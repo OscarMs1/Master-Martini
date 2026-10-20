@@ -1,0 +1,51 @@
+
+> master-martini-fullstack2-ep2@2.0.0 test:node
+> node --test testing/commerce.test.mjs
+
+✔ 01 precio neto CLP redondeado (2.6258ms)
+✔ 02 precios sin descuento (0.2566ms)
+✔ 03 precio 15% de descuento (0.1781ms)
+✔ 04 moneda CLP (21.1394ms)
+✔ 05 subtotal dos unidades (0.4313ms)
+✔ 06 subtotal con un producto que fue eliminado (0.2187ms)
+✔ 07 retiro sin cargo (0.1782ms)
+✔ 08 delivery bajo umbral (0.1334ms)
+✔ 09 delivery desde 50000 gratis (1.3276ms)
+✔ 10 total de la orden suma despacho (0.316ms)
+✔ 11 búsqueda acentos / mayúsculas (0.4824ms)
+✔ 12 filtrado categoría (0.1911ms)
+✔ 13 filtrado de ofertas (0.1943ms)
+✔ 14 agregar a carrito (1.2049ms)
+✔ 15 sumar en una sola línea (0.1624ms)
+✔ 16 stock límite máximo (0.1233ms)
+✔ 17 agregar cantidades no válidas no altera carrito (0.2299ms)
+✔ 18 producto sin stock no se agrega (0.1162ms)
+✔ 19 aumentar cantidad dentro del stock (0.2265ms)
+✔ 20 quitar elemento al poner cero (0.1168ms)
+✔ 21 si disminuye stock a cero, vacía el artículo (0.1451ms)
+✔ 22 carrito no permite checkout con SKU inexistente (0.1827ms)
+✔ 23 carrito no permite checkout con más unidades que stock (0.11ms)
+✔ 24 carrito permite checkout válido (0.0902ms)
+✔ 25 carrito vacío no permite compra (0.1015ms)
+✔ 26 dígito verificador RUN (0.2887ms)
+✔ 27 RUN válido con puntos (0.2375ms)
+✔ 28 RUN inválido se rechaza (0.1922ms)
+✔ 29 correos válidos/inválidos (0.3128ms)
+✔ 30 checkout incompleto tiene errores (0.2472ms)
+✔ 31 checkout válido no da errores (0.2471ms)
+✔ 32 validaciones de producto rechazan stock, precio y descuento (0.2455ms)
+✔ 33 crear nuevo producto inmutable (0.2731ms)
+✔ 34 SKU duplicado produce error (0.621ms)
+✔ 35 update actualiza solo SKU elegido sin mutar entrada (0.2152ms)
+✔ 36 update SKU inexistente lanza error (0.2513ms)
+✔ 37 delete no afecta lista original (0.2301ms)
+✔ 38 persistencia serializa y lee array (0.2981ms)
+✔ 39 persistencia corrupta usa fallback (0.2167ms)
+ℹ tests 39
+ℹ suites 0
+ℹ pass 39
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 192.7052

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 660" width="760" height="660">
+<defs><linearGradient id="a" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#f6f2eb"/></linearGradient></defs>
+<rect width="760" height="660" fill="url(#a)"/>
+<rect x="125" y="120" width="510" height="405" rx="20" fill="none" stroke="#d9d1c5" stroke-width="3" stroke-dasharray="10 12"/>
+<path d="M322 270l61-57 74 69 45-38 55 75v58H202v-58l78-74 42 25z" stroke="#b4a797" fill="#e7e0d6" stroke-width="6" stroke-linejoin="round"/>
+<circle cx="283" cy="212" r="25" fill="#d3c5b2"/>
+<text x="380" y="423" text-anchor="middle" fill="#4d5a5f" font-family="Arial,sans-serif" font-size="28" font-weight="bold">Imagen temporalmente</text>
+<text x="380" y="460" text-anchor="middle" fill="#4d5a5f" font-family="Arial,sans-serif" font-size="28" font-weight="bold">no disponible</text>
+<text x="380" y="502" text-anchor="middle" fill="#8d8379" font-family="Arial,sans-serif" font-size="18">Master Martini · Catálogo de demostración</text>
+</svg>

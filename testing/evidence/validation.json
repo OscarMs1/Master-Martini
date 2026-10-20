@@ -1,0 +1,30 @@
+[
+  {
+    "command": "npm run check:syntax",
+    "exitCode": 0
+  },
+  {
+    "command": "npm run check:logic",
+    "exitCode": 0
+  },
+  {
+    "command": "npm run test:node",
+    "exitCode": 0
+  },
+  {
+    "command": "npm run test:assets",
+    "exitCode": 0
+  },
+  {
+    "command": "npm run build",
+    "exitCode": 0
+  },
+  {
+    "command": "npm run test:coverage",
+    "exitCode": 0
+  },
+  {
+    "command": "npm run test:api",
+    "exitCode": 0
+  }
+]

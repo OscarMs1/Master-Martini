@@ -1,0 +1,63 @@
+[
+  {
+    "id": "MM-001",
+    "url": "https://bicomfiles.s3-sa-east-1.amazonaws.com/ecommerce/444/444650107.png",
+    "path": "public/assets/catalog-MM-001.webp",
+    "width": 800,
+    "height": 800
+  },
+  {
+    "id": "MM-002",
+    "url": "https://destro.fbitsstatic.net/img/p/creme-culinario-bravo-crem-tetrapak-1l-89236/276234.jpg?h=1000&qs=ignore&v=202501231555&w=1000",
+    "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1010)>"
+  },
+  {
+    "id": "MM-003",
+    "url": "https://backend.bakeryshop-ci.com/storage/images/MrD2r19aVg3MiddyFUyXlkn5fnl3PevBUZWiJ6rj.png",
+    "path": "public/assets/catalog-MM-003.webp",
+    "width": 500,
+    "height": 500
+  },
+  {
+    "id": "MM-004",
+    "url": "https://superxtrapanama.vtexassets.com/arquivos/ids/191781/8003180028194.png?v=638558686788300000",
+    "path": "public/assets/catalog-MM-004.webp",
+    "width": 1323,
+    "height": 1323
+  },
+  {
+    "id": "MM-005",
+    "url": "https://mastermartini.cl/wp-content/uploads/2023/06/Caravella-chocolate-sucedaneos.jpg",
+    "path": "public/assets/catalog-MM-005.webp",
+    "width": 720,
+    "height": 480
+  },
+  {
+    "id": "MM-006",
+    "url": "https://r.bolder.run/23053/original/1026328-gran_master_%282%29.JPG",
+    "path": "public/assets/catalog-MM-006.webp",
+    "width": 1200,
+    "height": 1200
+  },
+  {
+    "id": "MM-010",
+    "url": "https://www.martiniprofessional.net/img/containers/assets/products/martini-frozen/5070-mejor-vuoto-scaled.jpg/1ca04586c256061720f519ef8b5a06bb/5070-mejor-vuoto-scaled.jpg",
+    "path": "public/assets/catalog-MM-010.webp",
+    "width": 420,
+    "height": 420
+  },
+  {
+    "id": "MM-011",
+    "url": "https://aldeanativa.cl/cdn/shop/files/leche-soya-orasi-1-lt-orasi-aldea-nativa-532916.jpg?crop=center&height=1024&v=1718729764&width=1024",
+    "path": "public/assets/catalog-MM-011.webp",
+    "width": 800,
+    "height": 800
+  },
+  {
+    "id": "MM-012",
+    "url": "https://xfood.cl/29455-large_default/crema-vegetal-decor-up-1-lt.jpg",
+    "path": "public/assets/catalog-MM-012.webp",
+    "width": 800,
+    "height": 800
+  }
+]

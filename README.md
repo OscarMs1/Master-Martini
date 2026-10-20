@@ -1,79 +1,106 @@
-# Patitas Store
+# Master Martini | Desarrollo Fullstack II - Evaluación Parcial 2
 
-Patitas Store es una tienda online de artículos para mascotas desarrollada para la asignatura DSY1104 de Duoc UC.
+**Master Martini** es una aplicación web de comercio electrónico de carácter académico, orientada a insumos para panadería, pastelería, gelatería y food service. El proyecto incluye una tienda navegable, catálogo, carrito, simulación de compras, formularios y administración de productos.
 
-## Tecnologías
+## Plantilla de referencia y créditos
 
-- HTML5
-- CSS3
-- JavaScript
-- Bootstrap 5
-- localStorage para persistencia académica de carrito, usuarios, sesión, productos y órdenes
+La interfaz de este proyecto se desarrolló tomando como base de referencia visual la plantilla **Fruitkha – Free Bootstrap 4 Responsive Food Business Template**, publicada en **ThemeWagon**:
 
-## Funcionalidades principales
+https://themewagon.com/themes/fruitkha-free-bootstrap-4-responsive-food-business-template/
 
-- Inicio con productos destacados
-- Catálogo de productos y filtro por categoría
-- Vista de detalle de producto
-- Carrito persistente con control de cantidad y stock
-- Compra bloqueada hasta registrarse o iniciar sesión
-- Registro, inicio de sesión y contacto con validaciones en JavaScript
-- Regiones y comunas dependientes
-- Blog y sección Nosotros
-- Buscador con recomendaciones (sugiere productos, categorías y tipo de mascota)
-- Ofertas especiales con precio anterior tachado y porcentaje de descuento
-- Página de sucursales con las seis tiendas y la cobertura de despacho
-- Centro de ayuda con doce preguntas frecuentes en acordeón
-- Video de gatitos en el inicio, animación original del equipo
-- Panel protegido con permisos de Administrador, Vendedor y Cliente
-- Mantenedores funcionales de productos y usuarios
-- Listado y detalle de órdenes para Administrador y Vendedor
-- Fotografías realistas de productos y diseño adaptable a celular
+La ficha de ThemeWagon identifica a **Free CSS** como creador de la plantilla original. La apariencia, navegación y secciones se adaptaron a la identidad visual de Master Martini. **La implementación de esta entrega utiliza React 18, React Router 6, Vite 6 y Bootstrap 5**; por lo tanto, no debe confundirse la versión Bootstrap 4 de la plantilla original con las dependencias actuales del proyecto.
+
+Referencia de licencia de ThemeWagon: https://themewagon.com/license/ . Los recursos fotográficos se utilizan como material demostrativo y mantienen sus respectivas condiciones de origen.
+
+## Requisitos y puesta en marcha
+
+- Node.js 20 o superior y npm.
+- Visual Studio Code (o editor equivalente).
+- Navegador web moderno, preferentemente Chrome.
+
+Abra en Visual Studio Code **la carpeta del proyecto que contiene `package.json`**. En la terminal integrada ejecute:
+
+```bash
+npm install
+npm run dev
+```
+
+Visite la dirección local indicada por Vite, habitualmente **http://localhost:5173/**.
+
+Para generar y visualizar la versión optimizada de producción:
+
+```bash
+npm run build
+npm run preview
+```
 
 
-## Sobre el video del inicio
+## Funcionalidades
 
-El archivo `video/gatitos.mp4` (y su versión `.webm`) es una animación hecha
-por el equipo cuadro a cuadro, con los mismos colores del sitio. No se usó
-ninguna imagen ni video de terceros, así que no hay problema de derechos de
-autor. Se muestra sin sonido y en bucle, y pesa menos de 400 KB.
+- Inicio con carrusel, categorías, novedades y ofertas.
+- Catálogo de 12 productos de muestra, con búsqueda, filtros, ordenamiento y páginas de detalle.
+- Carrito con control de cantidades, validación de existencias y cálculos de compra.
+- Registro, inicio de sesión y perfiles demostrativos.
+- Checkout simulado con validaciones y registro de pedidos.
+- Administración de catálogo mediante operaciones de creación, consulta, actualización y eliminación.
+- Persistencia local del catálogo, carrito, perfil y pedidos mediante `localStorage`.
+- Interfaz adaptable a diferentes resoluciones y navegación entre páginas mediante React Router.
 
-Se entregan dos formatos porque no todos los navegadores leen los mismos
-códecs: la etiqueta `<video>` prueba primero el `.webm` y, si no puede, usa
-el `.mp4`.
-
-## Cuentas de demostración
+## Accesos de demostración
 
 | Rol | Correo | Contraseña |
-|---|---|---|
-| Administrador | admin@duoc.cl | Admin1! |
-| Vendedor | vendedor@duoc.cl | Venta1! |
-| Cliente | cliente@gmail.com | Cliente1! |
+| --- | --- | --- |
+| Administrador | `admin@demo.cl` | `Admin123` |
+| Vendedor | `vendedor@demo.cl` | `Venta123` |
+| Cliente | `cliente@demo.cl` | `Cliente123` |
 
-El Administrador tiene acceso total. El Vendedor solo puede consultar productos y órdenes. El Cliente compra desde la tienda y no puede entrar al panel.
+Estos accesos son parte de la demostración académica. No representan un sistema de autenticación seguro para producción.
 
-## Equipo
+## Pruebas y validación
 
-- Oscar Muñoz
-- Ángel Vergara
-- Felipe Zapata
+El proyecto conserva las pruebas automatizadas y la evidencia de las validaciones realizadas durante su desarrollo. Los comandos disponibles son:
 
-## Ejecución
+```bash
+npm run check:syntax
+npm run check:logic
+npm run test:node
+npm run test:assets
+npm run test:api
+npm run test:coverage
+```
 
-Abrir `index.html` en un navegador moderno. El proyecto no requiere instalación ni compilación.
+Las pruebas de componentes utilizan Jasmine y Karma con ChromeHeadless. El informe de cobertura se encuentra en `docs/INFORME_TESTING_COBERTURA_EP2.pdf`; los informes generados se incluyen en `testing/coverage/` y los registros de pruebas en `testing/evidence/`.
 
-Esta autenticación usa `localStorage` porque corresponde a un prototipo de frontend para la evaluación. En un sistema real las contraseñas y permisos deben validarse en un servidor.
+Para las pruebas integrales de navegador, mantenga `npm run dev` abierto y ejecute en otra terminal:
 
-## Estructura
+```bash
+npm run test:e2e
+```
 
-- `index.html`: página principal
-- `productos.html`: catálogo
-- `detalle-producto.html`: detalle de producto
-- `carrito.html`: carrito de compras
-- `registro.html`, `login.html`, `contacto.html`: formularios
-- `blogs.html`, `blog-1.html`, `blog-2.html`: contenidos del blog
-- `nosotros.html`: información de la tienda y del equipo
-- `admin/`: panel administrativo
-- `css/`: estilos del sitio
-- `js/`: lógica de catálogo, carrito, validaciones y administración
-- `img/`: recursos gráficos
+## API local opcional
+
+Por defecto, la aplicación utiliza datos locales y `localStorage`. Para utilizar la API educativa incluida en `server/api.mjs`, copie `.env.example` como `.env`, establezca `VITE_USE_BACKEND=true` y ejecute la API en otra terminal:
+
+```bash
+npm run api
+```
+
+Reinicie el servidor de Vite para aplicar el cambio de entorno. La API guarda sus datos en `server/.data/` (directorio generado durante la ejecución). Esta opción está pensada para pruebas locales.
+
+## Organización del proyecto
+
+| Ruta | Contenido |
+| --- | --- |
+| `src/components/` | Componentes reutilizables de interfaz |
+| `src/pages/` | Páginas y vistas |
+| `src/contexts/` | Estado global y operaciones de tienda |
+| `src/data/` | Catálogo, categorías y contenidos iniciales |
+| `src/utils/` | Validación, lógica comercial y persistencia |
+| `public/assets/` | Fotografías, logotipo y recursos locales |
+| `server/` | API de demostración en Node.js |
+| `src/tests/` y `testing/` | Código de pruebas, cobertura y evidencia |
+| `docs/` | Especificación de requisitos e informe de testing |
+
+## Alcance académico
+
+Los precios, existencias, pedidos, cuentas y pagos se simulan para fines de evaluación. El checkout no procesa pagos reales; el formulario de contacto y la suscripción no envían mensajes a servicios externos. La aplicación no debe utilizarse como tienda comercial real sin incorporar autenticación, infraestructura y controles de seguridad adicionales.

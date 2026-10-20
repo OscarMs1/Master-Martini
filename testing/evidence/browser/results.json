@@ -1,0 +1,67 @@
+{
+  "results": [
+    {
+      "name": "Inicio y carrusel 390x844",
+      "passed": true
+    },
+    {
+      "name": "Rutas y formularios 390x844",
+      "passed": true
+    },
+    {
+      "name": "Inicio y carrusel 768x1024",
+      "passed": true
+    },
+    {
+      "name": "Rutas y formularios 768x1024",
+      "passed": true
+    },
+    {
+      "name": "Inicio y carrusel 1366x768",
+      "passed": true
+    },
+    {
+      "name": "Rutas y formularios 1366x768",
+      "passed": true
+    },
+    {
+      "name": "Inicio y carrusel 1440x900",
+      "passed": true
+    },
+    {
+      "name": "Rutas y formularios 1440x900",
+      "passed": true
+    },
+    {
+      "name": "Inicio y carrusel 1920x1080",
+      "passed": true
+    },
+    {
+      "name": "Rutas y formularios 1920x1080",
+      "passed": true
+    },
+    {
+      "name": "Filtro, búsqueda, detalle, carrito, cantidades y eliminación",
+      "passed": true
+    },
+    {
+      "name": "Checkout inválido, rechazo y aprobación con persistencia",
+      "passed": true
+    },
+    {
+      "name": "Login y CRUD administrativo con recarga",
+      "passed": true
+    },
+    {
+      "name": "Nueva sesión de navegador tiene datos iniciales independientes",
+      "passed": true
+    },
+    {
+      "name": "Recursos locales de catálogo cargan y mantienen proporción",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "failedResources": [],
+  "date": "2026-10-20T15:12:07.358Z"
+}

@@ -1,0 +1,21 @@
+
+> master-martini-fullstack2-ep2@2.0.0 check:logic
+> node testing/smoke-node.mjs
+
+PASS Precio con descuento
+PASS Subtotal carrito
+PASS Costo envío bajo umbral
+PASS Envío sin costo umbral
+PASS Filtro por categoría
+PASS Filtro de ofertas
+PASS Agregar al carrito
+PASS Tope de stock
+PASS Actualizar cantidad
+PASS Eliminar cantidad cero
+PASS RUN chileno
+PASS Checkout incompleto
+PASS Datos producto invalidos
+PASS Crear registro JS
+PASS Actualizar registro JS
+PASS Eliminar registro JS
+Resultado smoke Node: 16/16

@@ -1,0 +1,74 @@
+[
+  {
+    "src": "/assets/catalog-MM-001.webp",
+    "width": 800,
+    "height": 800,
+    "fit": "contain"
+  },
+  {
+    "src": "/assets/prod-bravo.png",
+    "width": 240,
+    "height": 320,
+    "fit": "contain"
+  },
+  {
+    "src": "/assets/catalog-MM-003.webp",
+    "width": 500,
+    "height": 500,
+    "fit": "contain"
+  },
+  {
+    "src": "/assets/catalog-MM-004.webp",
+    "width": 1323,
+    "height": 1323,
+    "fit": "contain"
+  },
+  {
+    "src": "/assets/catalog-MM-005.webp",
+    "width": 720,
+    "height": 480,
+    "fit": "contain"
+  },
+  {
+    "src": "/assets/catalog-MM-006.webp",
+    "width": 1200,
+    "height": 1200,
+    "fit": "contain"
+  },
+  {
+    "src": "/assets/cat-gelateria.jpg",
+    "width": 700,
+    "height": 365,
+    "fit": "contain"
+  },
+  {
+    "src": "/assets/cat-gelateria.jpg",
+    "width": 700,
+    "height": 365,
+    "fit": "contain"
+  },
+  {
+    "src": "/assets/blog-pastel.jpg",
+    "width": 700,
+    "height": 365,
+    "fit": "contain"
+  },
+  {
+    "src": "/assets/catalog-MM-010.webp",
+    "width": 420,
+    "height": 420,
+    "fit": "contain"
+  },
+  {
+    "src": "/assets/catalog-MM-011.webp",
+    "width": 800,
+    "height": 800,
+    "fit": "contain"
+  },
+  {
+    "src": "/assets/catalog-MM-012.webp",
+    "width": 800,
+    "height": 800,
+    "fit": "contain"
+  }
+]

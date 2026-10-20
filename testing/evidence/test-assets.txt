@@ -1,0 +1,16 @@
+
+> master-martini-fullstack2-ep2@2.0.0 test:assets
+> node --test testing/assets.test.mjs
+
+✔ A01: toda imagen local de producto tiene un archivo real (6.5239ms)
+✔ A02: imágenes de categorías y publicaciones se encuentran localmente (1.8542ms)
+✔ A03: OraSì Soya tiene una imagen propia y alternativa accesible (0.6224ms)
+✔ A04: el HTML inicia sin pantalla provisional de carga (1.6887ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 152.4258

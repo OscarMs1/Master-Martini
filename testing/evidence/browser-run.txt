@@ -1,0 +1,15 @@
+PASS Inicio y carrusel 390x844
+PASS Rutas y formularios 390x844
+PASS Inicio y carrusel 768x1024
+PASS Rutas y formularios 768x1024
+PASS Inicio y carrusel 1366x768
+PASS Rutas y formularios 1366x768
+PASS Inicio y carrusel 1440x900
+PASS Rutas y formularios 1440x900
+PASS Inicio y carrusel 1920x1080
+PASS Rutas y formularios 1920x1080
+PASS Filtro, búsqueda, detalle, carrito, cantidades y eliminación
+PASS Checkout inválido, rechazo y aprobación con persistencia
+PASS Login y CRUD administrativo con recarga
+PASS Nueva sesión de navegador tiene datos iniciales independientes
+PASS Recursos locales de catálogo cargan y mantienen proporción
