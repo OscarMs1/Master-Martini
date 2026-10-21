@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Link, useParams } from 'react-router';
-import { ArrowRight, MapPin, Mail, Phone, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, MapPin, Mail, Phone, CheckCircle2, MessageCircle } from 'lucide-react';
 import { posts } from '../data/catalog';
+import { whatsappNumber, whatsappLink } from '../data/contacto';
 import { Breadcrumb, SectionTitle } from '../components/SiteLayout';
 import { Field, Alert } from '../components/FormFields';
 import { validateContact, hasErrors } from '../utils/commerce';
@@ -134,6 +135,16 @@ export function Contact() {
                 <Phone />
                 <p>
                   <b>Teléfono</b>+56 2 26611700
+                </p>
+              </div>
+              <div>
+                <MessageCircle />
+                <p>
+                  <b>WhatsApp</b>
+                  <a href={whatsappLink} target="_blank" rel="noreferrer">
+                    {whatsappNumber}
+                  </a>{' '}
+                  (número ficticio)
                 </p>
               </div>
               <div>

@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { Facebook, Instagram } from './SocialIcons';
 import { categories } from '../data/catalog';
+import { whatsappNumber, whatsappLink } from '../data/contacto';
 import { useShop } from '../contexts/ShopContext';
 
 export function Header() {
@@ -61,7 +62,7 @@ export function Header() {
         <div className="topbar">
           <div className="container topbar-inner">
             <span>
-              <Truck size={14} /> Despachos a todo Chile. Contáctanos por WhatsApp.
+              <Truck size={14} /> Despachos a todo Chile. WhatsApp: {whatsappNumber}
             </span>
             <span className="socials">
               <a
@@ -278,6 +279,9 @@ export function Footer() {
             <span>
               <Phone size={15} /> +56 2 26611700
             </span>
+            <a href={whatsappLink} target="_blank" rel="noreferrer">
+              <MessageCircle size={15} /> WhatsApp {whatsappNumber}
+            </a>
             <span>
               <Mail size={15} /> clientes@mastermartini.cl
             </span>
@@ -377,10 +381,10 @@ export function Layout() {
       <Footer />
       <a
         className="float-whatsapp"
-        href="https://wa.me/56226611700"
+        href={whatsappLink}
         target="_blank"
         rel="noreferrer"
-        aria-label="Consultar por WhatsApp"
+        aria-label={"Consultar por WhatsApp al " + whatsappNumber}
       >
         <MessageCircle size={27} />
       </a>
