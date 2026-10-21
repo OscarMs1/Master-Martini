@@ -12,6 +12,12 @@ La ficha de ThemeWagon identifica a **Free CSS** como creador de la plantilla or
 
 Referencia de licencia de ThemeWagon: https://themewagon.com/license/ . Los recursos fotográficos se utilizan como material demostrativo y mantienen sus respectivas condiciones de origen.
 
+## Repositorio público de la entrega
+
+Código fuente y documentación del proyecto: **https://github.com/OscarMs1/Master-Martini**
+
+El proyecto React se ejecuta en un entorno local con Vite siguiendo los comandos que se indican a continuación. No es necesario utilizar GitHub Pages para su ejecución.
+
 ## Requisitos y puesta en marcha
 
 - Node.js 20 o superior y npm.
