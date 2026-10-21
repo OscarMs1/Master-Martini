@@ -1,0 +1,131 @@
+/* Estilos de la página de Clases de recetas */
+
+.clases-filtros {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.clases-filtros button {
+  border: 1px solid var(--border);
+  background: #fff;
+  padding: 8px 20px;
+  border-radius: 30px;
+}
+
+.clases-filtros button.activo {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: #fff;
+}
+
+.clases-lista {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.clase-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.clase-card > img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.clase-info {
+  padding: 20px;
+}
+
+.clase-info h3 {
+  color: var(--navy);
+  margin: 10px 0 6px;
+}
+
+.clase-info h4 {
+  font-size: 15px;
+  color: var(--navy);
+  margin: 16px 0 8px;
+}
+
+.clase-info ol {
+  padding-left: 20px;
+  color: var(--muted);
+}
+
+.clase-etiqueta {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: #fff0e0;
+  color: var(--orange-hover);
+}
+
+.clase-etiqueta.online {
+  background: #e6f4ea;
+  color: #1e7a3c;
+}
+
+.clase-datos {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  color: var(--muted);
+}
+
+.clase-datos svg {
+  color: var(--orange);
+}
+
+.clase-insumos {
+  background: var(--cream);
+  border-radius: 6px;
+  padding: 12px 16px 16px;
+  margin-bottom: 16px;
+}
+
+.clase-insumos h4 {
+  margin-top: 0;
+}
+
+.insumo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.insumo img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  background: #fff;
+  border-radius: 4px;
+}
+
+.insumo span {
+  margin-left: auto;
+  color: var(--muted);
+}
+
+.clase-ok {
+  color: #1e7a3c;
+  font-weight: 700;
+}
+
+/* En celular las tarjetas van una debajo de otra */
+@media (max-width: 800px) {
+  .clases-lista {
+    grid-template-columns: 1fr;
+  }
+}

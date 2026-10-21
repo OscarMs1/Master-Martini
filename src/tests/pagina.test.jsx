@@ -2,6 +2,9 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import ProductCard from '../components/ProductCard';
+import Clases from '../pages/Clases';
+import { ShopProvider } from '../contexts/ShopContext';
+import { clases } from '../data/clases';
 import { initialProducts } from '../data/catalog';
 import { netPrice, shipping, validRun, validEmail, addCart, filteredProducts } from '../utils/commerce';
 
@@ -59,5 +62,34 @@ describe('Componente ProductCard', () => {
 
     fireEvent.click(screen.getByText('Agregar'));
     expect(onAdd).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('Página de Clases de recetas', () => {
+  it('9. todos los insumos de las clases existen en el catálogo', () => {
+    clases.forEach(clase => {
+      clase.insumos.forEach(insumo => {
+        const producto = initialProducts.find(p => p.id === insumo.id);
+        expect(producto).toBeDefined();
+      });
+    });
+  });
+
+  it('10. al inscribirse aparece el mensaje y baja un cupo', () => {
+    render(
+      <MemoryRouter>
+        <ShopProvider>
+          <Clases />
+        </ShopProvider>
+      </MemoryRouter>
+    );
+
+    const primeraClase = clases[0];
+    expect(screen.getByText(primeraClase.cupos + ' cupos disponibles')).toBeTruthy();
+
+    fireEvent.click(screen.getAllByText('Inscribirme')[0]);
+
+    expect(screen.getByText('¡Estás inscrito en esta clase!')).toBeTruthy();
+    expect(screen.getByText((primeraClase.cupos - 1) + ' cupos disponibles')).toBeTruthy();
   });
 });

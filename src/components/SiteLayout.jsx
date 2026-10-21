@@ -28,6 +28,7 @@ export function Header(){
       </div>
     </div>
     <NavLink to="/blog">Novedades</NavLink>
+    <NavLink to="/clases">Clases</NavLink>
     <NavLink to="/ofertas">Ofertas</NavLink>
     <NavLink to="/contacto">Contacto</NavLink>
     <NavLink to="/catalogo">Tienda</NavLink>
