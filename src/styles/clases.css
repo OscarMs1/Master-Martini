@@ -20,12 +20,6 @@
   color: #fff;
 }
 
-.clases-lista {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-}
-
 .clase-card {
   background: #fff;
   border: 1px solid var(--border);
@@ -77,9 +71,6 @@
 .clase-datos {
   list-style: none;
   padding: 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
   color: var(--muted);
 }
 
@@ -123,9 +114,4 @@
   font-weight: 700;
 }
 
-/* En celular las tarjetas van una debajo de otra */
-@media (max-width: 800px) {
-  .clases-lista {
-    grid-template-columns: 1fr;
-  }
-}
+/* Las columnas responsivas las maneja Bootstrap (row / col-12 / col-md-6) */

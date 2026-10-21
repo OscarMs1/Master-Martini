@@ -1,10 +1,12 @@
 // Tests simples de la página Master Martini usando Vitest
-import { render, screen, fireEvent } from '@testing-library/react';
-import { MemoryRouter } from 'react-router';
+import { render, screen, fireEvent, cleanup } from '@testing-library/react';
+import { MemoryRouter, Routes, Route } from 'react-router';
 import ProductCard from '../components/ProductCard';
 import Clases from '../pages/Clases';
 import { ShopProvider } from '../contexts/ShopContext';
 import { clases } from '../data/clases';
+import { Catalog } from '../pages/ShopPages';
+import { writeStore } from '../utils/storage';
 import { initialProducts } from '../data/catalog';
 import { netPrice, shipping, validRun, validEmail, addCart, filteredProducts } from '../utils/commerce';
 
@@ -91,5 +93,73 @@ describe('Página de Clases de recetas', () => {
 
     expect(screen.getByText('¡Estás inscrito en esta clase!')).toBeTruthy();
     expect(screen.getByText((primeraClase.cupos - 1) + ' cupos disponibles')).toBeTruthy();
+  });
+});
+
+describe('Pruebas con mocks', () => {
+  // Antes de cada test dejamos el localStorage vacío
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
+  // Después de cada test quitamos los mocks para que no afecten a otros tests
+  afterEach(() => {
+    cleanup();
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+    delete window.__MM_API_ENABLED__;
+  });
+
+  it('11. writeStore guarda el carrito en localStorage (spy)', () => {
+    // spyOn "espía" la función real para saber con qué datos fue llamada
+    const espia = vi.spyOn(Storage.prototype, 'setItem');
+    const carrito = [{ id: 'MM-001', qty: 2 }];
+
+    writeStore('mm-ep2-cart', carrito);
+
+    expect(espia).toHaveBeenCalledWith('mm-ep2-cart', JSON.stringify(carrito));
+  });
+
+  it('12. el catálogo muestra los productos que llegan desde la API (mock de fetch)', async () => {
+    // Producto falso que "responde" la API
+    const productoApi = { id: 'API-1', name: 'Producto desde la API', category: 'retail', price: 1000, stock: 3, discount: 0 };
+
+    // Reemplazamos fetch por una función falsa, así no se llama a un servidor real
+    const fetchFalso = vi.fn(url => Promise.resolve({
+      ok: true,
+      json: () => Promise.resolve(url === '/api/products' ? [productoApi] : [])
+    }));
+    vi.stubGlobal('fetch', fetchFalso);
+    window.__MM_API_ENABLED__ = true;
+
+    render(
+      <MemoryRouter initialEntries={['/catalogo']}>
+        <ShopProvider>
+          <Routes>
+            <Route path="/catalogo" element={<Catalog />} />
+          </Routes>
+        </ShopProvider>
+      </MemoryRouter>
+    );
+
+    // findByText espera a que aparezca el texto (la respuesta es asíncrona)
+    expect(await screen.findByText('Producto desde la API')).toBeTruthy();
+    expect(fetchFalso).toHaveBeenCalledWith('/api/products', expect.anything());
+  });
+
+  it('13. el filtro Online de la página de clases muestra solo clases online', () => {
+    render(
+      <MemoryRouter>
+        <ShopProvider>
+          <Clases />
+        </ShopProvider>
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Online' }));
+
+    const clasesOnline = clases.filter(clase => clase.modalidad === 'Online');
+    expect(screen.getAllByTestId('clase-card').length).toBe(clasesOnline.length);
+    expect(screen.queryByText('Presencial', { selector: 'span' })).toBeNull();
   });
 });

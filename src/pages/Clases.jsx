@@ -57,59 +57,62 @@ export default function Clases() {
             ))}
           </div>
 
-          <div className="clases-lista">
+          {/* Grilla de Bootstrap: 1 columna en celular (col-12) y 2 columnas desde tablet (col-md-6) */}
+          <div className="row g-4">
             {clasesFiltradas.map(clase => {
               const estaInscrito = inscritas.includes(clase.id);
               const cuposLibres = estaInscrito ? clase.cupos - 1 : clase.cupos;
 
               return (
-                <article className="clase-card" key={clase.id} data-testid="clase-card">
-                  <img src={clase.imagen} alt={clase.titulo} />
+                <div className="col-12 col-md-6" key={clase.id}>
+                  <article className="clase-card h-100" data-testid="clase-card">
+                    <img src={clase.imagen} alt={clase.titulo} />
 
-                  <div className="clase-info">
-                    <span className={'clase-etiqueta ' + clase.modalidad.toLowerCase()}>{clase.modalidad}</span>
-                    <h3>{clase.titulo}</h3>
-                    <p>{clase.descripcion}</p>
+                    <div className="clase-info">
+                      <span className={'clase-etiqueta ' + clase.modalidad.toLowerCase()}>{clase.modalidad}</span>
+                      <h3>{clase.titulo}</h3>
+                      <p>{clase.descripcion}</p>
 
-                    <ul className="clase-datos">
-                      <li><CalendarDays size={16} /> {clase.fecha}</li>
-                      <li><Clock size={16} /> {clase.hora} · {clase.duracion}</li>
-                      <li><MapPin size={16} /> {clase.lugar}</li>
-                      <li><Users size={16} /> {cuposLibres} cupos disponibles</li>
-                    </ul>
+                      <ul className="clase-datos row g-2">
+                        <li className="col-12 col-sm-6"><CalendarDays size={16} /> {clase.fecha}</li>
+                        <li className="col-12 col-sm-6"><Clock size={16} /> {clase.hora} · {clase.duracion}</li>
+                        <li className="col-12 col-sm-6"><MapPin size={16} /> {clase.lugar}</li>
+                        <li className="col-12 col-sm-6"><Users size={16} /> {cuposLibres} cupos disponibles</li>
+                      </ul>
 
-                    <h4>Receta · nivel {clase.nivel}</h4>
-                    <ol>
-                      {clase.pasos.map(paso => <li key={paso}>{paso}</li>)}
-                    </ol>
+                      <h4>Receta · nivel {clase.nivel}</h4>
+                      <ol>
+                        {clase.pasos.map(paso => <li key={paso}>{paso}</li>)}
+                      </ol>
 
-                    <div className="clase-insumos">
-                      <h4>Insumos de esta receta</h4>
-                      {clase.insumos.map(insumo => {
-                        const producto = buscarProducto(insumo.id);
-                        if (!producto) return null;
-                        return (
-                          <div className="insumo" key={insumo.id}>
-                            <img src={producto.image} alt="" />
-                            <Link to={'/producto/' + producto.id}>{producto.name}</Link>
-                            <span>{insumo.cantidad} x {money(netPrice(producto))}</span>
-                          </div>
-                        );
-                      })}
-                      <button type="button" className="btn-outline" onClick={() => agregarInsumos(clase)}>
-                        <ShoppingCart size={16} /> Agregar insumos al carrito
-                      </button>
+                      <div className="clase-insumos">
+                        <h4>Insumos de esta receta</h4>
+                        {clase.insumos.map(insumo => {
+                          const producto = buscarProducto(insumo.id);
+                          if (!producto) return null;
+                          return (
+                            <div className="insumo" key={insumo.id}>
+                              <img src={producto.image} alt="" />
+                              <Link to={'/producto/' + producto.id}>{producto.name}</Link>
+                              <span>{insumo.cantidad} x {money(netPrice(producto))}</span>
+                            </div>
+                          );
+                        })}
+                        <button type="button" className="btn-outline" onClick={() => agregarInsumos(clase)}>
+                          <ShoppingCart size={16} /> Agregar insumos al carrito
+                        </button>
+                      </div>
+
+                      {estaInscrito ? (
+                        <p className="clase-ok"><CheckCircle2 size={18} /> ¡Estás inscrito en esta clase!</p>
+                      ) : (
+                        <button type="button" className="btn-orange" onClick={() => inscribirse(clase.id)}>
+                          Inscribirme
+                        </button>
+                      )}
                     </div>
-
-                    {estaInscrito ? (
-                      <p className="clase-ok"><CheckCircle2 size={18} /> ¡Estás inscrito en esta clase!</p>
-                    ) : (
-                      <button type="button" className="btn-orange" onClick={() => inscribirse(clase.id)}>
-                        Inscribirme
-                      </button>
-                    )}
-                  </div>
-                </article>
+                  </article>
+                </div>
               );
             })}
           </div>
