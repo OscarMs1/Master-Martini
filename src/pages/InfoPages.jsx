@@ -84,7 +84,7 @@ export function BlogDetail() {
         <article className="container article">
           <img src={p.image} alt={p.name} />
           <span className="eyebrow">{p.tag}</span>
-          <h1>{p.name}</h1>
+          <h2>{p.name}</h2>
           <p className="lead">{p.desc}</p>
           <p>{p.text}</p>
           <p>
@@ -205,7 +205,7 @@ export function NotFound() {
       <Breadcrumb title="Página no encontrada" />
       <section className="section">
         <div className="container empty-state">
-          <h1 style={{ fontSize: 100 }}>404</h1>
+          <p className="error-code">404</p>
           <h2>Esta página no existe</h2>
           <p>Regresa al inicio para continuar explorando.</p>
           <Link className="btn-orange" to="/">

@@ -48,7 +48,7 @@ npm run preview
 - Carrito con control de cantidades, validación de existencias y cálculos de compra.
 - Registro, inicio de sesión y perfiles demostrativos.
 - Checkout simulado con validaciones y registro de pedidos.
-- Página de **Clases de recetas** (`/clases`): cada clase muestra su receta paso a paso, fecha, cupos y los insumos del catálogo que se usan, con un botón para agregarlos al carrito y otro para inscribirse. Se puede filtrar por clases presenciales u online.
+- Página de **Clases de recetas** (`/clases`): cada clase muestra su receta paso a paso, fecha, cupos y los insumos del catálogo que se usan, con un botón para agregarlos al carrito y otro para inscribirse. Se puede filtrar por clases presenciales u online. Las inscripciones se guardan en el estado global (`ShopContext`) y aparecen en **Mi cuenta → Mis clases de recetas**.
 - Administración de catálogo mediante operaciones de creación, consulta, actualización y eliminación.
 - Persistencia local del catálogo, carrito, perfil y pedidos mediante `localStorage`.
 - Interfaz adaptable a diferentes resoluciones y navegación entre páginas mediante React Router.

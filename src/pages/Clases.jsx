@@ -8,19 +8,14 @@ import { money, netPrice } from '../utils/commerce';
 import '../styles/clases.css';
 
 export default function Clases() {
-  const { products, add } = useShop();
+  // enrolledClasses y enrollClass vienen del estado global (ShopContext),
+  // así la inscripción se guarda y también se ve en "Mi cuenta".
+  const { products, add, enrolledClasses, enrollClass } = useShop();
 
   // Filtro: 'Todas', 'Presencial' u 'Online'
   const [filtro, setFiltro] = useState('Todas');
 
-  // Lista con los id de las clases en que el usuario se inscribió
-  const [inscritas, setInscritas] = useState([]);
-
   const clasesFiltradas = clases.filter(clase => filtro === 'Todas' || clase.modalidad === filtro);
-
-  function inscribirse(id) {
-    setInscritas([...inscritas, id]);
-  }
 
   // Busca un producto del catálogo por su id
   function buscarProducto(id) {
@@ -63,7 +58,7 @@ export default function Clases() {
           {/* Grilla de Bootstrap: 1 columna en celular (col-12) y 2 columnas desde tablet (col-md-6) */}
           <div className="row g-4">
             {clasesFiltradas.map(clase => {
-              const estaInscrito = inscritas.includes(clase.id);
+              const estaInscrito = enrolledClasses.includes(clase.id);
               const cuposLibres = estaInscrito ? clase.cupos - 1 : clase.cupos;
 
               return (
@@ -132,7 +127,7 @@ export default function Clases() {
                         <button
                           type="button"
                           className="btn-orange"
-                          onClick={() => inscribirse(clase.id)}
+                          onClick={() => enrollClass(clase.id)}
                         >
                           Inscribirme
                         </button>

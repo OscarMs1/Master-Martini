@@ -1,5 +1,4 @@
 /* Master Martini EP2 — Fruitkha inspired. Original accents: #051922 / #f28123. */
-@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
 :root {
   --navy: #051922;
   --orange: #f28123;
@@ -9,6 +8,9 @@
   --cream: #fbf8f3;
   --border: #e7eaec;
   --shadow: 0 6px 26px rgba(5, 25, 34, 0.07);
+  /* Fuentes del sitio (se cargan en index.html) */
+  --font-text: 'Open Sans', 'Segoe UI', sans-serif;
+  --font-title: 'Poppins', 'Segoe UI', sans-serif;
 }
 *,
 *::before,
@@ -19,7 +21,7 @@ body {
   margin: 0;
   color: var(--ink);
   background: #fff;
-  font-family: 'Inter', Arial, sans-serif;
+  font-family: var(--font-text);
   font-size: 14px;
   -webkit-font-smoothing: antialiased;
 }
@@ -50,7 +52,7 @@ h1,
 h2,
 h3,
 h4 {
-  font-family: 'Barlow', 'Inter', sans-serif;
+  font-family: var(--font-title);
   font-weight: 800;
   letter-spacing: -0.6px;
 }
@@ -473,7 +475,7 @@ h3 {
 }
 .product-name {
   display: block;
-  font-family: 'Barlow', sans-serif;
+  font-family: var(--font-title);
   color: var(--navy);
   font-size: 18px;
   font-weight: 800;
@@ -835,7 +837,7 @@ h3 {
   max-height: 410px;
   object-fit: contain;
 }
-.detail-info h1 {
+.detail-info h2 {
   font-size: 52px;
   line-height: 1.09;
   color: var(--navy);
@@ -915,12 +917,6 @@ h3 {
 }
 .detail-highlights span:first-letter {
   color: #23905a;
-}
-.cart-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 340px;
-  gap: 35px;
-  align-items: start;
 }
 .cart-table-head,
 .admin-content-header {
@@ -1035,14 +1031,6 @@ h3 {
 .checkout-fields h2 {
   margin: 8px 0;
 }
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 4px 20px;
-}
-.span-2 {
-  grid-column: span 2;
-}
 .field-wrap {
   margin-bottom: 10px;
 }
@@ -1126,7 +1114,7 @@ h3 {
   padding: 52px 40px;
   box-shadow: var(--shadow);
 }
-.result-panel h1 {
+.result-panel h2 {
   font-size: 37px;
   color: var(--navy);
   margin: 13px 0;
@@ -1437,7 +1425,7 @@ h3 {
   border-radius: 8px;
   margin-bottom: 30px;
 }
-.article h1 {
+.article h2 {
   font-size: 48px;
   color: var(--navy);
 }
@@ -1527,9 +1515,6 @@ h3 {
   }
   .footer-grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-  .cart-layout {
-    grid-template-columns: minmax(0, 1fr);
   }
   .detail-grid {
     gap: 26px;
@@ -1749,7 +1734,7 @@ h3 {
   .detail-photo img {
     max-height: 270px;
   }
-  .detail-info h1 {
+  .detail-info h2 {
     font-size: 37px;
   }
   .detail-price {
@@ -1773,12 +1758,6 @@ h3 {
   }
   .checkout-fields {
     padding: 20px;
-  }
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-  .span-2 {
-    grid-column: auto;
   }
   .form-panel {
     padding: 23px;
@@ -1831,7 +1810,7 @@ h3 {
   .article > img {
     height: 210px;
   }
-  .article h1 {
+  .article h2 {
     font-size: 32px;
   }
   .float-whatsapp {
@@ -1858,4 +1837,13 @@ h3 {
 }
 .product-bootstrap-grid .product-price {
   margin-top: auto;
+}
+
+/* Número grande de la página 404 */
+.error-code {
+  font-size: 100px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--navy);
+  margin: 0;
 }

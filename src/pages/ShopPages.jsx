@@ -169,7 +169,7 @@ export function ProductDetail() {
               <span className="eyebrow">
                 {product.brand} · {category?.name}
               </span>
-              <h1>{product.name}</h1>
+              <h2>{product.name}</h2>
               <div className="detail-sku">
                 SKU: {product.id} · Formato: {product.format}
               </div>

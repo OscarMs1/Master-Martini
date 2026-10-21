@@ -53,6 +53,11 @@ export function ShopProvider({ children }) {
     const v = readStore('mm-ep2-orders', []);
     return Array.isArray(v) ? v : [];
   });
+  // Ids de las clases de recetas en que el usuario se inscribió
+  const [enrolledClasses, setEnrolledClasses] = useState(() => {
+    const saved = readStore('mm-ep2-clases', []);
+    return Array.isArray(saved) ? saved : [];
+  });
   const [toast, setToast] = useState('');
   const [loading, setLoading] = useState(apiEnabled);
   const [apiError, setApiError] = useState('');
@@ -97,6 +102,9 @@ export function ShopProvider({ children }) {
   useEffect(() => {
     writeStore('mm-ep2-orders', orders);
   }, [orders]);
+  useEffect(() => {
+    writeStore('mm-ep2-clases', enrolledClasses);
+  }, [enrolledClasses]);
   useEffect(() => {
     if (!toast) return;
     const t = setTimeout(() => setToast(''), 3800);
@@ -191,6 +199,12 @@ export function ShopProvider({ children }) {
     setToast('Compra de demostración confirmada.');
     return { success: true, id: order.id };
   };
+  // Inscribe al usuario en una clase (si no estaba inscrito)
+  const enrollClass = classId => {
+    if (enrolledClasses.includes(classId)) return;
+    setEnrolledClasses([...enrolledClasses, classId]);
+    setToast('Inscripción confirmada.');
+  };
   const cartCount = cart.reduce((sum, i) => sum + i.qty, 0);
   const value = useMemo(
     () => ({
@@ -212,10 +226,12 @@ export function ShopProvider({ children }) {
       resetCatalog,
       checkout,
       cartCount,
+      enrolledClasses,
+      enrollClass,
       cartSubtotal: subtotal(cart, products),
       cartTotal: orderTotal(cart, products)
     }),
-    [products, cart, user, orders, toast, loading, apiError]
+    [products, cart, user, orders, enrolledClasses, toast, loading, apiError]
   );
   return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;
 }

@@ -2,7 +2,6 @@
    Sin jQuery: las transiciones y el estado están administrados por React.
    Paleta de Fruitkha: #051922 + #F28123. Misma barra superior y navbar.
 */
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap');
 :root {
   --navy: #051922;
   --orange: #f28123;
@@ -14,14 +13,14 @@ html {
   scroll-behavior: smooth;
 }
 body {
-  font-family: 'Open Sans', 'Segoe UI', sans-serif;
+  font-family: var(--font-text);
   font-size: 14px;
 }
 h1,
 h2,
 h3,
 h4 {
-  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  font-family: var(--font-title);
   letter-spacing: -0.9px;
 }
 a,
@@ -1009,7 +1008,7 @@ input:focus-visible {
   font-weight: 800;
   color: #829094;
   white-space: nowrap;
-  font-family: Poppins, 'Segoe UI', sans-serif;
+  font-family: var(--font-title);
 }
 @keyframes fk-marquee {
   to {
@@ -1686,7 +1685,7 @@ input:focus-visible {
 }
 .mainnav a,
 .nav-dropdown-toggle {
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font-text);
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.05px;
@@ -1786,7 +1785,7 @@ input:focus-visible {
   padding: 40px 32px 25px;
 }
 .fk-hero h1 {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-title);
   font-size: clamp(42px, 4.3vw, 66px);
   line-height: 1.16;
   letter-spacing: -1.9px;
@@ -1807,7 +1806,7 @@ input:focus-visible {
 }
 .fk-hero .btn-large,
 .fk-hero .fk-outline-btn {
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font-text);
   border-radius: 100px;
   padding: 15px 25px;
   font-size: 14px;
@@ -2269,7 +2268,7 @@ body,
 /* V4: restablece la bajada editorial de la referencia visual aprobada. */
 .fk-hero p {
   display: block;
-  font-family: 'Open Sans', 'Segoe UI', sans-serif;
+  font-family: var(--font-text);
   font-size: clamp(14px, 1.3vw, 19px);
   line-height: 1.6;
   max-width: 700px;

@@ -84,8 +84,9 @@ export function Cart() {
               </Link>
             </div>
           ) : (
-            <div className="cart-layout">
-              <div>
+            <div className="row g-4 align-items-start">
+              {/* Grilla de Bootstrap: productos (8 columnas) y resumen (4 columnas) en escritorio */}
+              <div className="col-lg-8">
                 <div className="cart-table-head">
                   <h2>
                     Mis productos <small>({cart.length})</small>
@@ -138,7 +139,7 @@ export function Cart() {
                   ← Seguir comprando
                 </Link>
               </div>
-              <div>
+              <div className="col-lg-4">
                 <Summary
                   cart={cart}
                   products={products}
@@ -222,135 +223,144 @@ export function Checkout() {
               </Link>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} noValidate className="cart-layout">
-              <div className="checkout-fields">
-                <span className="eyebrow">PASO 1 DE 2</span>
-                <h2>Datos de entrega</h2>
-                <p className="muted">
-                  Completa los campos para simular tu pedido. Si iniciaste sesión, tus datos se
-                  precargan.
-                </p>
-                <div className="form-grid">
-                  <Field
-                    label="Nombre completo *"
-                    name="name"
-                    placeholder="Ej. María Pérez"
-                    value={data.name}
-                    onChange={e => updateField('name', e.target.value)}
-                    error={errors.name}
-                  />
-                  <Field
-                    label="RUN *"
-                    name="run"
-                    placeholder="12.345.678-5"
-                    value={data.run}
-                    onChange={e => updateField('run', e.target.value)}
-                    error={errors.run}
-                  />
-                  <Field
-                    label="Correo electrónico *"
-                    type="email"
-                    name="email"
-                    placeholder="correo@ejemplo.cl"
-                    value={data.email}
-                    onChange={e => updateField('email', e.target.value)}
-                    error={errors.email}
-                  />
-                  <Field
-                    label="Teléfono *"
-                    name="phone"
-                    placeholder="+56912345678"
-                    value={data.phone}
-                    onChange={e => updateField('phone', e.target.value)}
-                    error={errors.phone}
-                  />
-                  <Field
-                    label="Región *"
-                    name="region"
-                    as="select"
-                    value={data.region}
-                    onChange={e => updateField('region', e.target.value)}
-                    error={errors.region}
-                  >
-                    <option value="">Selecciona región</option>
-                    {Object.keys(regions).map(r => (
-                      <option key={r}>{r}</option>
-                    ))}
-                  </Field>
-                  <Field
-                    label="Comuna *"
-                    name="commune"
-                    as="select"
-                    value={data.commune}
-                    onChange={e => updateField('commune', e.target.value)}
-                    error={errors.commune}
-                  >
-                    <option value="">Selecciona comuna</option>
-                    {(regions[data.region] || []).map(c => (
-                      <option key={c}>{c}</option>
-                    ))}
-                  </Field>
-                  <div className="span-2">
+            <form onSubmit={handleSubmit} noValidate className="row g-4 align-items-start">
+              <div className="col-lg-8">
+                <div className="checkout-fields">
+                  <span className="eyebrow">PASO 1 DE 2</span>
+                  <h2>Datos de entrega</h2>
+                  <p className="muted">
+                    Completa los campos para simular tu pedido. Si iniciaste sesión, tus datos se
+                    precargan.
+                  </p>
+                  {/* Bootstrap: 1 columna en celular, 2 desde tablet (col-md-6) */}
+                  <div className="row gx-4">
                     <Field
-                      label="Dirección de entrega *"
-                      name="address"
-                      placeholder="Calle, número, departamento"
-                      value={data.address}
-                      onChange={e => updateField('address', e.target.value)}
-                      error={errors.address}
+                      col="col-md-6"
+                      label="Nombre completo *"
+                      name="name"
+                      placeholder="Ej. María Pérez"
+                      value={data.name}
+                      onChange={e => updateField('name', e.target.value)}
+                      error={errors.name}
                     />
+                    <Field
+                      col="col-md-6"
+                      label="RUN *"
+                      name="run"
+                      placeholder="12.345.678-5"
+                      value={data.run}
+                      onChange={e => updateField('run', e.target.value)}
+                      error={errors.run}
+                    />
+                    <Field
+                      col="col-md-6"
+                      label="Correo electrónico *"
+                      type="email"
+                      name="email"
+                      placeholder="correo@ejemplo.cl"
+                      value={data.email}
+                      onChange={e => updateField('email', e.target.value)}
+                      error={errors.email}
+                    />
+                    <Field
+                      col="col-md-6"
+                      label="Teléfono *"
+                      name="phone"
+                      placeholder="+56912345678"
+                      value={data.phone}
+                      onChange={e => updateField('phone', e.target.value)}
+                      error={errors.phone}
+                    />
+                    <Field
+                      col="col-md-6"
+                      label="Región *"
+                      name="region"
+                      as="select"
+                      value={data.region}
+                      onChange={e => updateField('region', e.target.value)}
+                      error={errors.region}
+                    >
+                      <option value="">Selecciona región</option>
+                      {Object.keys(regions).map(r => (
+                        <option key={r}>{r}</option>
+                      ))}
+                    </Field>
+                    <Field
+                      col="col-md-6"
+                      label="Comuna *"
+                      name="commune"
+                      as="select"
+                      value={data.commune}
+                      onChange={e => updateField('commune', e.target.value)}
+                      error={errors.commune}
+                    >
+                      <option value="">Selecciona comuna</option>
+                      {(regions[data.region] || []).map(c => (
+                        <option key={c}>{c}</option>
+                      ))}
+                    </Field>
+                    <div className="col-12">
+                      <Field
+                        label="Dirección de entrega *"
+                        name="address"
+                        placeholder="Calle, número, departamento"
+                        value={data.address}
+                        onChange={e => updateField('address', e.target.value)}
+                        error={errors.address}
+                      />
+                    </div>
                   </div>
+                  <h3 className="mt-4">Método de entrega</h3>
+                  <div className="option-list">
+                    <label>
+                      <input
+                        type="radio"
+                        name="delivery"
+                        checked={data.delivery === 'domicilio'}
+                        onChange={() => updateField('delivery', 'domicilio')}
+                      />{' '}
+                      <Truck size={17} /> Despacho a domicilio
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="delivery"
+                        checked={data.delivery === 'retiro'}
+                        onChange={() => updateField('delivery', 'retiro')}
+                      />{' '}
+                      Retiro coordinado (demo)
+                    </label>
+                  </div>
+                  <h3 className="mt-4">Simulación del pago</h3>
+                  <p className="muted">No se solicitan ni almacenan tarjetas bancarias.</p>
+                  <div className="option-list">
+                    <label>
+                      <input
+                        type="radio"
+                        name="payment"
+                        checked={data.payment === 'aprobado'}
+                        onChange={() => updateField('payment', 'aprobado')}
+                      />{' '}
+                      Simular pago aprobado
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="payment"
+                        checked={data.payment === 'rechazado'}
+                        onChange={() => updateField('payment', 'rechazado')}
+                      />{' '}
+                      Simular pago rechazado
+                    </label>
+                  </div>
+                  {Object.keys(errors).length > 0 && (
+                    <Alert type="danger">
+                      {errors.stock || 'Revisa los campos resaltados antes de continuar.'}
+                    </Alert>
+                  )}
                 </div>
-                <h3 className="mt-4">Método de entrega</h3>
-                <div className="option-list">
-                  <label>
-                    <input
-                      type="radio"
-                      name="delivery"
-                      checked={data.delivery === 'domicilio'}
-                      onChange={() => updateField('delivery', 'domicilio')}
-                    />{' '}
-                    <Truck size={17} /> Despacho a domicilio
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="delivery"
-                      checked={data.delivery === 'retiro'}
-                      onChange={() => updateField('delivery', 'retiro')}
-                    />{' '}
-                    Retiro coordinado (demo)
-                  </label>
-                </div>
-                <h3 className="mt-4">Simulación del pago</h3>
-                <p className="muted">No se solicitan ni almacenan tarjetas bancarias.</p>
-                <div className="option-list">
-                  <label>
-                    <input
-                      type="radio"
-                      name="payment"
-                      checked={data.payment === 'aprobado'}
-                      onChange={() => updateField('payment', 'aprobado')}
-                    />{' '}
-                    Simular pago aprobado
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="payment"
-                      checked={data.payment === 'rechazado'}
-                      onChange={() => updateField('payment', 'rechazado')}
-                    />{' '}
-                    Simular pago rechazado
-                  </label>
-                </div>
-                {Object.keys(errors).length > 0 && (
-                  <Alert type="danger">
-                    {errors.stock || 'Revisa los campos resaltados antes de continuar.'}
-                  </Alert>
-                )}
               </div>
-              <div>
+              <div className="col-lg-4">
                 <Summary
                   cart={cart}
                   products={products}
@@ -406,7 +416,7 @@ export function PurchaseResult({ success }) {
               <XCircle className="error-icon" size={76} />
             )}
             <span className="eyebrow">SIMULACIÓN DE COMPRA</span>
-            <h1>{success ? '¡Tu pedido fue confirmado!' : 'Pago rechazado'}</h1>
+            <h2>{success ? '¡Tu pedido fue confirmado!' : 'Pago rechazado'}</h2>
             <p>
               {success
                 ? 'Tu pedido se registró correctamente en el navegador. No se efectuó un pago ni un despacho real.'

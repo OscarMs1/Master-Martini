@@ -23,7 +23,7 @@ const heroSlides = [
     title: ['Ingredientes para', 'grandes creaciones'],
     description:
       'Descubre soluciones para panadería, pastelería, gelatería y food service con la calidad de Master Martini.',
-    image: '/assets/hero-panaderia-artesanal.jpg',
+    image: '/assets/hero-panaderia.jpg',
     position: 'center center',
     overlay: 'rgba(0,0,0,.39)',
     button: 'Ver catálogo',

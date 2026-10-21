@@ -8,6 +8,7 @@ import ProductTable from '../components/admin/ProductTable';
 import OrderList from '../components/admin/OrderList';
 import { useShop } from '../contexts/ShopContext';
 import { regions } from '../data/catalog';
+import { clases } from '../data/clases';
 import { validateRegister, validateProduct, hasErrors } from '../utils/commerce';
 import { readStore, writeStore } from '../utils/storage';
 
@@ -156,8 +157,10 @@ export function Register() {
             <p className="muted">
               Formulario React con validación, RUN chileno y comunas dependientes de la región.
             </p>
-            <div className="form-grid">
+            {/* Bootstrap: 1 columna en celular, 2 desde tablet (col-md-6) */}
+            <div className="row gx-4">
               <Field
+                col="col-md-6"
                 name="name"
                 label="Nombre *"
                 value={formData.name}
@@ -165,6 +168,7 @@ export function Register() {
                 error={errors.name}
               />
               <Field
+                col="col-md-6"
                 name="lastName"
                 label="Apellido *"
                 value={formData.lastName}
@@ -172,6 +176,7 @@ export function Register() {
                 error={errors.lastName}
               />
               <Field
+                col="col-md-6"
                 name="run"
                 label="RUN *"
                 placeholder="12.345.678-5"
@@ -180,6 +185,7 @@ export function Register() {
                 error={errors.run}
               />
               <Field
+                col="col-md-6"
                 name="email"
                 label="Correo *"
                 type="email"
@@ -188,12 +194,14 @@ export function Register() {
                 error={errors.email}
               />
               <Field
+                col="col-md-6"
                 name="phone"
                 label="Teléfono"
                 value={formData.phone}
                 onChange={e => updateField('phone', e.target.value)}
               />
               <Field
+                col="col-md-6"
                 name="address"
                 label="Dirección *"
                 value={formData.address}
@@ -201,6 +209,7 @@ export function Register() {
                 error={errors.address}
               />
               <Field
+                col="col-md-6"
                 name="region"
                 label="Región *"
                 as="select"
@@ -214,6 +223,7 @@ export function Register() {
                 ))}
               </Field>
               <Field
+                col="col-md-6"
                 name="commune"
                 label="Comuna *"
                 as="select"
@@ -227,6 +237,7 @@ export function Register() {
                 ))}
               </Field>
               <Field
+                col="col-md-6"
                 name="password"
                 label="Contraseña (4 a 10 caracteres) *"
                 type="password"
@@ -235,6 +246,7 @@ export function Register() {
                 error={errors.password}
               />
               <Field
+                col="col-md-6"
                 name="confirm"
                 label="Confirmar contraseña *"
                 type="password"
@@ -255,13 +267,15 @@ export function Register() {
   );
 }
 export function MyAccount() {
-  const { user, setUser, orders } = useShop();
+  const { user, setUser, orders, enrolledClasses } = useShop();
   const navigate = useNavigate();
 
   if (!user) return <Navigate to="/login" replace />;
 
   // Solo los pedidos de este usuario
   const myOrders = orders.filter(order => order.userId === user.email);
+  // Las clases de recetas en que se inscribió (vienen del estado global)
+  const myClasses = clases.filter(clase => enrolledClasses.includes(clase.id));
 
   const handleLogout = () => {
     setUser(null);
@@ -296,6 +310,24 @@ export function MyAccount() {
             showDate
             emptyMessage="Todavía no hay pedidos asociados a esta cuenta."
           />
+
+          <h3 className="mt-4">Mis clases de recetas</h3>
+          {myClasses.length === 0 ? (
+            <p className="muted">
+              Aún no te inscribes en ninguna clase. <Link to="/clases">Ver clases</Link>
+            </p>
+          ) : (
+            <div className="order-list">
+              {myClasses.map(clase => (
+                <div className="order-line" key={clase.id}>
+                  <b>{clase.titulo}</b>
+                  <span>{clase.fecha}</span>
+                  <span>{clase.hora}</span>
+                  <span>{clase.modalidad}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </>

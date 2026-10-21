@@ -11,8 +11,10 @@ import { categories } from '../../data/catalog';
 export default function ProductForm({ product, errors, isNew, onFieldChange, onSubmit, onCancel }) {
   return (
     <form onSubmit={onSubmit} noValidate>
-      <div className="form-grid">
+      {/* Bootstrap: 1 columna en celular, 2 desde tablet (col-md-6) */}
+      <div className="row gx-4">
         <Field
+          col="col-md-6"
           label="Código SKU *"
           name="id"
           disabled={!isNew}
@@ -21,6 +23,7 @@ export default function ProductForm({ product, errors, isNew, onFieldChange, onS
           error={errors.id}
         />
         <Field
+          col="col-md-6"
           label="Nombre *"
           name="name"
           value={product.name}
@@ -28,12 +31,14 @@ export default function ProductForm({ product, errors, isNew, onFieldChange, onS
           error={errors.name}
         />
         <Field
+          col="col-md-6"
           label="Marca"
           name="brand"
           value={product.brand}
           onChange={e => onFieldChange('brand', e.target.value)}
         />
         <Field
+          col="col-md-6"
           label="Categoría *"
           name="category"
           as="select"
@@ -48,6 +53,7 @@ export default function ProductForm({ product, errors, isNew, onFieldChange, onS
           ))}
         </Field>
         <Field
+          col="col-md-6"
           label="Precio CLP *"
           name="price"
           type="number"
@@ -57,6 +63,7 @@ export default function ProductForm({ product, errors, isNew, onFieldChange, onS
           error={errors.price}
         />
         <Field
+          col="col-md-6"
           label="Stock *"
           name="stock"
           type="number"
@@ -66,6 +73,7 @@ export default function ProductForm({ product, errors, isNew, onFieldChange, onS
           error={errors.stock}
         />
         <Field
+          col="col-md-6"
           label="Descuento %"
           name="discount"
           type="number"
@@ -76,12 +84,13 @@ export default function ProductForm({ product, errors, isNew, onFieldChange, onS
           error={errors.discount}
         />
         <Field
+          col="col-md-6"
           label="Formato"
           name="format"
           value={product.format}
           onChange={e => onFieldChange('format', e.target.value)}
         />
-        <div className="span-2">
+        <div className="col-12">
           <Field
             name="description"
             label="Descripción"
