@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Link} from 'react-router-dom';
+import {Link} from 'react-router';
 import {ArrowRight, ArrowLeft, ChevronLeft, ChevronRight, Truck, Headphones, BadgeCheck, Play, ShoppingCart, X} from 'lucide-react';
 import {categories, posts} from '../data/catalog';
 import {useShop} from '../contexts/ShopContext';

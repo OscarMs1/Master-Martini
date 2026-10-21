@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import {Link,useNavigate,useParams} from 'react-router-dom';
+import {Link,useNavigate,useParams} from 'react-router';
 import {ArrowRight,CheckCircle2,XCircle,ShoppingBag,Trash2,Truck,LockKeyhole} from 'lucide-react';
 import {useShop} from '../contexts/ShopContext';
 import {Breadcrumb} from '../components/SiteLayout';

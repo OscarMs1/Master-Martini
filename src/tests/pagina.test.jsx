@@ -1,6 +1,6 @@
 // Tests simples de la página Master Martini usando Vitest
 import { render, screen, fireEvent } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router';
 import ProductCard from '../components/ProductCard';
 import { initialProducts } from '../data/catalog';
 import { netPrice, shipping, validRun, validEmail, addCart, filteredProducts } from '../utils/commerce';

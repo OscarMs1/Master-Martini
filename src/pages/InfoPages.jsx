@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import {Link,useParams} from 'react-router-dom';
+import {Link,useParams} from 'react-router';
 import {ArrowRight,MapPin,Mail,Phone,CheckCircle2} from 'lucide-react';
 import {posts} from '../data/catalog';
 import {Breadcrumb,SectionTitle} from '../components/SiteLayout';

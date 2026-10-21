@@ -1,6 +1,7 @@
 import React, {useEffect,useState} from 'react';
-import {Link,NavLink,Outlet,useLocation,useNavigate} from 'react-router-dom';
-import {Search,ShoppingCart,UserRound,Menu,X,ArrowRight,Instagram,Facebook,MapPin,Mail,Phone,MessageCircle,Truck,ArrowUp} from 'lucide-react';
+import {Link,NavLink,Outlet,useLocation,useNavigate} from 'react-router';
+import {Search,ShoppingCart,UserRound,Menu,X,ArrowRight,MapPin,Mail,Phone,MessageCircle,Truck,ArrowUp} from 'lucide-react';
+import {Facebook,Instagram} from './SocialIcons';
 import {categories} from '../data/catalog';
 import {useShop} from '../contexts/ShopContext';
 

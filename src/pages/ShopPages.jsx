@@ -1,5 +1,5 @@
 import React,{useMemo,useState} from 'react';
-import {Link,useParams,useSearchParams} from 'react-router-dom';
+import {Link,useParams,useSearchParams} from 'react-router';
 import {ArrowLeft,ArrowRight,ShoppingCart,Search,SlidersHorizontal,Package,Tag} from 'lucide-react';
 import {categories} from '../data/catalog';
 import {useShop} from '../contexts/ShopContext';

@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter,Routes,Route} from 'react-router-dom';
+import {BrowserRouter,Routes,Route} from 'react-router';
 import {ShopProvider} from './contexts/ShopContext';
 import {Layout} from './components/SiteLayout';
 import Home from './pages/Home';
