@@ -1,22 +1,232 @@
-import React,{useMemo,useState} from 'react';
-import {Link,useParams,useSearchParams} from 'react-router';
-import {ArrowLeft,ArrowRight,ShoppingCart,Search,SlidersHorizontal,Package,Tag} from 'lucide-react';
-import {categories} from '../data/catalog';
-import {useShop} from '../contexts/ShopContext';
-import {ProductGrid} from '../components/ProductCard';
-import {Breadcrumb} from '../components/SiteLayout';
+import { useMemo, useState } from 'react';
+import { Link, useParams, useSearchParams } from 'react-router';
+import {
+  ArrowLeft,
+  ArrowRight,
+  ShoppingCart,
+  Search,
+  SlidersHorizontal,
+  Package,
+  Tag
+} from 'lucide-react';
+import { categories } from '../data/catalog';
+import { useShop } from '../contexts/ShopContext';
+import { ProductGrid } from '../components/ProductCard';
+import { Breadcrumb } from '../components/SiteLayout';
 import ProductMedia from '../components/ProductMedia';
-import {filteredProducts,money,netPrice} from '../utils/commerce';
-export function Catalog({onlyOffers=false}){
- const {category:routeCat}=useParams();const [params,setParams]=useSearchParams();const [sort,setSort]=useState('featured');
- const {products,add}=useShop();const term=params.get('q')||'';const category=routeCat||params.get('categoria')||'all';
- const list=useMemo(()=>{const f=filteredProducts(products,term,category,onlyOffers);return [...f].sort((a,b)=>sort==='low'?netPrice(a)-netPrice(b):sort==='high'?netPrice(b)-netPrice(a):sort==='az'?a.name.localeCompare(b.name):0)},[products,term,category,onlyOffers,sort]);
- const label=onlyOffers?'Ofertas especiales':(routeCat?categories.find(x=>x.id===routeCat)?.name||'Categoría':'Catálogo de productos');
- const change=(key,val)=>{const n=new URLSearchParams(params);if(!val||val==='all')n.delete(key);else n.set(key,val);setParams(n)};
- return <><Breadcrumb title={label} crumb={onlyOffers?'OFERTAS':'CATÁLOGO'}/><section className="section"><div className="container"><div className="catalog-heading"><div><span className="eyebrow">EXPLORA NUESTRAS SOLUCIONES</span><h2>{label}</h2><p className="muted">{list.length} productos encontrados · Precios demostrativos en CLP</p></div><div className="catalog-tools"><div className="search-box"><Search size={18}/><input aria-label="Buscar productos" type="search" placeholder="Buscar producto, marca o código..." value={term} onChange={e=>change('q',e.target.value)}/></div><select aria-label="Ordenar productos" value={sort} onChange={e=>setSort(e.target.value)}><option value="featured">Destacados</option><option value="low">Menor precio</option><option value="high">Mayor precio</option><option value="az">Nombre A–Z</option></select></div></div>
- {!routeCat&&<div className="filter-tabs" aria-label="Filtrar por categoría"><SlidersHorizontal size={18}/><button className={category==='all'?'active':''} onClick={()=>change('categoria','all')}>Todos</button>{categories.map(c=><button key={c.id} className={category===c.id?'active':''} onClick={()=>change('categoria',c.id)}>{c.name}</button>)}</div>}
- {list.length?<ProductGrid products={list} onAdd={add}/>:<div className="empty-state"><Package size={50}/><h3>No encontramos productos</h3><p>Prueba con otra búsqueda o cambia de categoría.</p><Link to="/catalogo" className="btn-orange">Ver catálogo completo</Link></div>}
- </div></section></>}
-export function ProductDetail(){const {id}=useParams();const {products,add}=useShop();const [qty,setQty]=useState(1);const product=products.find(p=>p.id===id);if(!product)return <><Breadcrumb title="Producto no encontrado"/><div className="container section text-center"><h2>No existe el producto solicitado.</h2><Link className="btn-orange" to="/catalogo">Volver al catálogo</Link></div></>;
- const c=categories.find(x=>x.id===product.category);
- return <><Breadcrumb title="Detalle de producto" crumb="PRODUCTO"/><section className="section"><div className="container"><Link className="back-link" to="/catalogo"><ArrowLeft size={17}/> Volver al catálogo</Link><div className="detail-grid"><div className="detail-photo"><ProductMedia product={product} variant="detail"/>{product.discount>0&&<span className="sale-tag">-{product.discount}%</span>}</div><div className="detail-info"><span className="eyebrow">{product.brand} · {c?.name}</span><h1>{product.name}</h1><div className="detail-sku">SKU: {product.id} · Formato: {product.format}</div><div className="detail-price">{money(netPrice(product))} {product.discount>0&&<del>{money(product.price)}</del>}</div><p>{product.description}</p><p className={product.stock?'stock yes':'stock no'}>{product.stock?`● Disponible · ${product.stock} unidades (demo)`:'● Producto agotado'}</p><div className="add-row"><div className="qty-control"><button onClick={()=>setQty(Math.max(1,qty-1))} aria-label="Reducir cantidad">−</button><span>{qty}</span><button onClick={()=>setQty(Math.max(1,Math.min(product.stock,qty+1)))} aria-label="Aumentar cantidad">+</button></div><button className="btn-orange btn-large" disabled={!product.stock} onClick={()=>add(product,qty)}><ShoppingCart size={17}/> Añadir al carrito</button></div><div className="detail-highlights"><span>✓ Calidad profesional</span><span>✓ Compra de demostración</span><span>✓ Cobertura nacional</span></div></div></div></div></section><section className="section cream-section"><div className="container"><h2>También te puede interesar</h2><ProductGrid products={products.filter(p=>p.category===product.category &&p.id!==product.id).slice(0,4)} onAdd={add}/></div></section></>}
+import { filteredProducts, money, netPrice } from '../utils/commerce';
+
+// Ordena una lista de productos según la opción elegida en el select
+function sortProducts(list, sort) {
+  const sorted = [...list]; // copia, para no modificar la lista original
+  if (sort === 'low') sorted.sort((a, b) => netPrice(a) - netPrice(b));
+  if (sort === 'high') sorted.sort((a, b) => netPrice(b) - netPrice(a));
+  if (sort === 'az') sorted.sort((a, b) => a.name.localeCompare(b.name));
+  return sorted; // 'featured' deja el orden original
+}
+
+// Título de la página según si son ofertas, una categoría o el catálogo completo
+function getCatalogTitle(onlyOffers, categoryFromRoute) {
+  if (onlyOffers) return 'Ofertas especiales';
+  if (categoryFromRoute) {
+    const category = categories.find(item => item.id === categoryFromRoute);
+    return category ? category.name : 'Categoría';
+  }
+  return 'Catálogo de productos';
+}
+
+export function Catalog({ onlyOffers = false }) {
+  const { category: categoryFromRoute } = useParams();
+  const [params, setParams] = useSearchParams();
+  const [sort, setSort] = useState('featured');
+  const { products, add } = useShop();
+
+  // La búsqueda y la categoría se guardan en la URL (?q=...&categoria=...)
+  const term = params.get('q') || '';
+  const category = categoryFromRoute || params.get('categoria') || 'all';
+
+  const list = useMemo(() => {
+    const filtered = filteredProducts(products, term, category, onlyOffers);
+    return sortProducts(filtered, sort);
+  }, [products, term, category, onlyOffers, sort]);
+
+  const label = getCatalogTitle(onlyOffers, categoryFromRoute);
+
+  // Cambia un parámetro de la URL. 'all' o vacío lo quita.
+  const updateUrlParam = (key, value) => {
+    const newParams = new URLSearchParams(params);
+    if (!value || value === 'all') newParams.delete(key);
+    else newParams.set(key, value);
+    setParams(newParams);
+  };
+
+  return (
+    <>
+      <Breadcrumb title={label} crumb={onlyOffers ? 'OFERTAS' : 'CATÁLOGO'} />
+      <section className="section">
+        <div className="container">
+          <div className="catalog-heading">
+            <div>
+              <span className="eyebrow">EXPLORA NUESTRAS SOLUCIONES</span>
+              <h2>{label}</h2>
+              <p className="muted">
+                {list.length} productos encontrados · Precios demostrativos en CLP
+              </p>
+            </div>
+            <div className="catalog-tools">
+              <div className="search-box">
+                <Search size={18} />
+                <input
+                  aria-label="Buscar productos"
+                  type="search"
+                  placeholder="Buscar producto, marca o código..."
+                  value={term}
+                  onChange={e => updateUrlParam('q', e.target.value)}
+                />
+              </div>
+              <select
+                aria-label="Ordenar productos"
+                value={sort}
+                onChange={e => setSort(e.target.value)}
+              >
+                <option value="featured">Destacados</option>
+                <option value="low">Menor precio</option>
+                <option value="high">Mayor precio</option>
+                <option value="az">Nombre A–Z</option>
+              </select>
+            </div>
+          </div>
+          {!categoryFromRoute && (
+            <div className="filter-tabs" aria-label="Filtrar por categoría">
+              <SlidersHorizontal size={18} />
+              <button
+                className={category === 'all' ? 'active' : ''}
+                onClick={() => updateUrlParam('categoria', 'all')}
+              >
+                Todos
+              </button>
+              {categories.map(item => (
+                <button
+                  key={item.id}
+                  className={category === item.id ? 'active' : ''}
+                  onClick={() => updateUrlParam('categoria', item.id)}
+                >
+                  {item.name}
+                </button>
+              ))}
+            </div>
+          )}
+          {list.length ? (
+            <ProductGrid products={list} onAdd={add} />
+          ) : (
+            <div className="empty-state">
+              <Package size={50} />
+              <h3>No encontramos productos</h3>
+              <p>Prueba con otra búsqueda o cambia de categoría.</p>
+              <Link to="/catalogo" className="btn-orange">
+                Ver catálogo completo
+              </Link>
+            </div>
+          )}
+        </div>
+      </section>
+    </>
+  );
+}
+
+export function ProductDetail() {
+  const { id } = useParams();
+  const { products, add } = useShop();
+  const [qty, setQty] = useState(1);
+  const product = products.find(item => item.id === id);
+  if (!product)
+    return (
+      <>
+        <Breadcrumb title="Producto no encontrado" />
+        <div className="container section text-center">
+          <h2>No existe el producto solicitado.</h2>
+          <Link className="btn-orange" to="/catalogo">
+            Volver al catálogo
+          </Link>
+        </div>
+      </>
+    );
+  const category = categories.find(item => item.id === product.category);
+  return (
+    <>
+      <Breadcrumb title="Detalle de producto" crumb="PRODUCTO" />
+      <section className="section">
+        <div className="container">
+          <Link className="back-link" to="/catalogo">
+            <ArrowLeft size={17} /> Volver al catálogo
+          </Link>
+          <div className="detail-grid">
+            <div className="detail-photo">
+              <ProductMedia product={product} variant="detail" />
+              {product.discount > 0 && <span className="sale-tag">-{product.discount}%</span>}
+            </div>
+            <div className="detail-info">
+              <span className="eyebrow">
+                {product.brand} · {category?.name}
+              </span>
+              <h1>{product.name}</h1>
+              <div className="detail-sku">
+                SKU: {product.id} · Formato: {product.format}
+              </div>
+              <div className="detail-price">
+                {money(netPrice(product))}{' '}
+                {product.discount > 0 && <del>{money(product.price)}</del>}
+              </div>
+              <p>{product.description}</p>
+              <p className={product.stock ? 'stock yes' : 'stock no'}>
+                {product.stock
+                  ? `● Disponible · ${product.stock} unidades (demo)`
+                  : '● Producto agotado'}
+              </p>
+              <div className="add-row">
+                <div className="qty-control">
+                  <button
+                    onClick={() => setQty(Math.max(1, qty - 1))}
+                    aria-label="Reducir cantidad"
+                  >
+                    −
+                  </button>
+                  <span>{qty}</span>
+                  <button
+                    onClick={() => setQty(Math.max(1, Math.min(product.stock, qty + 1)))}
+                    aria-label="Aumentar cantidad"
+                  >
+                    +
+                  </button>
+                </div>
+                <button
+                  className="btn-orange btn-large"
+                  disabled={!product.stock}
+                  onClick={() => add(product, qty)}
+                >
+                  <ShoppingCart size={17} /> Añadir al carrito
+                </button>
+              </div>
+              <div className="detail-highlights">
+                <span>✓ Calidad profesional</span>
+                <span>✓ Compra de demostración</span>
+                <span>✓ Cobertura nacional</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="section cream-section">
+        <div className="container">
+          <h2>También te puede interesar</h2>
+          <ProductGrid
+            products={products
+              .filter(item => item.category === product.category && item.id !== product.id)
+              .slice(0, 4)}
+            onAdd={add}
+          />
+        </div>
+      </section>
+    </>
+  );
+}

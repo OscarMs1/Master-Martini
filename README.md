@@ -130,6 +130,7 @@ Reinicie el servidor de Vite para aplicar el cambio de entorno. La API guarda su
 | Ruta | Contenido |
 | --- | --- |
 | `src/components/` | Componentes reutilizables de interfaz |
+| `src/components/admin/` | Componentes del panel de administración (`ProductForm`, `ProductTable`, `OrderList`) |
 | `src/pages/` | Páginas y vistas |
 | `src/contexts/` | Estado global y operaciones de tienda |
 | `src/data/` | Catálogo, categorías y contenidos iniciales |

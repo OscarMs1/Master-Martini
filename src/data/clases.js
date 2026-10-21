@@ -14,7 +14,8 @@ export const clases = [
     nivel: 'Medio',
     cupos: 12,
     imagen: '/assets/blog-croissant-unsplash.webp',
-    descripcion: 'Aprende a laminar la masa y lograr un croissant crujiente por fuera y suave por dentro.',
+    descripcion:
+      'Aprende a laminar la masa y lograr un croissant crujiente por fuera y suave por dentro.',
     pasos: [
       'Preparar la masa base y dejarla reposar en frío.',
       'Laminar la masa con margarina en tres dobleces.',
@@ -82,7 +83,8 @@ export const clases = [
     nivel: 'Medio',
     cupos: 40,
     imagen: '/assets/cat-retail.jpg',
-    descripcion: 'Arma una torta de bizcocho con crema vegetal y una base de chocolate, decorada con frutos rojos.',
+    descripcion:
+      'Arma una torta de bizcocho con crema vegetal y una base de chocolate, decorada con frutos rojos.',
     pasos: [
       'Hornear el bizcocho y cortarlo en capas.',
       'Bañar la primera capa con la cobertura de chocolate.',

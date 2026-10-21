@@ -42,7 +42,10 @@ export default function Clases() {
       <Breadcrumb title="Clases de recetas" crumb="CLASES" />
       <section className="section">
         <div className="container">
-          <SectionTitle eyebrow="APRENDE CON NOSOTROS" title="Clases con productos de nuestro catálogo" />
+          <SectionTitle
+            eyebrow="APRENDE CON NOSOTROS"
+            title="Clases con productos de nuestro catálogo"
+          />
 
           <div className="clases-filtros">
             {['Todas', 'Presencial', 'Online'].map(opcion => (
@@ -69,20 +72,32 @@ export default function Clases() {
                     <img src={clase.imagen} alt={clase.titulo} />
 
                     <div className="clase-info">
-                      <span className={'clase-etiqueta ' + clase.modalidad.toLowerCase()}>{clase.modalidad}</span>
+                      <span className={'clase-etiqueta ' + clase.modalidad.toLowerCase()}>
+                        {clase.modalidad}
+                      </span>
                       <h3>{clase.titulo}</h3>
                       <p>{clase.descripcion}</p>
 
                       <ul className="clase-datos row g-2">
-                        <li className="col-12 col-sm-6"><CalendarDays size={16} /> {clase.fecha}</li>
-                        <li className="col-12 col-sm-6"><Clock size={16} /> {clase.hora} · {clase.duracion}</li>
-                        <li className="col-12 col-sm-6"><MapPin size={16} /> {clase.lugar}</li>
-                        <li className="col-12 col-sm-6"><Users size={16} /> {cuposLibres} cupos disponibles</li>
+                        <li className="col-12 col-sm-6">
+                          <CalendarDays size={16} /> {clase.fecha}
+                        </li>
+                        <li className="col-12 col-sm-6">
+                          <Clock size={16} /> {clase.hora} · {clase.duracion}
+                        </li>
+                        <li className="col-12 col-sm-6">
+                          <MapPin size={16} /> {clase.lugar}
+                        </li>
+                        <li className="col-12 col-sm-6">
+                          <Users size={16} /> {cuposLibres} cupos disponibles
+                        </li>
                       </ul>
 
                       <h4>Receta · nivel {clase.nivel}</h4>
                       <ol>
-                        {clase.pasos.map(paso => <li key={paso}>{paso}</li>)}
+                        {clase.pasos.map(paso => (
+                          <li key={paso}>{paso}</li>
+                        ))}
                       </ol>
 
                       <div className="clase-insumos">
@@ -94,19 +109,31 @@ export default function Clases() {
                             <div className="insumo" key={insumo.id}>
                               <img src={producto.image} alt="" />
                               <Link to={'/producto/' + producto.id}>{producto.name}</Link>
-                              <span>{insumo.cantidad} x {money(netPrice(producto))}</span>
+                              <span>
+                                {insumo.cantidad} x {money(netPrice(producto))}
+                              </span>
                             </div>
                           );
                         })}
-                        <button type="button" className="btn-outline" onClick={() => agregarInsumos(clase)}>
+                        <button
+                          type="button"
+                          className="btn-outline"
+                          onClick={() => agregarInsumos(clase)}
+                        >
                           <ShoppingCart size={16} /> Agregar insumos al carrito
                         </button>
                       </div>
 
                       {estaInscrito ? (
-                        <p className="clase-ok"><CheckCircle2 size={18} /> ¡Estás inscrito en esta clase!</p>
+                        <p className="clase-ok">
+                          <CheckCircle2 size={18} /> ¡Estás inscrito en esta clase!
+                        </p>
                       ) : (
-                        <button type="button" className="btn-orange" onClick={() => inscribirse(clase.id)}>
+                        <button
+                          type="button"
+                          className="btn-orange"
+                          onClick={() => inscribirse(clase.id)}
+                        >
                           Inscribirme
                         </button>
                       )}

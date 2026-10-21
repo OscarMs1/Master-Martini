@@ -66,6 +66,6 @@ test('A07: Tendencias en pastelería utiliza encuadre local diferenciado para ta
  assert.ok(existsSync(asset(p.image)));
  const home=readFileSync(resolve(root,'src/pages/Home.jsx'),'utf8');
  const blog=readFileSync(resolve(root,'src/pages/InfoPages.jsx'),'utf8');
- assert.match(home,/post\.cardImage\|\|post\.image/);
- assert.match(blog,/p\.cardImage\|\|p\.image/);
+ assert.match(home,/post\.cardImage\s*\|\|\s*post\.image/);
+ assert.match(blog,/p\.cardImage\s*\|\|\s*p\.image/);
 });

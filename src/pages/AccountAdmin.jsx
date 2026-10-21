@@ -1,28 +1,558 @@
-import React,{useState} from 'react';
-import {Link,Navigate,useNavigate} from 'react-router';
-import {Package,Users,ClipboardList,Plus,PenLine,Trash2,ShieldCheck,LogOut,RotateCcw} from 'lucide-react';
-import {Breadcrumb} from '../components/SiteLayout';
-import {Field,Alert} from '../components/FormFields';
-import {useShop} from '../contexts/ShopContext';
-import {categories,regions} from '../data/catalog';
-import {validRun,validEmail,validateProduct,hasErrors,money} from '../utils/commerce';
-import {readStore,writeStore} from '../utils/storage';
-const demoAccounts=[{email:'admin@demo.cl',password:'Admin123',name:'Administrador Demo',role:'admin'},{email:'vendedor@demo.cl',password:'Venta123',name:'Vendedor Demo',role:'vendedor'},{email:'cliente@demo.cl',password:'Cliente123',name:'Cliente Demo',role:'cliente'}];
-export function Login(){const {setUser,user}=useShop();const nav=useNavigate();const [email,setEmail]=useState('');const [pass,setPass]=useState('');const [error,setError]=useState('');
- const submit=e=>{e.preventDefault();const item=demoAccounts.find(x=>x.email===email.trim().toLowerCase()&&x.password===pass);if(!item){setError('Credenciales inválidas. Revisa los usuarios ficticios de la demostración.');return;}setUser({name:item.name,email:item.email,role:item.role});nav(item.role==='admin'||item.role==='vendedor'?'/admin':'/mi-cuenta')};
- return <><Breadcrumb title="Iniciar sesión"/><section className="section"><div className="container narrow"><div className="form-panel"><h2>Bienvenido de nuevo</h2><p className="muted">Accede con un usuario de prueba. No utilices credenciales personales.</p><form onSubmit={submit}><Field name="email" label="Correo electrónico" type="email" required value={email} onChange={e=>setEmail(e.target.value)}/><Field name="password" label="Contraseña" type="password" required value={pass} onChange={e=>setPass(e.target.value)}/>{error&&<Alert type="danger">{error}</Alert>}<button className="btn-orange btn-block">Entrar a mi cuenta</button></form><div className="demo-creds"><b>Accesos para la defensa:</b><p>Administrador: <code>admin@demo.cl</code> / <code>Admin123</code></p><p>Vendedor: <code>vendedor@demo.cl</code> / <code>Venta123</code></p><p>Cliente: <code>cliente@demo.cl</code> / <code>Cliente123</code></p></div><p className="text-center mt-3">¿No tienes cuenta? <Link to="/registro">Regístrate aquí</Link></p></div></div></section></>}
-export function Register(){const {setUser}=useShop();const nav=useNavigate();const [errors,setErrors]=useState({});const [d,setD]=useState({name:'',lastName:'',run:'',email:'',phone:'',region:'',commune:'',address:'',password:'',confirm:''});const update=(key,value)=>setD(prev=>({...prev,[key]:value,...(key==='region'?{commune:''}:{})}));
- const submit=e=>{e.preventDefault();const er={};if(d.name.trim().length<2)er.name='Mínimo 2 caracteres.';if(d.lastName.trim().length<2)er.lastName='Mínimo 2 caracteres.';if(!validRun(d.run))er.run='RUN no válido.';if(!validEmail(d.email))er.email='Correo inválido.';if(!/^.{4,10}$/.test(d.password))er.password='Entre 4 y 10 caracteres.';if(d.password!==d.confirm)er.confirm='Las contraseñas deben coincidir.';if(!d.region)er.region='Obligatoria.';if(!d.commune)er.commune='Obligatoria.';if(d.address.length<5)er.address='Dirección incompleta.';setErrors(er);if(hasErrors(er))return;
-  // No se almacenan contraseñas. Cuenta de sesión de prototipo, sin backend.
-  const safe={name:d.name+' '+d.lastName,email:d.email,run:d.run,phone:d.phone,region:d.region,commune:d.commune,address:d.address,role:'cliente'};
-  const existing=readStore('mm-ep2-clients',[]);writeStore('mm-ep2-clients',[...existing.filter(x=>x.email!==safe.email),safe]);setUser(safe);nav('/mi-cuenta');};
- return <><Breadcrumb title="Crear una cuenta"/><section className="section"><div className="container narrow-wide"><form className="form-panel" onSubmit={submit} noValidate><h2>Registro de cliente</h2><p className="muted">Formulario React con validación, RUN chileno y comunas dependientes de la región.</p><div className="form-grid"><Field name="name" label="Nombre *" value={d.name} onChange={e=>update('name',e.target.value)} error={errors.name}/><Field name="lastName" label="Apellido *" value={d.lastName} onChange={e=>update('lastName',e.target.value)} error={errors.lastName}/><Field name="run" label="RUN *" placeholder="12.345.678-5" value={d.run} onChange={e=>update('run',e.target.value)} error={errors.run}/><Field name="email" label="Correo *" type="email" value={d.email} onChange={e=>update('email',e.target.value)} error={errors.email}/><Field name="phone" label="Teléfono" value={d.phone} onChange={e=>update('phone',e.target.value)} /><Field name="address" label="Dirección *" value={d.address} onChange={e=>update('address',e.target.value)} error={errors.address}/><Field name="region" label="Región *" as="select" value={d.region} onChange={e=>update('region',e.target.value)} error={errors.region}><option value="">Seleccionar región</option>{Object.keys(regions).map(r=><option key={r}>{r}</option>)}</Field><Field name="commune" label="Comuna *" as="select" value={d.commune} onChange={e=>update('commune',e.target.value)} error={errors.commune}><option value="">Seleccionar comuna</option>{(regions[d.region]||[]).map(c=><option key={c}>{c}</option>)}</Field><Field name="password" label="Contraseña (4 a 10 caracteres) *" type="password" value={d.password} onChange={e=>update('password',e.target.value)} error={errors.password}/><Field name="confirm" label="Confirmar contraseña *" type="password" value={d.confirm} onChange={e=>update('confirm',e.target.value)} error={errors.confirm}/></div><p className="small muted">Importante: registro ilustrativo. La contraseña no se persiste; para iniciar sesión después usa las cuentas demo.</p><button className="btn-orange btn-block">Registrarme</button></form></div></section></>}
-export function MyAccount(){const {user,setUser,orders}=useShop();const nav=useNavigate();if(!user)return <Navigate to="/login" replace/>;return <><Breadcrumb title="Mi cuenta"/><section className="section"><div className="container"><div className="account-row"><div><span className="eyebrow">ÁREA PERSONAL</span><h2>Hola, {user.name}</h2><p>{user.email} · Rol: {user.role}</p></div><button className="btn-outline" onClick={()=>{setUser(null);nav('/')}}><LogOut size={17}/> Cerrar sesión</button></div>{user.role!=='cliente'&&<Link to="/admin" className="btn-orange">Abrir administración</Link>}<h3 className="mt-4">Mis pedidos de demostración</h3><div className="order-list">{orders.filter(o=>o.userId===user.email).length?orders.filter(o=>o.userId===user.email).map(o=><div className="order-line" key={o.id}><b>{o.id}</b><span>{new Date(o.date).toLocaleDateString('es-CL')}</span><span>{o.status}</span><b>{money(o.total)}</b></div>):<p className="muted">Todavía no hay pedidos asociados a esta cuenta.</p>}</div></div></section></>}
-export function ProtectedAdmin({children}){const {user}=useShop();return user?.role==='admin'||user?.role==='vendedor'?children:<Navigate to="/login" replace/>}
-const emptyProduct={id:'',name:'',brand:'Master Martini',category:'panaderia',format:'1 kg',description:'',price:0,stock:0,discount:0,image:'/assets/producto-respaldo.svg',featured:false};
-export function Admin(){const {products,orders,user,saveProduct,eraseProduct,resetCatalog}=useShop();const [tab,setTab]=useState('productos');const [editing,setEditing]=useState(null);const [form,setForm]=useState(emptyProduct);const [errors,setErrors]=useState({});const [msg,setMsg]=useState('');const [q,setQ]=useState('');const clients=readStore('mm-ep2-clients',[]);
- const begin=(p=null)=>{setEditing(p?.id||'new');setForm(p?{...p}:{...emptyProduct,id:'MM-'+String(Date.now()).slice(-6)});setErrors({});setMsg('')};
- const submit=async e=>{e.preventDefault();const errs=validateProduct(form);const p={...form,price:Number(form.price),stock:Number(form.stock),discount:Number(form.discount)};setErrors(errs);if(hasErrors(errs))return;try{await saveProduct(p,editing!=='new');setMsg(editing==='new'?'Producto creado correctamente.':'Producto actualizado.');setEditing(null)}catch(e){setMsg(e.message)}};
- const del=async(id)=>{if(window.confirm(`¿Eliminar producto ${id}?`)){try{await eraseProduct(id);setMsg('Producto eliminado.')}catch(e){setMsg(e.message)}}};
- const navItems=[{key:'productos',icon:Package,label:'Productos'},{key:'pedidos',icon:ClipboardList,label:'Pedidos'},{key:'usuarios',icon:Users,label:'Usuarios'}];
- return <><Breadcrumb title="Panel administrativo" crumb="SISTEMA ADMINISTRATIVO"/><section className="section admin-section"><div className="container"><div className="admin-welcome"><div><span className="eyebrow">PANEL DE CONTROL</span><h2>Hola, {user.name}</h2><p>Gestiona el inventario y consulta los datos de la aplicación (simulación local).</p></div><span className="admin-badge"><ShieldCheck size={16}/> {user.role}</span></div><div className="admin-stats"><div><Package/><b>{products.length}</b><span>Productos</span></div><div><ClipboardList/><b>{orders.length}</b><span>Pedidos registrados</span></div><div><Users/><b>{clients.length+3}</b><span>Usuarios de prueba</span></div><div><Package/><b>{products.filter(p=>p.stock<5).length}</b><span>Stock crítico</span></div></div><div className="admin-shell"><aside className="admin-sidebar"><h3>Administración</h3>{navItems.map(({key,icon:Icon,label})=><button key={key} onClick={()=>{setTab(key);setEditing(null)}} className={tab===key?'selected':''}><Icon size={18}/>{label}</button>)}<button onClick={async()=>{if(window.confirm('¿Restaurar productos y borrar carrito demo?'))try{await resetCatalog()}catch(error){setMsg(error.message)}}}><RotateCcw size={17}/> Reiniciar catálogo</button></aside><div className="admin-content">{msg&&<Alert type="info">{msg}</Alert>}{tab==='productos'&&<><div className="admin-content-header"><h3>{editing?'Formulario de producto':'Gestión de productos (CRUD)'}</h3><div className="admin-actions">{!editing&&<><input placeholder="Buscar SKU o nombre" aria-label="Buscar productos en administración" value={q} onChange={e=>setQ(e.target.value)}/><button className="btn-orange" onClick={()=>begin()}><Plus size={16}/> Nuevo producto</button></>}</div></div>{editing?<form onSubmit={submit} noValidate><div className="form-grid"><Field label="Código SKU *" name="id" disabled={editing!=='new'} value={form.id} onChange={e=>setForm({...form,id:e.target.value})} error={errors.id}/><Field label="Nombre *" name="name" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} error={errors.name}/><Field label="Marca" name="brand" value={form.brand} onChange={e=>setForm({...form,brand:e.target.value})}/><Field label="Categoría *" name="category" as="select" value={form.category} onChange={e=>setForm({...form,category:e.target.value})} error={errors.category}>{categories.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}</Field><Field label="Precio CLP *" name="price" type="number" min="0" value={form.price} onChange={e=>setForm({...form,price:e.target.value})} error={errors.price}/><Field label="Stock *" name="stock" type="number" min="0" value={form.stock} onChange={e=>setForm({...form,stock:e.target.value})} error={errors.stock}/><Field label="Descuento %" name="discount" type="number" min="0" max="100" value={form.discount} onChange={e=>setForm({...form,discount:e.target.value})} error={errors.discount}/><Field label="Formato" name="format" value={form.format} onChange={e=>setForm({...form,format:e.target.value})}/><div className="span-2"><Field name="description" label="Descripción" as="textarea" rows="3" value={form.description} onChange={e=>setForm({...form,description:e.target.value})}/><Field name="image" label="Ruta de imagen / URL" value={form.image} onChange={e=>setForm({...form,image:e.target.value,remoteImage:undefined,imageNote:undefined})}/></div></div><label className="form-check mt-2"><input type="checkbox" className="form-check-input" checked={form.featured||false} onChange={e=>setForm({...form,featured:e.target.checked})}/> Producto destacado</label><div className="form-buttons"><button type="submit" className="btn-orange">Guardar producto</button><button type="button" className="btn-outline" onClick={()=>setEditing(null)}>Cancelar</button></div></form>:<div className="admin-table-wrap"><table className="admin-table"><thead><tr><th>Producto</th><th>SKU</th><th>Precio</th><th>Stock</th><th>Acciones</th></tr></thead><tbody>{products.filter(p=>(p.name+p.id).toLowerCase().includes(q.toLowerCase())).map(p=><tr key={p.id}><td><div className="table-product"><img src={p.remoteImage||p.image} onError={e=>{e.currentTarget.onerror=null;e.currentTarget.src=p.image||'/assets/producto-respaldo.svg'}} alt=""/><span>{p.name}<small>{categories.find(c=>c.id===p.category)?.name}</small></span></div></td><td>{p.id}</td><td>{money(p.price)}</td><td><span className={p.stock<5?'low-stock':''}>{p.stock}</span></td><td><div className="row-actions"><button aria-label={'Editar '+p.name} onClick={()=>begin(p)}><PenLine size={16}/></button>{user.role==='admin'&&<button aria-label={'Eliminar '+p.name} onClick={()=>del(p.id)}><Trash2 size={16}/></button>}</div></td></tr>)}</tbody></table></div>}</>}{tab==='pedidos'&&<><h3>Pedidos de demostración</h3>{orders.length?orders.map(o=><div className="order-line" key={o.id}><b>{o.id}</b><span>{o.details?.name}</span><span>{o.status}</span><b>{money(o.total)}</b></div>):<p className="muted">Aún no hay pedidos. Finaliza un checkout de prueba.</p>}</>}{tab==='usuarios'&&<><h3>Usuarios registrados (demo)</h3><p className="muted">Datos locales de ejemplo; no almacena contraseñas.</p>{[...demoAccounts.map(({password,...a})=>a),...clients].map((u,i)=><div className="order-line" key={i}><b>{u.name}</b><span>{u.email}</span><span>{u.role}</span></div>)}</>}</div></div></div></section></>}
+import { useState } from 'react';
+import { Link, Navigate, useNavigate } from 'react-router';
+import { Package, Users, ClipboardList, Plus, ShieldCheck, LogOut, RotateCcw } from 'lucide-react';
+import { Breadcrumb } from '../components/SiteLayout';
+import { Field, Alert } from '../components/FormFields';
+import ProductForm from '../components/admin/ProductForm';
+import ProductTable from '../components/admin/ProductTable';
+import OrderList from '../components/admin/OrderList';
+import { useShop } from '../contexts/ShopContext';
+import { regions } from '../data/catalog';
+import { validateRegister, validateProduct, hasErrors } from '../utils/commerce';
+import { readStore, writeStore } from '../utils/storage';
+
+// Cuentas de prueba para la demostración.
+// En un sistema real, las contraseñas se validan en el backend y nunca en el frontend.
+const demoAccounts = [
+  { email: 'admin@demo.cl', password: 'Admin123', name: 'Administrador Demo', role: 'admin' },
+  { email: 'vendedor@demo.cl', password: 'Venta123', name: 'Vendedor Demo', role: 'vendedor' },
+  { email: 'cliente@demo.cl', password: 'Cliente123', name: 'Cliente Demo', role: 'cliente' }
+];
+
+// Devuelve true si el usuario puede entrar al panel de administración
+function canUseAdmin(user) {
+  return user?.role === 'admin' || user?.role === 'vendedor';
+}
+
+export function Login() {
+  const { setUser } = useShop();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const handleSubmit = event => {
+    event.preventDefault();
+    const account = demoAccounts.find(
+      item => item.email === email.trim().toLowerCase() && item.password === password
+    );
+    if (!account) {
+      setError('Credenciales inválidas. Revisa los usuarios ficticios de la demostración.');
+      return;
+    }
+    // Guardamos el usuario sin la contraseña
+    const loggedUser = { name: account.name, email: account.email, role: account.role };
+    setUser(loggedUser);
+    navigate(canUseAdmin(loggedUser) ? '/admin' : '/mi-cuenta');
+  };
+
+  return (
+    <>
+      <Breadcrumb title="Iniciar sesión" />
+      <section className="section">
+        <div className="container narrow">
+          <div className="form-panel">
+            <h2>Bienvenido de nuevo</h2>
+            <p className="muted">
+              Accede con un usuario de prueba. No utilices credenciales personales.
+            </p>
+            <form onSubmit={handleSubmit}>
+              <Field
+                name="email"
+                label="Correo electrónico"
+                type="email"
+                required
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+              />
+              <Field
+                name="password"
+                label="Contraseña"
+                type="password"
+                required
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+              />
+              {error && <Alert type="danger">{error}</Alert>}
+              <button className="btn-orange btn-block">Entrar a mi cuenta</button>
+            </form>
+            <div className="demo-creds">
+              <b>Accesos para la defensa:</b>
+              <p>
+                Administrador: <code>admin@demo.cl</code> / <code>Admin123</code>
+              </p>
+              <p>
+                Vendedor: <code>vendedor@demo.cl</code> / <code>Venta123</code>
+              </p>
+              <p>
+                Cliente: <code>cliente@demo.cl</code> / <code>Cliente123</code>
+              </p>
+            </div>
+            <p className="text-center mt-3">
+              ¿No tienes cuenta? <Link to="/registro">Regístrate aquí</Link>
+            </p>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+export function Register() {
+  const { setUser } = useShop();
+  const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
+  const [formData, setFormData] = useState({
+    name: '',
+    lastName: '',
+    run: '',
+    email: '',
+    phone: '',
+    region: '',
+    commune: '',
+    address: '',
+    password: '',
+    confirm: ''
+  });
+
+  // Actualiza un campo. Si cambia la región, se borra la comuna elegida.
+  const updateField = (key, value) => {
+    const newData = { ...formData, [key]: value };
+    if (key === 'region') newData.commune = '';
+    setFormData(newData);
+  };
+
+  const handleSubmit = event => {
+    event.preventDefault();
+    const newErrors = validateRegister(formData);
+    setErrors(newErrors);
+    if (hasErrors(newErrors)) return;
+
+    // La contraseña NO se guarda: es un registro de prototipo, sin backend.
+    const newClient = {
+      name: formData.name + ' ' + formData.lastName,
+      email: formData.email,
+      run: formData.run,
+      phone: formData.phone,
+      region: formData.region,
+      commune: formData.commune,
+      address: formData.address,
+      role: 'cliente'
+    };
+    const otherClients = readStore('mm-ep2-clients', []).filter(
+      client => client.email !== newClient.email
+    );
+    writeStore('mm-ep2-clients', [...otherClients, newClient]);
+    setUser(newClient);
+    navigate('/mi-cuenta');
+  };
+
+  return (
+    <>
+      <Breadcrumb title="Crear una cuenta" />
+      <section className="section">
+        <div className="container narrow-wide">
+          <form className="form-panel" onSubmit={handleSubmit} noValidate>
+            <h2>Registro de cliente</h2>
+            <p className="muted">
+              Formulario React con validación, RUN chileno y comunas dependientes de la región.
+            </p>
+            <div className="form-grid">
+              <Field
+                name="name"
+                label="Nombre *"
+                value={formData.name}
+                onChange={e => updateField('name', e.target.value)}
+                error={errors.name}
+              />
+              <Field
+                name="lastName"
+                label="Apellido *"
+                value={formData.lastName}
+                onChange={e => updateField('lastName', e.target.value)}
+                error={errors.lastName}
+              />
+              <Field
+                name="run"
+                label="RUN *"
+                placeholder="12.345.678-5"
+                value={formData.run}
+                onChange={e => updateField('run', e.target.value)}
+                error={errors.run}
+              />
+              <Field
+                name="email"
+                label="Correo *"
+                type="email"
+                value={formData.email}
+                onChange={e => updateField('email', e.target.value)}
+                error={errors.email}
+              />
+              <Field
+                name="phone"
+                label="Teléfono"
+                value={formData.phone}
+                onChange={e => updateField('phone', e.target.value)}
+              />
+              <Field
+                name="address"
+                label="Dirección *"
+                value={formData.address}
+                onChange={e => updateField('address', e.target.value)}
+                error={errors.address}
+              />
+              <Field
+                name="region"
+                label="Región *"
+                as="select"
+                value={formData.region}
+                onChange={e => updateField('region', e.target.value)}
+                error={errors.region}
+              >
+                <option value="">Seleccionar región</option>
+                {Object.keys(regions).map(region => (
+                  <option key={region}>{region}</option>
+                ))}
+              </Field>
+              <Field
+                name="commune"
+                label="Comuna *"
+                as="select"
+                value={formData.commune}
+                onChange={e => updateField('commune', e.target.value)}
+                error={errors.commune}
+              >
+                <option value="">Seleccionar comuna</option>
+                {(regions[formData.region] || []).map(commune => (
+                  <option key={commune}>{commune}</option>
+                ))}
+              </Field>
+              <Field
+                name="password"
+                label="Contraseña (4 a 10 caracteres) *"
+                type="password"
+                value={formData.password}
+                onChange={e => updateField('password', e.target.value)}
+                error={errors.password}
+              />
+              <Field
+                name="confirm"
+                label="Confirmar contraseña *"
+                type="password"
+                value={formData.confirm}
+                onChange={e => updateField('confirm', e.target.value)}
+                error={errors.confirm}
+              />
+            </div>
+            <p className="small muted">
+              Importante: registro ilustrativo. La contraseña no se persiste; para iniciar sesión
+              después usa las cuentas demo.
+            </p>
+            <button className="btn-orange btn-block">Registrarme</button>
+          </form>
+        </div>
+      </section>
+    </>
+  );
+}
+export function MyAccount() {
+  const { user, setUser, orders } = useShop();
+  const navigate = useNavigate();
+
+  if (!user) return <Navigate to="/login" replace />;
+
+  // Solo los pedidos de este usuario
+  const myOrders = orders.filter(order => order.userId === user.email);
+
+  const handleLogout = () => {
+    setUser(null);
+    navigate('/');
+  };
+
+  return (
+    <>
+      <Breadcrumb title="Mi cuenta" />
+      <section className="section">
+        <div className="container">
+          <div className="account-row">
+            <div>
+              <span className="eyebrow">ÁREA PERSONAL</span>
+              <h2>Hola, {user.name}</h2>
+              <p>
+                {user.email} · Rol: {user.role}
+              </p>
+            </div>
+            <button className="btn-outline" onClick={handleLogout}>
+              <LogOut size={17} /> Cerrar sesión
+            </button>
+          </div>
+          {canUseAdmin(user) && (
+            <Link to="/admin" className="btn-orange">
+              Abrir administración
+            </Link>
+          )}
+          <h3 className="mt-4">Mis pedidos de demostración</h3>
+          <OrderList
+            orders={myOrders}
+            showDate
+            emptyMessage="Todavía no hay pedidos asociados a esta cuenta."
+          />
+        </div>
+      </section>
+    </>
+  );
+}
+
+// Si el usuario no puede usar el panel, lo manda al login
+export function ProtectedAdmin({ children }) {
+  const { user } = useShop();
+  if (!canUseAdmin(user)) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+}
+
+const emptyProduct = {
+  id: '',
+  name: '',
+  brand: 'Master Martini',
+  category: 'panaderia',
+  format: '1 kg',
+  description: '',
+  price: 0,
+  stock: 0,
+  discount: 0,
+  image: '/assets/producto-respaldo.svg',
+  featured: false
+};
+
+const adminTabs = [
+  { key: 'productos', icon: Package, label: 'Productos' },
+  { key: 'pedidos', icon: ClipboardList, label: 'Pedidos' },
+  { key: 'usuarios', icon: Users, label: 'Usuarios' }
+];
+
+export function Admin() {
+  const { products, orders, user, saveProduct, eraseProduct, resetCatalog } = useShop();
+  const [tab, setTab] = useState('productos');
+  // editingId: null = viendo la tabla, 'new' = producto nuevo, o el id del producto que se edita
+  const [editingId, setEditingId] = useState(null);
+  const [form, setForm] = useState(emptyProduct);
+  const [errors, setErrors] = useState({});
+  const [message, setMessage] = useState('');
+  const [search, setSearch] = useState('');
+
+  const clients = readStore('mm-ep2-clients', []);
+  const isNew = editingId === 'new';
+  const lowStockCount = products.filter(product => product.stock < 5).length;
+  const filteredProducts = products.filter(product =>
+    (product.name + product.id).toLowerCase().includes(search.toLowerCase())
+  );
+  // Usuarios de prueba (sin contraseña) + clientes registrados
+  const allUsers = [
+    ...demoAccounts.map(account => ({
+      name: account.name,
+      email: account.email,
+      role: account.role
+    })),
+    ...clients
+  ];
+
+  const startEditing = (product = null) => {
+    if (product) {
+      setEditingId(product.id);
+      setForm({ ...product });
+    } else {
+      setEditingId('new');
+      setForm({ ...emptyProduct, id: 'MM-' + String(Date.now()).slice(-6) });
+    }
+    setErrors({});
+    setMessage('');
+  };
+
+  const updateField = (key, value) => {
+    const newForm = { ...form, [key]: value };
+    // Si cambia la imagen, se olvida la imagen remota anterior
+    if (key === 'image') {
+      newForm.remoteImage = undefined;
+      newForm.imageNote = undefined;
+    }
+    setForm(newForm);
+  };
+
+  const handleSubmit = async event => {
+    event.preventDefault();
+    const newErrors = validateProduct(form);
+    setErrors(newErrors);
+    if (hasErrors(newErrors)) return;
+
+    // Los inputs entregan texto, así que se pasan a número antes de guardar
+    const product = {
+      ...form,
+      price: Number(form.price),
+      stock: Number(form.stock),
+      discount: Number(form.discount)
+    };
+    try {
+      await saveProduct(product, !isNew);
+      setMessage(isNew ? 'Producto creado correctamente.' : 'Producto actualizado.');
+      setEditingId(null);
+    } catch (error) {
+      setMessage(error.message);
+    }
+  };
+
+  const handleDelete = async id => {
+    if (!window.confirm(`¿Eliminar producto ${id}?`)) return;
+    try {
+      await eraseProduct(id);
+      setMessage('Producto eliminado.');
+    } catch (error) {
+      setMessage(error.message);
+    }
+  };
+
+  const handleReset = async () => {
+    if (!window.confirm('¿Restaurar productos y borrar carrito demo?')) return;
+    try {
+      await resetCatalog();
+    } catch (error) {
+      setMessage(error.message);
+    }
+  };
+
+  const changeTab = key => {
+    setTab(key);
+    setEditingId(null);
+  };
+
+  return (
+    <>
+      <Breadcrumb title="Panel administrativo" crumb="SISTEMA ADMINISTRATIVO" />
+      <section className="section admin-section">
+        <div className="container">
+          <div className="admin-welcome">
+            <div>
+              <span className="eyebrow">PANEL DE CONTROL</span>
+              <h2>Hola, {user.name}</h2>
+              <p>
+                Gestiona el inventario y consulta los datos de la aplicación (simulación local).
+              </p>
+            </div>
+            <span className="admin-badge">
+              <ShieldCheck size={16} /> {user.role}
+            </span>
+          </div>
+
+          <div className="admin-stats">
+            <div>
+              <Package />
+              <b>{products.length}</b>
+              <span>Productos</span>
+            </div>
+            <div>
+              <ClipboardList />
+              <b>{orders.length}</b>
+              <span>Pedidos registrados</span>
+            </div>
+            <div>
+              <Users />
+              <b>{allUsers.length}</b>
+              <span>Usuarios de prueba</span>
+            </div>
+            <div>
+              <Package />
+              <b>{lowStockCount}</b>
+              <span>Stock crítico</span>
+            </div>
+          </div>
+
+          <div className="admin-shell">
+            <aside className="admin-sidebar">
+              <h3>Administración</h3>
+              {adminTabs.map(({ key, icon: Icon, label }) => (
+                <button
+                  key={key}
+                  onClick={() => changeTab(key)}
+                  className={tab === key ? 'selected' : ''}
+                >
+                  <Icon size={18} />
+                  {label}
+                </button>
+              ))}
+              <button onClick={handleReset}>
+                <RotateCcw size={17} /> Reiniciar catálogo
+              </button>
+            </aside>
+
+            <div className="admin-content">
+              {message && <Alert type="info">{message}</Alert>}
+
+              {tab === 'productos' && (
+                <>
+                  <div className="admin-content-header">
+                    <h3>{editingId ? 'Formulario de producto' : 'Gestión de productos (CRUD)'}</h3>
+                    {!editingId && (
+                      <div className="admin-actions">
+                        <input
+                          placeholder="Buscar SKU o nombre"
+                          aria-label="Buscar productos en administración"
+                          value={search}
+                          onChange={e => setSearch(e.target.value)}
+                        />
+                        <button className="btn-orange" onClick={() => startEditing()}>
+                          <Plus size={16} /> Nuevo producto
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  {editingId ? (
+                    <ProductForm
+                      product={form}
+                      errors={errors}
+                      isNew={isNew}
+                      onFieldChange={updateField}
+                      onSubmit={handleSubmit}
+                      onCancel={() => setEditingId(null)}
+                    />
+                  ) : (
+                    <ProductTable
+                      products={filteredProducts}
+                      canDelete={user.role === 'admin'}
+                      onEdit={startEditing}
+                      onDelete={handleDelete}
+                    />
+                  )}
+                </>
+              )}
+
+              {tab === 'pedidos' && (
+                <>
+                  <h3>Pedidos de demostración</h3>
+                  <OrderList
+                    orders={orders}
+                    emptyMessage="Aún no hay pedidos. Finaliza un checkout de prueba."
+                  />
+                </>
+              )}
+
+              {tab === 'usuarios' && (
+                <>
+                  <h3>Usuarios registrados (demo)</h3>
+                  <p className="muted">Datos locales de ejemplo; no almacena contraseñas.</p>
+                  {allUsers.map(item => (
+                    <div className="order-line" key={item.email}>
+                      <b>{item.name}</b>
+                      <span>{item.email}</span>
+                      <span>{item.role}</span>
+                    </div>
+                  ))}
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}

@@ -8,10 +8,24 @@ import { clases } from '../data/clases';
 import { Catalog } from '../pages/ShopPages';
 import { writeStore } from '../utils/storage';
 import { initialProducts } from '../data/catalog';
-import { netPrice, shipping, validRun, validEmail, addCart, filteredProducts } from '../utils/commerce';
+import {
+  netPrice,
+  shipping,
+  validRun,
+  validEmail,
+  addCart,
+  filteredProducts
+} from '../utils/commerce';
 
 // Un producto de ejemplo para usar en los tests
-const producto = { id: 'TEST-1', name: 'Crema de prueba', price: 10000, discount: 0, stock: 5, category: 'retail' };
+const producto = {
+  id: 'TEST-1',
+  name: 'Crema de prueba',
+  price: 10000,
+  discount: 0,
+  stock: 5,
+  category: 'retail'
+};
 
 describe('Funciones de la tienda', () => {
   it('1. netPrice aplica el descuento al precio', () => {
@@ -92,7 +106,7 @@ describe('Página de Clases de recetas', () => {
     fireEvent.click(screen.getAllByText('Inscribirme')[0]);
 
     expect(screen.getByText('¡Estás inscrito en esta clase!')).toBeTruthy();
-    expect(screen.getByText((primeraClase.cupos - 1) + ' cupos disponibles')).toBeTruthy();
+    expect(screen.getByText(primeraClase.cupos - 1 + ' cupos disponibles')).toBeTruthy();
   });
 });
 
@@ -122,13 +136,22 @@ describe('Pruebas con mocks', () => {
 
   it('12. el catálogo muestra los productos que llegan desde la API (mock de fetch)', async () => {
     // Producto falso que "responde" la API
-    const productoApi = { id: 'API-1', name: 'Producto desde la API', category: 'retail', price: 1000, stock: 3, discount: 0 };
+    const productoApi = {
+      id: 'API-1',
+      name: 'Producto desde la API',
+      category: 'retail',
+      price: 1000,
+      stock: 3,
+      discount: 0
+    };
 
     // Reemplazamos fetch por una función falsa, así no se llama a un servidor real
-    const fetchFalso = vi.fn(url => Promise.resolve({
-      ok: true,
-      json: () => Promise.resolve(url === '/api/products' ? [productoApi] : [])
-    }));
+    const fetchFalso = vi.fn(url =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(url === '/api/products' ? [productoApi] : [])
+      })
+    );
     vi.stubGlobal('fetch', fetchFalso);
     window.__MM_API_ENABLED__ = true;
 
