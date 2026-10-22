@@ -70,8 +70,6 @@ export const initialProducts = [
     stock: 18,
     discount: 15,
     image: '/assets/catalog-MM-003.webp',
-    sourceUrl:
-      'https://backend.bakeryshop-ci.com/storage/images/MrD2r19aVg3MiddyFUyXlkn5fnl3PevBUZWiJ6rj.png',
     featured: true
   },
   {

@@ -245,7 +245,7 @@ function FeaturedProducts() {
           <p className="text-center muted">No hay productos en esta categoría.</p>
         )}
         <p className="fk-disclaimer">
-          * Precios, descuentos y stock ilustrativos para fines académicos.
+          Precios, descuentos y stocks ilustrativos.
         </p>
         <div className="text-center mt-4">
           <Link className="fk-plain-link" to="/catalogo">
