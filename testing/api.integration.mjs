@@ -1,4 +1,4 @@
-/** API local demo - integración sin npm; separada de pruebas de frontend Jasmine. */
+/** API local demo - integración sin npm; complementaria a las pruebas frontend Vitest. */
 import {spawn} from 'node:child_process';
 import {setTimeout as sleep} from 'node:timers/promises';
 import assert from 'node:assert/strict';

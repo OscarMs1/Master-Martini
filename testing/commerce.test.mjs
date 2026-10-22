@@ -1,4 +1,4 @@
-/** Pruebas ejecutables con Node nativo: evidencia complementaria, NO Jasmine/Karma. */
+/** Pruebas ejecutables con Node nativo: evidencia complementaria, complementarias a Vitest. */
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {initialProducts} from '../src/data/catalog.js';

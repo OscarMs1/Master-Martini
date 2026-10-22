@@ -1,4 +1,4 @@
-// Pruebas rápidas de reglas JS ejecutables sin dependencias npm (NO sustituyen Jasmine+Karma).
+// Pruebas rápidas de reglas JS ejecutables sin dependencias npm (Complementan las pruebas Vitest de React).
 import assert from 'node:assert/strict';
 import {initialProducts} from '../src/data/catalog.js';
 import {money,netPrice,subtotal,shipping,orderTotal,filteredProducts,addCart,setCartQuantity,validRun,validateCheckout,validateProduct} from '../src/utils/commerce.js';

@@ -13,7 +13,7 @@ export const clases = [
     duracion: '3 h',
     nivel: 'Medio',
     cupos: 12,
-    imagen: '/assets/pruebareceta3.webp',
+    imagen: '/assets/clase-croissants-hojaldre.webp',
     descripcion:
       'Aprende a laminar la masa y lograr un croissant crujiente por fuera y suave por dentro.',
     pasos: [
@@ -37,7 +37,7 @@ export const clases = [
     duracion: '2 h',
     nivel: 'Fácil',
     cupos: 8,
-    imagen: '/assets/helado-de-pistachos-2.webp',
+    imagen: '/assets/clase-helado-pistacho.webp',
     descripcion: 'Prepara un gelato cremoso usando una base lista y pasta de pistacho.',
     pasos: [
       'Mezclar la base de gelato con la pasta de pistacho.',
@@ -59,7 +59,7 @@ export const clases = [
     duracion: '1 h 30 min',
     nivel: 'Fácil',
     cupos: 30,
-    imagen: '/assets/prueba5.png',
+    imagen: '/assets/clase-tartaleta-frambuesa.png',
     descripcion: 'Una tartaleta de masa quebrada con crema batida y frambuesas frescas.',
     pasos: [
       'Preparar la masa quebrada con margarina y hornearla.',
@@ -82,7 +82,7 @@ export const clases = [
     duracion: '2 h',
     nivel: 'Medio',
     cupos: 40,
-    imagen: '/assets/prueba4.png',
+    imagen: '/assets/clase-torta-frutos-rojos.png',
     descripcion:
       'Arma una torta de bizcocho con crema vegetal y una base de chocolate, decorada con frutos rojos.',
     pasos: [

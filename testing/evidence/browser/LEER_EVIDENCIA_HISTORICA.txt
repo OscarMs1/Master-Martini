@@ -1,0 +1,3 @@
+Capturas y resultados tomados en una versión anterior del proyecto.
+No verifican las fotografías renombradas ni la portada de esta entrega.
+Para evidencia final renovada ejecutar npm run test:e2e en equipo con navegador.

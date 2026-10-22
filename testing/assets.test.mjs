@@ -57,15 +57,31 @@ test('A06: los productos antiguos guardados renuevan sus fotos sin perder cambio
  assert.deepEqual(refreshCatalogProductMedia(custom),custom);
 });
 
-// La nueva fotografía para tarjetas se usa en Inicio y Novedades sin alterar la imagen de artículo.
-test('A07: Tendencias en pastelería utiliza encuadre local diferenciado para tarjetas',()=>{
+// La fotografía de Tendencias se comparte entre tarjetas y página del artículo.
+test('A07: Tendencias en pastelería usa fotografía local vigente en tarjetas y artículo',()=>{
  const p=posts.find(x=>x.slug==='tendencias-en-pasteleria');
  assert.ok(p);
- assert.equal(p.cardImage,'/assets/blog-pastel-tarjetas-centrado.webp');
+ assert.equal(p.cardImage,'/assets/tendencias-pasteleria.avif');
+ assert.equal(p.image,'/assets/tendencias-pasteleria.avif');
  assert.ok(existsSync(asset(p.cardImage)));
  assert.ok(existsSync(asset(p.image)));
  const home=readFileSync(resolve(root,'src/pages/Home.jsx'),'utf8');
  const blog=readFileSync(resolve(root,'src/pages/InfoPages.jsx'),'utf8');
  assert.match(home,/post\.cardImage\s*\|\|\s*post\.image/);
  assert.match(blog,/p\.cardImage\s*\|\|\s*p\.image/);
+});
+
+
+test('A08: las 4 clases usan recursos presentes en public/assets', async () => {
+ const { clases } = await import('../src/data/clases.js');
+ const invalidas=clases.filter(c => !c.imagen?.startsWith('/assets/') || !existsSync(asset(c.imagen)));
+ assert.deepEqual(invalidas.map(c=>c.id), []);
+});
+
+test('A09: las fotos del carrusel de Inicio existen y no usan rutas temporales', () => {
+ const home=readFileSync(resolve(root,'src/pages/Home.jsx'),'utf8');
+ const fotos=[...home.matchAll(/image:\s*'\/assets\/([^']+)'/g)].map(x=>'/assets/'+x[1]);
+ assert.equal(fotos.length,3);
+ assert.deepEqual(fotos.filter(x=>!existsSync(asset(x))),[]);
+ assert.equal(fotos[0],'/assets/hero-panaderia-artesanal.jpg');
 });

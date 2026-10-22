@@ -3,28 +3,28 @@ export const categories = [
     id: 'panaderia',
     name: 'Panadería & Pastelería',
     subtitle: 'Insumos para preparaciones dulces y saladas.',
-    image: '/assets/prueba.avif',
+    image: '/assets/categoria-panaderia-artesanal.avif',
     description: 'Margarinas, cremas y coberturas para creaciones profesionales.'
   },
   {
     id: 'gelateria',
     name: 'Gelatería',
     subtitle: 'Sabores y texturas de la tradición italiana.',
-    image: '/assets/ice-cream.jpg',
+    image: '/assets/categoria-gelateria.jpg',
     description: 'Bases, pastas y complementos para un gelato excepcional.'
   },
   {
     id: 'food-service',
     name: 'Food Service',
     subtitle: 'Soluciones para hoteles y restaurantes.',
-    image: '/assets/foodservice.jpg',
+    image: '/assets/categoria-food-service.jpg',
     description: 'Ingredientes prácticos para profesionales gastronómicos.'
   },
   {
     id: 'retail',
     name: 'Retail',
     subtitle: 'Productos para hogares y negocios.',
-    image: '/assets/retail.png',
+    image: '/assets/categoria-retail.png',
     description: 'Bebidas vegetales y productos para el consumidor final.'
   }
 ];
@@ -205,7 +205,7 @@ export const posts = [
     tag: 'RECETAS',
     name: 'Croissants de hojaldre',
     desc: 'Técnicas para preparar hojaldres y obtener un acabado profesional.',
-    image: '/assets/criossants.jpg',
+    image: '/assets/novedad-croissants-hojaldre.jpg',
     text: 'El secreto del hojaldre está en la temperatura, el reposo y el laminado uniforme. Prueba la técnica con margarina apta para masas de hoja.'
   },
   {
@@ -222,7 +222,7 @@ export const posts = [
     tag: 'RECETAS',
     name: 'Gelato artesanal',
     desc: 'Bases, sabores y consejos para helados con carácter italiano.',
-    image: '/assets/helado-artesanal.avif',
+    image: '/assets/novedad-gelato-artesanal.avif',
     text: 'Trabaja con una base adecuada, sabores de calidad y un proceso controlado para obtener una textura de gelato equilibrada.'
   }
 ];
