@@ -1,146 +1,224 @@
-# Master Martini | Desarrollo Fullstack II - Evaluación Parcial 2
+<div align="center">
 
-**Master Martini** es una aplicación web de comercio electrónico de carácter académico, orientada a insumos para panadería, pastelería, gelatería y food service. El proyecto incluye una tienda navegable, catálogo, carrito, simulación de compras, formularios y administración de productos.
+# Master Martini
 
-## Plantilla de referencia y créditos
+### Plataforma de comercio electrónico · Desarrollo Fullstack II
 
-La interfaz de este proyecto se desarrolló tomando como base de referencia visual la plantilla **Fruitkha – Free Bootstrap 4 Responsive Food Business Template**, publicada en **ThemeWagon**:
+**Evaluación Parcial 2 · DSY1104 · Duoc UC**
 
-https://themewagon.com/themes/fruitkha-free-bootstrap-4-responsive-food-business-template/
+![React](https://img.shields.io/badge/React-19-149ECA?style=flat-square&logo=react&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-7-646CFF?style=flat-square&logo=vite&logoColor=white)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5-7952B3?style=flat-square&logo=bootstrap&logoColor=white)
+![Vitest](https://img.shields.io/badge/Vitest-5-6E9F18?style=flat-square&logo=vitest&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES_Modules-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
 
-La ficha de ThemeWagon identifica a **Free CSS** como creador de la plantilla original. La apariencia, navegación y secciones se adaptaron a la identidad visual de Master Martini. **La implementación de esta entrega utiliza React 19, React Router 8, Vite 7, Vitest 5 y Bootstrap 5**; por lo tanto, no debe confundirse la versión Bootstrap 4 de la plantilla original con las dependencias actuales del proyecto.
+**[Repositorio](https://github.com/OscarMs1/Master-Martini)** · **[Documentación](docs/ERS_MASTER_MARTINI_EP2.pdf)** · **[Informe de pruebas](docs/INFORME_TESTING_COBERTURA_EP2.pdf)**
 
-Referencia de licencia de ThemeWagon: https://themewagon.com/license/ . Los recursos fotográficos se utilizan como material demostrativo y mantienen sus respectivas condiciones de origen.
+</div>
 
-## Repositorio público de la entrega
+---
 
-Código fuente y documentación del proyecto: **https://github.com/OscarMs1/Master-Martini**
+## Descripción general
 
-El proyecto React se ejecuta en un entorno local con Vite siguiendo los comandos que se indican a continuación. No es necesario utilizar GitHub Pages para su ejecución.
+**Master Martini** es una aplicación web de comercio electrónico desarrollada como proyecto académico de **Desarrollo Fullstack II**, orientada a la venta de insumos para **panadería, pastelería, gelatería y food service**.
 
-## Requisitos y puesta en marcha
+La plataforma integra un catálogo de productos, carrito de compras, gestión de usuarios, simulación de pedidos, administración de productos y un módulo de clases de recetas. Su implementación utiliza una arquitectura frontend basada en **componentes React**, con separación de responsabilidades entre presentación, estado, datos y lógica de negocio.
 
-- Node.js 22.22 o superior (o Node.js 24) y npm.
-- Visual Studio Code (o editor equivalente).
-- Navegador web moderno, preferentemente Chrome.
+El desarrollo pone énfasis en la **reutilización de componentes**, el **enrutamiento**, la **validación de formularios**, el **diseño adaptable** y las **pruebas automatizadas**.
 
-Abra en Visual Studio Code **la carpeta del proyecto que contiene `package.json`**. En la terminal integrada ejecute:
+## Tecnologías utilizadas
+
+| Tecnología | Versión | Propósito |
+|:--|:--|:--|
+| React | 19 | Componentes y renderizado de la interfaz |
+| React Router | 8 | Navegación entre vistas |
+| Vite | 7 | Desarrollo local y compilación para producción |
+| JavaScript | ES Modules | Lógica de negocio e interacción |
+| Bootstrap | 5 | Diseño responsive y componentes visuales |
+| Lucide React | 1.x | Iconografía |
+| Context API | React 19 | Gestión de estado compartido |
+| Node.js | 22.22.2+ o 24 | Herramientas de desarrollo y API local |
+| Vitest | 5 | Pruebas automatizadas |
+| React Testing Library | 16 | Pruebas de componentes e interacción |
+| Playwright | 1.x | Pruebas en navegador |
+
+## Funcionalidades
+
+### Catálogo y proceso de compra
+
+- Página de inicio con carrusel, categorías, novedades y ofertas.
+- Catálogo de demostración con **12 productos**, búsqueda, filtros, ordenamiento y páginas de detalle.
+- Carrito con gestión de cantidades, validación de existencias y cálculo de totales.
+- Checkout simulado con formularios validados y registro de pedidos.
+
+### Usuarios y administración
+
+- Registro, inicio de sesión y perfiles demostrativos.
+- Roles de **cliente, vendedor y administrador**.
+- Administración de catálogo mediante operaciones **CRUD**.
+- Consulta de pedidos y persistencia local de datos con `localStorage`.
+
+### Clases de recetas
+
+El módulo **`/clases`** relaciona actividades formativas con productos del catálogo:
+
+- Recetas, fechas, modalidad y cupos disponibles.
+- Inscripción en clases presenciales u online.
+- Filtro por modalidad.
+- Incorporación al carrito de los insumos asociados a cada receta.
+- Consulta de inscripciones en **Mi cuenta → Mis clases de recetas**.
+
+## Arquitectura y organización
+
+```text
+master-martini/
+├── public/
+│   └── assets/             # Recursos visuales
+├── src/
+│   ├── components/         # Componentes reutilizables
+│   │   └── admin/          # Panel de administración
+│   ├── contexts/           # Estado global de la tienda
+│   ├── data/               # Datos y catálogos iniciales
+│   ├── pages/              # Vistas y páginas
+│   ├── styles/             # Estilos de la aplicación
+│   ├── tests/              # Pruebas con Vitest
+│   ├── utils/              # Validaciones y lógica comercial
+│   ├── App.jsx             # Composición y rutas
+│   └── main.jsx            # Entrada de React
+├── server/                 # API local de demostración
+├── testing/                # Pruebas complementarias y evidencias
+├── docs/                   # Documentación técnica
+├── package.json
+└── vite.config.js
+```
+
+La interfaz se construye en `components/` y `pages/`; `ShopContext` coordina el estado compartido de la tienda, mientras `utils/` concentra funciones de validación, cálculo comercial y persistencia. Los datos iniciales se encuentran en `src/data/`, con una **API local opcional** para pruebas de integración.
+
+## Instalación y ejecución
+
+### Requisitos
+
+- **Node.js 22.22.2 o superior**, o Node.js 24, y npm.
+- Visual Studio Code u otro editor compatible.
+- Un navegador web moderno.
+
+### 1. Clonar e instalar
 
 ```bash
+git clone https://github.com/OscarMs1/Master-Martini.git
+cd Master-Martini
 npm install
+```
+
+### 2. Ejecutar en desarrollo
+
+```bash
 npm run dev
 ```
 
-Visite la dirección local indicada por Vite, habitualmente **http://localhost:5173/**.
+Abre la dirección indicada por Vite en la terminal, habitualmente **http://localhost:5173/**.
 
-Para generar y visualizar la versión optimizada de producción:
+### 3. Compilar y previsualizar
 
 ```bash
 npm run build
 npm run preview
 ```
 
+La compilación genera los recursos optimizados en la carpeta `dist/`.
 
-## Funcionalidades
+> **Nota para Windows:** `package.json` configura versiones WebAssembly de Rollup y esbuild mediante `overrides`, para favorecer la compatibilidad con sistemas que restringen binarios nativos.
 
-- Inicio con carrusel, categorías, novedades y ofertas.
-- Catálogo de 12 productos de muestra, con búsqueda, filtros, ordenamiento y páginas de detalle.
-- Carrito con control de cantidades, validación de existencias y cálculos de compra.
-- Registro, inicio de sesión y perfiles demostrativos.
-- Checkout simulado con validaciones y registro de pedidos.
-- Página de **Clases de recetas** (`/clases`): cada clase muestra su receta paso a paso, fecha, cupos y los insumos del catálogo que se usan, con un botón para agregarlos al carrito y otro para inscribirse. Se puede filtrar por clases presenciales u online. Las inscripciones se guardan en el estado global (`ShopContext`) y aparecen en **Mi cuenta → Mis clases de recetas**.
-- Administración de catálogo mediante operaciones de creación, consulta, actualización y eliminación.
-- Persistencia local del catálogo, carrito, perfil y pedidos mediante `localStorage`.
-- Interfaz adaptable a diferentes resoluciones y navegación entre páginas mediante React Router.
+## Pruebas y calidad
 
-## Accesos de demostración
+La aplicación utiliza **Vitest**, **React Testing Library** y `jsdom` para comprobar tanto funciones de negocio como interacciones con componentes.
 
-| Rol | Correo | Contraseña |
-| --- | --- | --- |
-| Administrador | `admin@demo.cl` | `Admin123` |
-| Vendedor | `vendedor@demo.cl` | `Venta123` |
-| Cliente | `cliente@demo.cl` | `Cliente123` |
+| Comando | Función |
+|:--|:--|
+| `npm test` | Ejecutar pruebas frontend |
+| `npm run test:watch` | Ejecutar Vitest en modo observación |
+| `npm run test:coverage` | Generar reporte de cobertura V8 |
+| `npm run check:syntax` | Verificar sintaxis |
+| `npm run check:logic` | Ejecutar comprobaciones generales de lógica |
+| `npm run test:node` | Probar utilidades comerciales con Node |
+| `npm run test:assets` | Validar referencias de recursos |
+| `npm run test:api` | Ejecutar pruebas de integración de API |
+| `npm run test:e2e` | Ejecutar pruebas de navegador con el servidor de desarrollo abierto |
 
-Estos accesos son parte de la demostración académica. No representan un sistema de autenticación seguro para producción.
+### Resultados de la evaluación
 
-## Pruebas y validación
+Los siguientes resultados corresponden a la ejecución de pruebas de la entrega EP2:
 
-Las pruebas unitarias del frontend se hacen con **Vitest** y **React Testing Library**. Vitest usa **jsdom** para simular el navegador, así se pueden renderizar componentes React y hacer clic en ellos dentro de los tests.
+| Indicador | Resultado |
+|:--|--:|
+| Pruebas frontend Vitest | **13/13 aprobadas** |
+| Cobertura de líneas | **45,54 %** |
+| Cobertura de funciones | **37,91 %** |
+| Cobertura de ramas | **34,83 %** |
+| Cobertura de sentencias | **38,40 %** |
+| Compilación Vite para producción | **Exitosa** |
 
-```bash
-npm test               # corre todas las pruebas una vez
-npm run test:watch     # vuelve a correr las pruebas cada vez que se guarda un archivo
-npm run test:coverage  # corre las pruebas y muestra el porcentaje de cobertura
-```
+Entre los escenarios probados se incluyen cálculos de precios y despacho, validación de RUN y correo, gestión del carrito, filtrado de productos, interacción con componentes, almacenamiento local y simulación de respuestas HTTP mediante mocks.
 
-La configuración de Vitest está en el bloque `test` de `vite.config.js`, y las pruebas están en `src/tests/pagina.test.jsx`. El reporte de cobertura se genera en la carpeta `coverage/`.
-
-| N° | Prueba | Qué verifica |
-| --- | --- | --- |
-| 1 | `netPrice` | Aplica bien el descuento al precio |
-| 2 | `shipping` | El envío es gratis desde $50.000 |
-| 3 | `shipping` | El envío a domicilio cuesta $3.990 bajo $50.000 |
-| 4 | `validRun` | Acepta un RUN válido y rechaza uno inválido |
-| 5 | `validEmail` | Revisa el formato del correo |
-| 6 | `addCart` | Suma cantidades sin repetir el producto en el carrito |
-| 7 | `filteredProducts` | Filtra el catálogo por categoría |
-| 8 | `ProductCard` | Muestra el nombre y el botón "Agregar" llama a `onAdd` (mock con `vi.fn`) |
-| 9 | Datos de clases | Todos los insumos de las clases existen en el catálogo |
-| 10 | Página `Clases` | Al inscribirse aparece el mensaje y baja un cupo |
-| 11 | `writeStore` | Guarda el carrito en `localStorage` (spy con `vi.spyOn`) |
-| 12 | Página `Catalog` | Muestra los productos que llegan desde la API (mock de `fetch` con `vi.stubGlobal`) |
-| 13 | Página `Clases` | El filtro "Online" muestra solo las clases online |
-
-**Mocks usados:**
-
-- `vi.fn()`: crea una función falsa para comprobar que un componente la llama al hacer clic.
-- `vi.spyOn()`: "espía" una función real (`localStorage.setItem`) para revisar con qué datos se llamó.
-- `vi.stubGlobal()`: reemplaza `fetch` por una respuesta falsa, así el test no necesita la API corriendo.
-
-Además, el proyecto mantiene otros scripts de validación que se ejecutan con Node:
-
-```bash
-npm run check:syntax
-npm run check:logic
-npm run test:node
-npm run test:assets
-npm run test:api
-```
-
-Para las pruebas de navegador, mantenga `npm run dev` abierto y ejecute en otra terminal:
-
-```bash
-npm run test:e2e
-```
-
-**Nota para Windows:** en `package.json`, el bloque `overrides` cambia Rollup y esbuild (las herramientas que usa Vite por dentro) por sus versiones WebAssembly. Así el proyecto funciona aunque Windows (Smart App Control) bloquee los archivos nativos.
+**La cobertura expresa qué parte del código fue ejecutada por estas pruebas; no equivale a una validación exhaustiva de toda la aplicación.** El detalle de metodología y evidencias se encuentra en el [informe de testing](docs/INFORME_TESTING_COBERTURA_EP2.pdf).
 
 ## API local opcional
 
-Por defecto, la aplicación utiliza datos locales y `localStorage`. Para utilizar la API educativa incluida en `server/api.mjs`, copie `.env.example` como `.env`, establezca `VITE_USE_BACKEND=true` y ejecute la API en otra terminal:
+En su configuración inicial, la aplicación utiliza datos locales y persistencia en `localStorage`. Para habilitar la API educativa de `server/api.mjs`:
+
+1. Copia `.env.example` como `.env`.
+2. Define `VITE_USE_BACKEND=true`.
+3. Inicia la API y Vite en **terminales separadas**:
 
 ```bash
 npm run api
 ```
 
-Reinicie el servidor de Vite para aplicar el cambio de entorno. La API guarda sus datos en `server/.data/` (directorio generado durante la ejecución). Esta opción está pensada para pruebas locales.
+```bash
+npm run dev
+```
 
-## Organización del proyecto
+El proxy de Vite dirige las solicitudes `/api` al servidor local en `http://127.0.0.1:3001`. Reinicia Vite si cambiaste las variables del archivo `.env`.
 
-| Ruta | Contenido |
-| --- | --- |
-| `src/components/` | Componentes reutilizables de interfaz |
-| `src/components/admin/` | Componentes del panel de administración (`ProductForm`, `ProductTable`, `OrderList`) |
-| `src/pages/` | Páginas y vistas |
-| `src/contexts/` | Estado global y operaciones de tienda |
-| `src/data/` | Catálogo, categorías y contenidos iniciales |
-| `src/utils/` | Validación, lógica comercial y persistencia |
-| `public/assets/` | Fotografías, logotipo y recursos locales |
-| `server/` | API de demostración en Node.js |
-| `src/tests/` | Pruebas unitarias con Vitest |
-| `testing/` | Scripts de validación con Node y evidencia |
-| `docs/` | Especificación de requisitos e informe de testing |
+## Accesos de demostración
+
+| Perfil | Correo | Contraseña |
+|:--|:--|:--|
+| Administrador | `admin@demo.cl` | `Admin123` |
+| Vendedor | `vendedor@demo.cl` | `Venta123` |
+| Cliente | `cliente@demo.cl` | `Cliente123` |
+
+Estos accesos se incluyen **exclusivamente con fines de demostración**. No constituyen un mecanismo de autenticación seguro para un entorno productivo.
+
+## Documentación
+
+| Documento | Contenido |
+|:--|:--|
+| [Especificación de Requisitos de Software (ERS)](docs/ERS_MASTER_MARTINI_EP2.pdf) | Alcance, requisitos funcionales y no funcionales |
+| [Informe de Testing y Cobertura](docs/INFORME_TESTING_COBERTURA_EP2.pdf) | Metodología, validaciones, resultados y evidencias |
+
+Las pruebas y sus registros complementarios están disponibles en `src/tests/` y `testing/`.
+
+## Diseño y atribuciones
+
+La propuesta visual de Master Martini toma como referencia la plantilla **[Fruitkha — Free Bootstrap 4 Responsive Food Business Template](https://themewagon.com/themes/fruitkha-free-bootstrap-4-responsive-food-business-template/)**, distribuida a través de ThemeWagon y atribuida a **Free CSS** en su ficha de publicación.
+
+La interfaz y los contenidos fueron adaptados a la identidad del proyecto, con una implementación en React y Bootstrap 5. Se reconocen los derechos de los autores de la plantilla y de los recursos fotográficos utilizados.
+
+- [Licencia de referencia de ThemeWagon](https://themewagon.com/license/)
 
 ## Alcance académico
 
-Los precios, existencias, pedidos, cuentas y pagos se simulan para fines de evaluación. El checkout no procesa pagos reales; el formulario de contacto y la suscripción no envían mensajes a servicios externos. La aplicación no debe utilizarse como tienda comercial real sin incorporar autenticación, infraestructura y controles de seguridad adicionales.
+**Master Martini es un prototipo funcional con fines de evaluación.** Los productos, precios, existencias, cuentas, pedidos y pagos se emplean en un entorno de simulación. El checkout **no procesa pagos reales**, y los formularios de contacto y suscripción no están conectados a servicios de mensajería externos.
+
+Antes de un uso comercial real sería necesario integrar autenticación y autorización seguras, persistencia centralizada, servicios de pago, controles de seguridad y una infraestructura de operación adecuada.
+
+---
+
+<div align="center">
+
+**Master Martini · Desarrollo Fullstack II · Duoc UC**
+
+Desarrollado con React, Vite y tecnologías web modernas.
+
+</div>
