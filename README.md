@@ -20,7 +20,7 @@ El proyecto React se ejecuta en un entorno local con Vite siguiendo los comandos
 
 ## Requisitos y puesta en marcha
 
-- Node.js 22.22.2 o superior de la rama 22 (o Node.js 24 compatible) y npm.
+- Node.js 22.22 o superior (o Node.js 24) y npm.
 - Visual Studio Code (o editor equivalente).
 - Navegador web moderno, preferentemente Chrome.
 
@@ -73,7 +73,7 @@ npm run test:watch     # vuelve a correr las pruebas cada vez que se guarda un a
 npm run test:coverage  # corre las pruebas y muestra el porcentaje de cobertura
 ```
 
-La configuración de Vitest está en el bloque `test` de `vite.config.js`. En la ejecución local documentada del **21 de octubre de 2026** se aprobaron **las 13 pruebas de 13** de `src/tests/pagina.test.jsx`. La cobertura V8 medida fue **38,40 % sentencias, 34,83 % ramas, 37,91 % funciones y 45,54 % líneas**. El reporte detallado se puede regenerar en `coverage/` mediante `npm run test:coverage` y sus resultados están resumidos en `testing/evidence/RESULTADOS_VITEST_BUILD_2026-10-21.txt`. La cobertura es parcial y no equivale a que toda la aplicación esté probada.
+La configuración de Vitest está en el bloque `test` de `vite.config.js`, y las pruebas están en `src/tests/pagina.test.jsx`. El reporte de cobertura se genera en la carpeta `coverage/`.
 
 | N° | Prueba | Qué verifica |
 | --- | --- | --- |
@@ -140,14 +140,6 @@ Reinicie el servidor de Vite para aplicar el cambio de entorno. La API guarda su
 | `src/tests/` | Pruebas unitarias con Vitest |
 | `testing/` | Scripts de validación con Node y evidencia |
 | `docs/` | Especificación de requisitos e informe de testing |
-
-## Verificación de esta entrega
-
-Las verificaciones complementarias registraron **39/39 pruebas de lógica comercial, 9/9 de imágenes, 15/15 escenarios API y 16/16 comprobaciones smoke**. La suite principal de **Vitest finalizó con 13/13 pruebas aprobadas**. Además, `npm run build` compiló correctamente con Vite 7.3.7 (2.046 módulos; 4,57 s). La cobertura V8 se documenta con sus porcentajes reales, sin atribuirle cobertura total al proyecto. El detalle se encuentra en `docs/INFORME_TESTING_COBERTURA_EP2.pdf` y `testing/evidence/RESULTADOS_VITEST_BUILD_2026-10-21.txt`.
-
-Se actualizaron referencias fotográficas y se eliminaron archivos no utilizados. El detalle de recursos renombrados/retirados está en `docs/INVENTARIO_LIMPIEZA_ASSETS.md`. Las rutas antiguas que permanecen en `legacyProductPhotos` se usan solo para actualizar datos previos de localStorage.
-
-**Aviso sobre fotografía:** `hero-panaderia-artesanal.jpg` contiene marcas de agua de Unsplash+; se conserva sin alterar. Verifique la licencia o sustituya ese recurso por una fotografía autorizada antes de publicar/distribuir públicamente el sitio.
 
 ## Alcance académico
 
