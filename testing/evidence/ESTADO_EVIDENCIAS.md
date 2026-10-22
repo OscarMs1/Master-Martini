@@ -1,25 +1,17 @@
-# Evidencias de validación - Master Martini EP2
+# Evidencias de pruebas
 
-## Pruebas frontend y compilación
+22 de octubre de 2026. Vitest: 62/62 (44 casos de componentes/vistas, nueve de hook y nueve de funciones/datos/almacenamiento). Node: 39/39. Recursos: 9/9. API: 15/15. Smoke: 16/16. E2E local: 16/16. E2E con API real: 5/5. Sintaxis y build correctos.
 
-Ejecución local documentada el **21 de octubre de 2026** en `RESULTADOS_VITEST_BUILD_2026-10-21.txt`:
+Cobertura final: líneas 97,56 %, sentencias 95,28 %, funciones 96,60 %, ramas 90,55 %. Umbrales entregados: 95 % en líneas/sentencias/funciones y 90 % en ramas.
 
-- **Vitest 5.0.5:** 13 de 13 pruebas aprobadas (1 archivo).
-- **Cobertura V8:** sentencias 38,40 %; ramas 34,83 %; funciones 37,91 %; líneas 45,54 %.
-- **Vite 7.3.7:** compilación de producción correcta (2.046 módulos; 4,57 segundos).
+- validate-all.txt: ejecución agregada, también desglosada en registros por comando.
+- coverage-summary.json: medición final; previous-review-coverage.json: medición intermedia (74,86 % de líneas).
+- baseline-coverage.*: medición base (45,54 % de líneas).
+- baseline-full-scope*: medición base con alcance completo (25 % de líneas). La medición final incorpora dos líneas adicionales instrumentadas; el alcance de archivos se mantiene.
+- browser/: capturas y resultados de 16 escenarios locales.
+- backend-browser/: cinco escenarios con API real y datos temporales aislados.
+- backend-browser-run.txt: ECONNREFUSED es esperado en B05, donde se apaga deliberadamente la API para comprobar el mensaje de error.
+- coverage-gate-check.txt: rechazo ESPERADO (código 1) al exigir 100 % de líneas por CLI; confirma que el control de calidad falla ante un umbral incumplido. No representa un fallo de la suite ni de los umbrales entregados.
+- validation.json: resultados de comandos y separación de la prueba negativa del umbral.
 
-Los porcentajes corresponden a la suite instrumentada, no al cumplimiento total del producto.
-La salida de `coverage/` y `dist/` se regenera mediante los comandos del README.
-
-## Pruebas complementarias
-
-- `test-assets.txt`: 9/9 comprobaciones de imágenes.
-- `test-node.txt`: 39/39 pruebas de lógica comercial.
-- `test-api.txt`: 15/15 pruebas de integración API.
-- `check-logic.txt`: 16/16 comprobaciones smoke.
-- `check-syntax.txt`: comprobación de sintaxis registrada previamente.
-
-## Evidencias de navegador
-
-Las capturas en `browser/` y el reporte `browser-run.txt` provienen de una ejecución anterior.
-Su conservación tiene fines de trazabilidad; no certifican una verificación visual reciente de los nuevos recursos.
+GitHub Actions está configurado en .github/workflows/quality.yml, pero no se ha ejecutado remotamente ni se ha publicado el código. Las pruebas locales y sus evidencias sí se ejecutaron.

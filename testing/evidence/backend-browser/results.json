@@ -1,0 +1,192 @@
+{
+  "date": "2026-10-22T05:08:41.234Z",
+  "results": [
+    {
+      "name": "B01 carga catálogo desde API real",
+      "passed": true
+    },
+    {
+      "name": "B02 rechazo y compra real vía API, stock e historial tras recarga",
+      "passed": true
+    },
+    {
+      "name": "B03 CRUD de interfaz persiste en API real",
+      "passed": true
+    },
+    {
+      "name": "B04 restauración sincroniza pedidos y catálogo sin necesitar recarga",
+      "passed": true
+    },
+    {
+      "name": "B05 caída real del backend se informa sin pantalla vacía",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "requests": [
+    {
+      "method": "GET",
+      "url": "/api/products"
+    },
+    {
+      "method": "GET",
+      "url": "/api/orders"
+    },
+    {
+      "method": "GET",
+      "url": "/api/products"
+    },
+    {
+      "method": "GET",
+      "url": "/api/orders"
+    },
+    {
+      "method": "GET",
+      "url": "/api/products"
+    },
+    {
+      "method": "GET",
+      "url": "/api/orders"
+    },
+    {
+      "method": "GET",
+      "url": "/api/products"
+    },
+    {
+      "method": "GET",
+      "url": "/api/orders"
+    },
+    {
+      "method": "GET",
+      "url": "/api/products"
+    },
+    {
+      "method": "GET",
+      "url": "/api/orders"
+    },
+    {
+      "method": "GET",
+      "url": "/api/products"
+    },
+    {
+      "method": "GET",
+      "url": "/api/orders"
+    },
+    {
+      "method": "GET",
+      "url": "/api/products"
+    },
+    {
+      "method": "GET",
+      "url": "/api/orders"
+    },
+    {
+      "method": "GET",
+      "url": "/api/products"
+    },
+    {
+      "method": "GET",
+      "url": "/api/orders"
+    },
+    {
+      "method": "POST",
+      "url": "/api/checkout"
+    },
+    {
+      "method": "GET",
+      "url": "/api/products"
+    },
+    {
+      "method": "GET",
+      "url": "/api/orders"
+    },
+    {
+      "method": "GET",
+      "url": "/api/products"
+    },
+    {
+      "method": "GET",
+      "url": "/api/orders"
+    },
+    {
+      "method": "GET",
+      "url": "/api/products"
+    },
+    {
+      "method": "GET",
+      "url": "/api/orders"
+    },
+    {
+      "method": "GET",
+      "url": "/api/products"
+    },
+    {
+      "method": "GET",
+      "url": "/api/orders"
+    },
+    {
+      "method": "GET",
+      "url": "/api/products"
+    },
+    {
+      "method": "GET",
+      "url": "/api/orders"
+    },
+    {
+      "method": "GET",
+      "url": "/api/products"
+    },
+    {
+      "method": "GET",
+      "url": "/api/orders"
+    },
+    {
+      "method": "POST",
+      "url": "/api/products"
+    },
+    {
+      "method": "PUT",
+      "url": "/api/products/API-E2E"
+    },
+    {
+      "method": "GET",
+      "url": "/api/products"
+    },
+    {
+      "method": "GET",
+      "url": "/api/orders"
+    },
+    {
+      "method": "GET",
+      "url": "/api/products"
+    },
+    {
+      "method": "GET",
+      "url": "/api/orders"
+    },
+    {
+      "method": "DELETE",
+      "url": "/api/products/API-E2E"
+    },
+    {
+      "method": "POST",
+      "url": "/api/reset"
+    },
+    {
+      "method": "GET",
+      "url": "/api/products"
+    },
+    {
+      "method": "GET",
+      "url": "/api/orders"
+    },
+    {
+      "method": "GET",
+      "url": "/api/products"
+    },
+    {
+      "method": "GET",
+      "url": "/api/orders"
+    }
+  ]
+}

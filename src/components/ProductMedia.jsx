@@ -1,9 +1,5 @@
 import { useEffect, useState } from 'react';
-/**
- * Real catalogue photos come from retailers/brands. Local fallback is explicitly
- * labelled as unavailable, avoiding fabricated product packaging or broken images.
- * Remount on image changes so localStorage/admin updates refresh cleanly.
- */
+/** Imágenes de catálogo con respaldo local y actualización al cambiar de producto. */
 export default function ProductMedia({ product, variant = 'card', className = '' }) {
   const main = product?.remoteImage || product?.image || '/assets/producto-respaldo.svg';
   const backup = product?.image || '/assets/producto-respaldo.svg';

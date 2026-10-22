@@ -83,5 +83,5 @@ test('A09: las fotos del carrusel de Inicio existen y no usan rutas temporales',
  const fotos=[...home.matchAll(/image:\s*'\/assets\/([^']+)'/g)].map(x=>'/assets/'+x[1]);
  assert.equal(fotos.length,3);
  assert.deepEqual(fotos.filter(x=>!existsSync(asset(x))),[]);
- assert.equal(fotos[0],'/assets/hero-panaderia-artesanal.jpg');
+ assert.equal(fotos[0],'/assets/Portada.jpg');
 });

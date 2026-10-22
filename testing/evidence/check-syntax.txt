@@ -1,5 +1,5 @@
-
-> master-martini-fullstack2-ep2@2.0.0 check:syntax
+> npm run check:syntax
 > node testing/check-js-syntax.cjs
 
-Sintaxis 29 archivos JS/JSX: 0 errores
+Sintaxis 37 archivos JS/JSX: 0 errores
+

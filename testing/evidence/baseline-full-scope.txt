@@ -1,0 +1,49 @@
+
+ RUN  v5.0.5
+      Coverage enabled with v8
+
+
+ Test Files  1 passed (1)
+      Tests  13 passed (13)
+   Start at  01:25:59
+   Duration  3.12s (environment 53%, tests 20%, import 11%, setup 11%, transform 3%, worker 2%)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   22.13 |    23.14 |   19.54 |      25 |                   
+ src               |       0 |      100 |       0 |       0 |                   
+  App.jsx          |       0 |      100 |       0 |       0 | 11                
+ src/components    |   11.45 |    24.77 |   14.54 |   13.04 |                   
+  ...rBoundary.jsx |       0 |        0 |       0 |       0 | 6-63              
+  FormFields.jsx   |       0 |        0 |       0 |       0 | 9-39              
+  ProductMedia.jsx |   56.25 |    46.42 |   66.66 |   56.25 | 17-25             
+  SiteLayout.jsx   |    2.19 |     5.45 |    5.12 |    2.56 | 23-396            
+  SocialIcons.jsx  |       0 |        0 |       0 |       0 | 5-22              
+ ...mponents/admin |       0 |        0 |       0 |       0 |                   
+  OrderList.jsx    |       0 |        0 |       0 |       0 | 9-16              
+  ProductForm.jsx  |       0 |        0 |       0 |       0 | 12-116            
+  ProductTable.jsx |       0 |        0 |       0 |       0 | 8-55              
+ src/contexts      |   47.16 |    29.24 |   43.63 |    55.2 |                   
+  ShopContext.jsx  |   47.16 |    29.24 |   43.63 |    55.2 | ...49,152-200,223 
+ src/data          |    90.9 |       70 |     100 |     100 |                   
+  catalog.js       |   88.23 |       70 |     100 |     100 | 261,266-269       
+ src/pages         |    9.24 |    10.83 |    8.52 |   10.11 |                   
+  AccountAdmin.jsx |       0 |        0 |       0 |       0 | 17-576            
+  CartCheckout.jsx |       0 |        0 |       0 |       0 | 29-404            
+  Clases.jsx       |   73.91 |       75 |   76.92 |      75 | 27-30,116         
+  Home.jsx         |       0 |        0 |       0 |       0 | 20-515            
+  InfoPages.jsx    |       0 |        0 |       0 |       0 | 10-214            
+  ShopPages.jsx    |   38.88 |    38.63 |    23.8 |   48.83 | ...84-104,112-224 
+ src/utils         |    34.5 |    35.94 |   45.23 |   46.93 |                   
+  commerce.js      |    35.2 |    37.24 |   51.51 |   47.12 | ...,83-94,100-133 
+  storage.js       |   29.41 |     12.5 |   22.22 |   45.45 | 6,17-25           
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 22.13% ( 197/890 )
+Branches     : 23.14% ( 147/635 )
+Functions    : 19.54% ( 69/353 )
+Lines        : 25% ( 184/736 )
+================================================================================

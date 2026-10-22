@@ -1,0 +1,21 @@
+
+> master-martini-fullstack2-ep2@2.0.0 test:e2e:api
+> node testing/backend.browser.e2e.mjs
+
+PASS B01 carga catálogo desde API real
+PASS B02 rechazo y compra real vía API, stock e historial tras recarga
+PASS B03 CRUD de interfaz persiste en API real
+PASS B04 restauración sincroniza pedidos y catálogo sin necesitar recarga
+2:08:40 a. m. [vite] http proxy error: /api/products
+Error: connect ECONNREFUSED 127.0.0.1:51008
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16)
+2:08:40 a. m. [vite] http proxy error: /api/orders
+Error: connect ECONNREFUSED 127.0.0.1:51008
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16)
+2:08:40 a. m. [vite] http proxy error: /api/products
+Error: connect ECONNREFUSED 127.0.0.1:51008
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16)
+2:08:40 a. m. [vite] http proxy error: /api/orders
+Error: connect ECONNREFUSED 127.0.0.1:51008
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1705:16)
+PASS B05 caída real del backend se informa sin pantalla vacía

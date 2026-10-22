@@ -1,0 +1,48 @@
+
+> master-martini-fullstack2-ep2@2.0.0 test:coverage
+> vitest run --coverage --coverage.thresholds.lines=100
+
+
+ RUN  v5.0.5
+      Coverage enabled with v8
+
+
+ Test Files  5 passed (5)
+      Tests  62 passed (62)
+   Start at  02:10:26
+   Duration  6.64s (tests 43%, environment 39%, setup 7%, import 7%, worker 2%, transform 2%)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   95.28 |    90.55 |    96.6 |   97.56 |                   
+ src/components    |   94.65 |    88.49 |    90.9 |   94.78 |                   
+  ProductMedia.jsx |     100 |    89.28 |     100 |     100 | 30,35,49          
+  SiteLayout.jsx   |    92.3 |    81.81 |   87.17 |    92.3 | ...43,200,348-349 
+ ...mponents/admin |   95.83 |    84.61 |   95.23 |   95.65 |                   
+  OrderList.jsx    |     100 |       80 |     100 |     100 | 19                
+  ProductForm.jsx  |    92.3 |      100 |    92.3 |    92.3 | 106               
+  ProductTable.jsx |     100 |    83.33 |     100 |     100 | 9                 
+ src/contexts      |   98.12 |    92.45 |     100 |     100 |                   
+  ShopContext.jsx  |   98.12 |    92.45 |     100 |     100 | 38,75-87,189-243  
+ src/data          |    90.9 |       70 |     100 |     100 |                   
+  catalog.js       |   88.23 |       70 |     100 |     100 | 261,266-269       
+ src/pages         |   96.59 |    93.75 |   98.29 |   97.75 |                   
+  AccountAdmin.jsx |   94.89 |    94.33 |   97.72 |   94.48 | ...09,432,442,451 
+  CartCheckout.jsx |   95.65 |    95.16 |     100 |     100 | 40,101,197        
+  Clases.jsx       |   95.65 |    83.33 |     100 |     100 | 29,102            
+  Home.jsx         |   99.01 |    95.08 |   98.24 |     100 | 121,353           
+  ShopPages.jsx    |   96.29 |     90.9 |   95.23 |   97.67 | 104               
+ src/utils         |   89.43 |    87.58 |   92.85 |   96.93 |                   
+  commerce.js      |    89.6 |    88.27 |    90.9 |   96.55 | 31,57,59          
+  storage.js       |   88.23 |       75 |     100 |     100 | 17-21             
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 95.28% ( 849/891 )
+Branches     : 90.55% ( 575/635 )
+Functions    : 96.6% ( 341/353 )
+Lines        : 97.56% ( 720/738 )
+================================================================================
+ERROR: Coverage for lines (97.56%) does not meet global threshold (100%)

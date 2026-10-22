@@ -18,7 +18,9 @@
     "check:syntax": "node testing/check-js-syntax.cjs",
     "validate:frontend": "npm run check:syntax && npm run build && npm run test:coverage",
     "test:api": "node testing/api.integration.mjs",
-    "test:e2e": "node testing/browser.e2e.mjs"
+    "test:e2e": "node testing/browser.e2e.mjs",
+    "test:e2e:api": "node testing/backend.browser.e2e.mjs",
+    "validate:all": "npm run check:syntax && npm run check:logic && npm run test:node && npm run test:assets && npm run test:api && npm run test:coverage && npm run build"
   },
   "dependencies": {
     "bootstrap": "^5.3.8",

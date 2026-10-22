@@ -143,7 +143,10 @@ export function ShopProvider({ children }) {
     setCart(prev => prev.filter(x => x.id !== id));
   };
   const resetCatalog = async () => {
-    if (apiEnabled()) await apiRequest('/reset', 'POST');
+    if (apiEnabled()) {
+      await apiRequest('/reset', 'POST');
+      setOrders([]);
+    }
     setProducts(initialProducts);
     setCart([]);
     setToast('Catálogo de demostración restaurado.');

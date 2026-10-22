@@ -53,6 +53,10 @@
       "passed": true
     },
     {
+      "name": "Clases, inscripción, insumos y cuenta con persistencia",
+      "passed": true
+    },
+    {
       "name": "Nueva sesión de navegador tiene datos iniciales independientes",
       "passed": true
     },
@@ -63,5 +67,5 @@
   ],
   "errors": [],
   "failedResources": [],
-  "date": "2026-10-20T15:12:07.358Z"
+  "date": "2026-10-22T05:10:25.550Z"
 }

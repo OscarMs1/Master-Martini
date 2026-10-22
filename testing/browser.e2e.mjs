@@ -2,6 +2,7 @@
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir,writeFile} from 'node:fs/promises';
+import {clases} from '../src/data/clases.js';
 const base=process.env.TEST_BASE_URL||'http://127.0.0.1:5173';
 const out='testing/evidence/browser';
 await mkdir(out,{recursive:true});
@@ -37,11 +38,15 @@ try{
    assert.equal(await page.locator('.site-header').evaluate(e=>getComputedStyle(e).backgroundColor),'rgb(5, 25, 34)');
    if(width<=900){await page.getByRole('button',{name:'Abrir menú',exact:true}).click();await page.getByRole('navigation').getByRole('link',{name:'Tienda',exact:true}).click();}
    else await page.getByRole('navigation').getByRole('link',{name:'Tienda',exact:true}).click();
-   await page.waitForURL('**/catalogo');await noOverflow();await shot(`catalogo-${width}`);
+   await page.waitForURL('**/catalogo');await page.getByRole('heading',{name:'Catálogo de productos',level:1}).waitFor();
+   if(width<=900)await page.getByRole('button',{name:'Abrir menú',exact:true}).waitFor();
+   await page.evaluate(()=>window.scrollTo(0,0));
+   await page.waitForFunction(()=>Array.from(document.querySelectorAll('.product-photo img')).filter(i=>i.getBoundingClientRect().top<innerHeight).every(i=>i.complete&&i.naturalWidth>0));
+   await noOverflow();await shot(`catalogo-${width}`);
   });
   await check(`Rutas y formularios ${width}x${height}`,async()=>{
-   for(const route of ['/ofertas','/categorias/gelateria','/producto/MM-006','/carrito','/checkout','/compra-rechazada','/login','/registro','/contacto','/nosotros','/blog','/blog/gelato-artesanal','/no-existe']){
-    await page.goto(base+route);await noOverflow();
+   for(const route of ['/clases','/ofertas','/categorias/gelateria','/producto/MM-006','/carrito','/checkout','/compra-rechazada','/login','/registro','/contacto','/nosotros','/blog','/blog/gelato-artesanal','/no-existe']){
+    await page.goto(base+route);await page.locator('h1').waitFor();await noOverflow();
    }
   });
  }
@@ -49,18 +54,22 @@ try{
  await check('Filtro, búsqueda, detalle, carrito, cantidades y eliminación',async()=>{
   await page.goto(base+'/catalogo');
   await page.getByRole('button',{name:'Gelatería',exact:true}).click();
+  await page.waitForFunction(()=>document.querySelectorAll('[data-testid=product-card]').length===2);
   assert.equal(await page.getByTestId('product-card').count(),2);
   await page.getByRole('button',{name:'Todos',exact:true}).click();
+  await page.waitForFunction(()=>document.querySelectorAll('[data-testid=product-card]').length===12);
   await page.getByRole('searchbox',{name:'Buscar productos',exact:true}).fill('Gran Master Hoja');
+  await page.waitForFunction(()=>document.querySelectorAll('[data-testid=product-card]').length===1);
   assert.equal(await page.getByTestId('product-card').count(),1);
   await page.getByRole('link',{name:'Ver Gran Master Hoja',exact:true}).click();
   await page.getByRole('button',{name:'Añadir al carrito',exact:true}).click();
   await page.getByRole('link',{name:'Carrito con 1 productos'}).click();
   await page.getByRole('button',{name:'Aumentar Gran Master Hoja'}).click();
+  await page.waitForFunction(()=>document.querySelector('.qty-control output')?.textContent==='2');
   assert.match(await page.locator('.summary').innerText(),/10\.782/);
-  await page.reload();assert.equal(await page.locator('.qty-control output').innerText(),'2');
+  await page.reload();await page.waitForFunction(()=>document.querySelector('.qty-control output')?.textContent==='2');assert.equal(await page.locator('.qty-control output').innerText(),'2');
   await page.getByRole('button',{name:'Reducir Gran Master Hoja'}).click();
-  await page.getByRole('button',{name:'Eliminar',exact:true}).click();
+  await page.getByRole('button',{name:'Eliminar',exact:true}).click();await page.getByText('Tu carrito está vacío').waitFor();
   assert.equal(await page.getByText('Tu carrito está vacío').count(),1);
  });
  await check('Checkout inválido, rechazo y aprobación con persistencia',async()=>{
@@ -90,6 +99,34 @@ try{
   page.once('dialog',d=>d.accept());await page.getByRole('button',{name:'Eliminar Producto actualizado navegador'}).click();
   await page.getByText('Producto eliminado.').waitFor();await page.reload();assert.equal(await page.getByRole('button',{name:'Editar Producto actualizado navegador'}).count(),0);
   for(const width of [390,768,1366,1440,1920]){await page.setViewportSize({width,height:width===390?844:900});await noOverflow();await shot(`admin-${width}`);}
+ });
+ await check('Clases, inscripción, insumos y cuenta con persistencia',async()=>{
+  await page.goto(base+'/login');
+  await page.locator('.form-panel').getByLabel('Correo electrónico',{exact:true}).fill('cliente@demo.cl');
+  await page.getByLabel('Contraseña',{exact:true}).fill('Cliente123');
+  await page.getByRole('button',{name:'Entrar a mi cuenta'}).click();await page.waitForURL('**/mi-cuenta');
+  await page.goto(base+'/clases');await page.getByRole('button',{name:'Online',exact:true}).click();
+  await page.waitForFunction(()=>document.querySelectorAll('[data-testid=clase-card]').length===2);
+  await page.getByRole('button',{name:'Todas',exact:true}).click();
+  await page.waitForFunction(()=>document.querySelectorAll('[data-testid=clase-card]').length===4);
+  const card=page.getByTestId('clase-card').first();
+  await card.getByRole('button',{name:'Inscribirme',exact:true}).click();
+  await card.getByText('¡Estás inscrito en esta clase!').waitFor();
+  assert.equal(await card.getByText(`${clases[0].cupos-1} cupos disponibles`).count(),1);
+  await card.getByRole('button',{name:'Agregar insumos al carrito'}).click();await page.reload();
+  await page.getByTestId('clase-card').first().getByText('¡Estás inscrito en esta clase!').waitFor();
+  await page.goto(base+'/mi-cuenta');await page.getByText(clases[0].titulo,{exact:true}).waitFor();
+  for(const width of [390,768,1366,1920]){
+    await page.setViewportSize({width,height:900});
+    for(const route of ['/clases','/carrito','/checkout']){
+      await page.goto(base+route);await page.locator('h1').waitFor();await noOverflow();
+      await shot(`${route.slice(1)}-${width}`);
+    }
+  }
+  await checkoutFields();await page.getByRole('button',{name:/Confirmar pedido/}).click();
+  await page.waitForURL('**/compra-exitosa/**');
+  const id=await page.evaluate(()=>JSON.parse(localStorage.getItem('mm-ep2-orders'))[0].id);
+  await page.goto(base+'/mi-cuenta');await page.getByText(id,{exact:true}).waitFor();
  });
  await check('Nueva sesión de navegador tiene datos iniciales independientes',async()=>{
   const fresh=await browser.newContext();const tab=await fresh.newPage();await tab.goto(base+'/catalogo');

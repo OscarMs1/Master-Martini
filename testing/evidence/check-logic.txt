@@ -1,5 +1,4 @@
-
-> master-martini-fullstack2-ep2@2.0.0 check:logic
+> npm run check:logic
 > node testing/smoke-node.mjs
 
 PASS Precio con descuento
@@ -19,3 +18,4 @@ PASS Crear registro JS
 PASS Actualizar registro JS
 PASS Eliminar registro JS
 Resultado smoke Node: 16/16
+

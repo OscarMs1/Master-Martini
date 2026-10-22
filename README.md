@@ -101,7 +101,7 @@ El proyecto está dividido en carpetas para mantener organizadas las páginas, l
 
 ### Requisitos
 
-- **Node.js 22.22.2 o superior**, o Node.js 24, con npm.
+- **Node.js 22.22.2 o superior (línea 22)** o **Node.js 24.15.0 o superior (línea 24)**, con npm.
 - Visual Studio Code u otro editor de código.
 - Un navegador web actualizado.
 
@@ -157,14 +157,18 @@ Para comprobar el funcionamiento del proyecto se utilizaron **Vitest** y **React
 
 | Resultado | Valor |
 | --- | ---: |
-| Pruebas de Vitest aprobadas | **13 de 13** |
-| Cobertura de líneas | **45,54 %** |
-| Cobertura de funciones | 37,91 % |
-| Cobertura de ramas | 34,83 % |
-| Cobertura de sentencias | 38,40 % |
+| Pruebas de Vitest aprobadas | **62 de 62** |
+| Cobertura de líneas | **97,56 %** |
+| Cobertura de funciones | 96,60 % |
+| Cobertura de ramas | 90,55 % |
+| Cobertura de sentencias | 95,28 % |
 | Compilación con Vite | **Exitosa** |
 
-Las pruebas incluyen descuentos, costos de despacho, validación de RUN y correo, carrito de compras, filtros, inscripciones a clases y visualización de productos.
+La suite incluye 44 casos de componentes o vistas React: props, eventos, filtros, cantidades, checkout aprobado y rechazado, credenciales, registro, CRUD, clases y persistencia. También se prueban carrusel, temporizadores, rutas, recuperación de errores y la integración del contexto con la API.
+
+La cobertura de Vitest incluye `src/**/*.{js,jsx}`, excepto las pruebas y `main.jsx` (arranque del DOM). Se incluyen archivos sin ejecución. Las pruebas de Node y de navegador se informan por separado, sin sumarlas a los porcentajes de cobertura del frontend.
+
+La validación exige como mínimo 95 % de líneas, sentencias y funciones, y 90 % de ramas. Ejecuta `npm run validate:all` para revisar sintaxis, lógica, recursos, API, cobertura y build. `npm run test:e2e:api` inicia servidores y datos temporales para cinco escenarios con backend real; en Windows requiere Chrome. El workflow `.github/workflows/quality.yml` permite ejecutar comprobaciones automáticas desde GitHub Actions una vez publicado el repositorio.
 
 **La cobertura no es del 100 %**: los porcentajes indican qué parte del código se ejecutó durante las pruebas.
 

@@ -6,9 +6,9 @@
     "fit": "contain"
   },
   {
-    "src": "/assets/prod-bravo.png",
-    "width": 240,
-    "height": 320,
+    "src": "/assets/prod-bravo-v2.png",
+    "width": 1200,
+    "height": 1200,
     "fit": "contain"
   },
   {
@@ -36,21 +36,21 @@
     "fit": "contain"
   },
   {
-    "src": "/assets/cat-gelateria.jpg",
-    "width": 700,
-    "height": 365,
+    "src": "/assets/prod-base-gelato-uht-v2.jpg",
+    "width": 1200,
+    "height": 1200,
     "fit": "contain"
   },
   {
-    "src": "/assets/cat-gelateria.jpg",
-    "width": 700,
-    "height": 365,
+    "src": "/assets/prod-pasta-pistacho-v2.jpg",
+    "width": 1200,
+    "height": 1200,
     "fit": "contain"
   },
   {
-    "src": "/assets/blog-pastel.jpg",
-    "width": 700,
-    "height": 365,
+    "src": "/assets/prod-master-gourmet-encuadrado.png",
+    "width": 900,
+    "height": 900,
     "fit": "contain"
   },
   {

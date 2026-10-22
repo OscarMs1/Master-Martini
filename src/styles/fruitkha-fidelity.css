@@ -979,7 +979,7 @@ input:focus-visible {
 .fk-news-card:hover .fk-news-content span {
   color: var(--orange);
 }
-/* LOGO/LINES CAROUSEL FROM FRUITKHA; TEXT NAMES NOT INVENTED LOGOS */
+/* Carrusel de marcas de referencia. */
 .fk-brand-strip {
   border-top: 1px solid #ededed;
   border-bottom: 1px solid #ededed;
@@ -1149,7 +1149,7 @@ input:focus-visible {
 .fk-news-card.reveal:hover {
   transform: translateY(-6px);
 }
-/* Small design refinements elsewhere: same visual language across screens */
+/* Estilo visual coherente entre las secciones. */
 .product-card,
 .category-card,
 .blog-card,
@@ -1605,7 +1605,7 @@ input:focus-visible {
   }
 }
 
-/* === V3: HOME FIEL A FRUITKHA / LOGO TRANSPARENTE / NAVEGACION AMPLIA === */
+/* Barra de navegación, identidad visual y logotipo. */
 .topbar {
   background: #051922 !important;
 }
@@ -2033,13 +2033,13 @@ input:focus-visible {
 }
 
 /* ===============================================================
-   V4 — PORTADA FULL-VIEWPORT (Fruitkha, 19/10/2026)
+   Portada a pantalla completa
    La portada cubre exactamente el alto de la ventana. Navbar inicial
    100% transparente y superpuesta a la foto, sin franja promocional.
    Solo después de desplazarse se transforma en navbar sólida animada.
    =============================================================== */
 
-/* Ajuste del documento / evita bandas debajo del primer fold. */
+/* Evita espacios inesperados alrededor de la portada. */
 html,
 body,
 #root {
@@ -2265,7 +2265,7 @@ body,
   }
 }
 
-/* V4: restablece la bajada editorial de la referencia visual aprobada. */
+/* Tipografía y espaciado del texto introductorio. */
 .fk-hero p {
   display: block;
   font-family: var(--font-text);
@@ -2297,7 +2297,7 @@ body,
 }
 
 /* ===============================================================
-   V8 — Ajustes específicos aprobados: Navbar + Hero
+   Barra de navegación y portada
    La fotografía permanece como asset real, nunca con texto integrado.
    Las animaciones existentes (sticky/slider) no se modifican.
    =============================================================== */
@@ -2384,8 +2384,7 @@ body,
   }
 }
 
-/* Fix product media layout: a square/portrait catalogue image must never
-   determine its own height inside a fixed-height card or be clipped. */
+/* Mantiene las fotografías completas dentro de las tarjetas de producto. */
 .product-photo > .mm-product-media {
   width: 100%;
   height: 100%;
@@ -2406,11 +2405,11 @@ body,
   object-position: center !important;
   flex-shrink: 1;
 }
-/* A portrait package should have comfortable whitespace on the store cards. */
+/* Tamaño de las imágenes verticales en las tarjetas. */
 .product-photo > .mm-product-media[data-product='MM-009'] > img {
   max-height: 100% !important;
 }
-/* Product-detail view preserves the entire package and its image disclosure. */
+/* Fotografías completas y nota informativa en el detalle de producto. */
 .detail-photo > .mm-product-media {
   width: 100%;
   max-width: 100%;

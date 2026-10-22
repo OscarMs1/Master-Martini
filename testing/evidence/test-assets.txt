@@ -1,68 +1,21 @@
-
-> master-martini-fullstack2-ep2@2.0.0 test:assets
+> npm run test:assets
 > node --test testing/assets.test.mjs
 
-TAP version 13
-# Subtest: A01: toda imagen local de producto tiene un archivo real
-ok 1 - A01: toda imagen local de producto tiene un archivo real
-  ---
-  duration_ms: 1.775235
-  type: 'test'
-  ...
-# Subtest: A02: imágenes de categorías y publicaciones se encuentran localmente
-ok 2 - A02: imágenes de categorías y publicaciones se encuentran localmente
-  ---
-  duration_ms: 0.471516
-  type: 'test'
-  ...
-# Subtest: A03: OraSì Soya tiene una imagen propia y alternativa accesible
-ok 3 - A03: OraSì Soya tiene una imagen propia y alternativa accesible
-  ---
-  duration_ms: 0.242183
-  type: 'test'
-  ...
-# Subtest: A04: el HTML inicia sin pantalla provisional de carga
-ok 4 - A04: el HTML inicia sin pantalla provisional de carga
-  ---
-  duration_ms: 0.233961
-  type: 'test'
-  ...
-# Subtest: A05: las tres nuevas fotos son independientes y se cargan desde archivos locales
-ok 5 - A05: las tres nuevas fotos son independientes y se cargan desde archivos locales
-  ---
-  duration_ms: 0.293193
-  type: 'test'
-  ...
-# Subtest: A06: los productos antiguos guardados renuevan sus fotos sin perder cambios comerciales
-ok 6 - A06: los productos antiguos guardados renuevan sus fotos sin perder cambios comerciales
-  ---
-  duration_ms: 0.314733
-  type: 'test'
-  ...
-# Subtest: A07: Tendencias en pastelería usa fotografía local vigente en tarjetas y artículo
-ok 7 - A07: Tendencias en pastelería usa fotografía local vigente en tarjetas y artículo
-  ---
-  duration_ms: 0.94914
-  type: 'test'
-  ...
-# Subtest: A08: las 4 clases usan recursos presentes en public/assets
-ok 8 - A08: las 4 clases usan recursos presentes en public/assets
-  ---
-  duration_ms: 7.706176
-  type: 'test'
-  ...
-# Subtest: A09: las fotos del carrusel de Inicio existen y no usan rutas temporales
-ok 9 - A09: las fotos del carrusel de Inicio existen y no usan rutas temporales
-  ---
-  duration_ms: 0.632804
-  type: 'test'
-  ...
-1..9
-# tests 9
-# suites 0
-# pass 9
-# fail 0
-# cancelled 0
-# skipped 0
-# todo 0
-# duration_ms 88.578476
+✔ A01: toda imagen local de producto tiene un archivo real (3.2291ms)
+✔ A02: imágenes de categorías y publicaciones se encuentran localmente (0.8284ms)
+✔ A03: OraSì Soya tiene una imagen propia y alternativa accesible (0.32ms)
+✔ A04: el HTML inicia sin pantalla provisional de carga (0.349ms)
+✔ A05: las tres nuevas fotos son independientes y se cargan desde archivos locales (0.4924ms)
+✔ A06: los productos antiguos guardados renuevan sus fotos sin perder cambios comerciales (0.3319ms)
+✔ A07: Tendencias en pastelería usa fotografía local vigente en tarjetas y artículo (0.6565ms)
+✔ A08: las 4 clases usan recursos presentes en public/assets (1.4351ms)
+✔ A09: las fotos del carrusel de Inicio existen y no usan rutas temporales (0.7257ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 100.9987
+

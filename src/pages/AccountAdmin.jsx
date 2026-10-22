@@ -444,7 +444,7 @@ export function Admin() {
   };
 
   const handleReset = async () => {
-    if (!window.confirm('¿Restaurar productos y borrar carrito demo?')) return;
+    if (!window.confirm('¿Restaurar productos y vaciar el carrito? En modo API también se borran los pedidos demo.')) return;
     try {
       await resetCatalog();
     } catch (error) {

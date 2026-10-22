@@ -1,5 +1,4 @@
-
-> master-martini-fullstack2-ep2@2.0.0 test:api
+> npm run test:api
 > node testing/api.integration.mjs
 
 PASS GET /api/health
@@ -18,3 +17,4 @@ PASS POST reset restaura semilla y pedidos
 PASS POST producto inválido retorna 422
 PASS GET ruta desconocida retorna 404
 Resultado API: 15/15
+

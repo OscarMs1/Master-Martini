@@ -264,7 +264,7 @@ export function refreshCatalogProductMedia(products) {
     const originals = legacyProductPhotos[product.id];
     const updated = initialProducts.find(p => p.id === product.id);
     if (!updated) return product;
-    // Remove obsolete note text from any previously saved catalog entries.
+    // Omite las notas antiguas al actualizar los productos guardados.
     const { imageNote: _obsoleteNote, ...withoutNote } = product;
     return originals.includes(product.image)
       ? { ...withoutNote, image: updated.image }

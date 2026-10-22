@@ -1,0 +1,182 @@
+
+> master-martini-fullstack2-ep2@2.0.0 validate:all
+> npm run check:syntax && npm run check:logic && npm run test:node && npm run test:assets && npm run test:api && npm run test:coverage && npm run build
+
+
+> master-martini-fullstack2-ep2@2.0.0 check:syntax
+> node testing/check-js-syntax.cjs
+
+Sintaxis 37 archivos JS/JSX: 0 errores
+
+> master-martini-fullstack2-ep2@2.0.0 check:logic
+> node testing/smoke-node.mjs
+
+PASS Precio con descuento
+PASS Subtotal carrito
+PASS Costo envío bajo umbral
+PASS Envío sin costo umbral
+PASS Filtro por categoría
+PASS Filtro de ofertas
+PASS Agregar al carrito
+PASS Tope de stock
+PASS Actualizar cantidad
+PASS Eliminar cantidad cero
+PASS RUN chileno
+PASS Checkout incompleto
+PASS Datos producto invalidos
+PASS Crear registro JS
+PASS Actualizar registro JS
+PASS Eliminar registro JS
+Resultado smoke Node: 16/16
+
+> master-martini-fullstack2-ep2@2.0.0 test:node
+> node --test testing/commerce.test.mjs
+
+✔ 01 precio neto CLP redondeado (1.1047ms)
+✔ 02 precios sin descuento (0.1117ms)
+✔ 03 precio 15% de descuento (0.105ms)
+✔ 04 moneda CLP (13.2813ms)
+✔ 05 subtotal dos unidades (0.2465ms)
+✔ 06 subtotal con un producto que fue eliminado (0.1537ms)
+✔ 07 retiro sin cargo (0.1205ms)
+✔ 08 delivery bajo umbral (0.0917ms)
+✔ 09 delivery desde 50000 gratis (0.2161ms)
+✔ 10 total de la orden suma despacho (0.2164ms)
+✔ 11 búsqueda acentos / mayúsculas (0.2942ms)
+✔ 12 filtrado categoría (0.1552ms)
+✔ 13 filtrado de ofertas (0.0994ms)
+✔ 14 agregar a carrito (0.8417ms)
+✔ 15 sumar en una sola línea (0.1369ms)
+✔ 16 stock límite máximo (0.086ms)
+✔ 17 agregar cantidades no válidas no altera carrito (0.1892ms)
+✔ 18 producto sin stock no se agrega (0.0758ms)
+✔ 19 aumentar cantidad dentro del stock (0.1515ms)
+✔ 20 quitar elemento al poner cero (0.0797ms)
+✔ 21 si disminuye stock a cero, vacía el artículo (0.0854ms)
+✔ 22 carrito no permite checkout con SKU inexistente (0.1515ms)
+✔ 23 carrito no permite checkout con más unidades que stock (0.0763ms)
+✔ 24 carrito permite checkout válido (0.0627ms)
+✔ 25 carrito vacío no permite compra (0.0796ms)
+✔ 26 dígito verificador RUN (0.1475ms)
+✔ 27 RUN válido con puntos (0.1569ms)
+✔ 28 RUN inválido se rechaza (0.0968ms)
+✔ 29 correos válidos/inválidos (0.1317ms)
+✔ 30 checkout incompleto tiene errores (0.1363ms)
+✔ 31 checkout válido no da errores (0.1144ms)
+✔ 32 validaciones de producto rechazan stock, precio y descuento (0.1248ms)
+✔ 33 crear nuevo producto inmutable (0.1285ms)
+✔ 34 SKU duplicado produce error (0.3479ms)
+✔ 35 update actualiza solo SKU elegido sin mutar entrada (0.1309ms)
+✔ 36 update SKU inexistente lanza error (0.1257ms)
+✔ 37 delete no afecta lista original (0.0955ms)
+✔ 38 persistencia serializa y lee array (0.1787ms)
+✔ 39 persistencia corrupta usa fallback (0.1199ms)
+ℹ tests 39
+ℹ suites 0
+ℹ pass 39
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 125.4903
+
+> master-martini-fullstack2-ep2@2.0.0 test:assets
+> node --test testing/assets.test.mjs
+
+✔ A01: toda imagen local de producto tiene un archivo real (3.2291ms)
+✔ A02: imágenes de categorías y publicaciones se encuentran localmente (0.8284ms)
+✔ A03: OraSì Soya tiene una imagen propia y alternativa accesible (0.32ms)
+✔ A04: el HTML inicia sin pantalla provisional de carga (0.349ms)
+✔ A05: las tres nuevas fotos son independientes y se cargan desde archivos locales (0.4924ms)
+✔ A06: los productos antiguos guardados renuevan sus fotos sin perder cambios comerciales (0.3319ms)
+✔ A07: Tendencias en pastelería usa fotografía local vigente en tarjetas y artículo (0.6565ms)
+✔ A08: las 4 clases usan recursos presentes en public/assets (1.4351ms)
+✔ A09: las fotos del carrusel de Inicio existen y no usan rutas temporales (0.7257ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 100.9987
+
+> master-martini-fullstack2-ep2@2.0.0 test:api
+> node testing/api.integration.mjs
+
+PASS GET /api/health
+PASS GET /api/products
+PASS POST /api/products crea SKU
+PASS POST duplicado retorna 409
+PASS PUT /api/products/:id actualiza
+PASS GET visualiza SKU modificado
+PASS DELETE producto
+PASS DELETE inexistente devuelve 404
+PASS POST checkout inválido retorna 422
+PASS POST checkout rechazado no registra pedido
+PASS POST checkout aprobado registra precio neto y stock
+PASS POST checkout stock insuficiente retorna 409
+PASS POST reset restaura semilla y pedidos
+PASS POST producto inválido retorna 422
+PASS GET ruta desconocida retorna 404
+Resultado API: 15/15
+
+> master-martini-fullstack2-ep2@2.0.0 test:coverage
+> vitest run --coverage
+
+
+ RUN  v5.0.5
+      Coverage enabled with v8
+
+
+ Test Files  5 passed (5)
+      Tests  62 passed (62)
+   Start at  02:09:16
+   Duration  6.62s (tests 42%, environment 33%, transform 10%, import 7%, setup 6%, worker 2%)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   95.28 |    90.55 |    96.6 |   97.56 |                   
+ src/components    |   94.65 |    88.49 |    90.9 |   94.78 |                   
+  ProductMedia.jsx |     100 |    89.28 |     100 |     100 | 30,35,49          
+  SiteLayout.jsx   |    92.3 |    81.81 |   87.17 |    92.3 | ...43,200,348-349 
+ ...mponents/admin |   95.83 |    84.61 |   95.23 |   95.65 |                   
+  OrderList.jsx    |     100 |       80 |     100 |     100 | 19                
+  ProductForm.jsx  |    92.3 |      100 |    92.3 |    92.3 | 106               
+  ProductTable.jsx |     100 |    83.33 |     100 |     100 | 9                 
+ src/contexts      |   98.12 |    92.45 |     100 |     100 |                   
+  ShopContext.jsx  |   98.12 |    92.45 |     100 |     100 | 38,75-87,189-243  
+ src/data          |    90.9 |       70 |     100 |     100 |                   
+  catalog.js       |   88.23 |       70 |     100 |     100 | 261,266-269       
+ src/pages         |   96.59 |    93.75 |   98.29 |   97.75 |                   
+  AccountAdmin.jsx |   94.89 |    94.33 |   97.72 |   94.48 | ...09,432,442,451 
+  CartCheckout.jsx |   95.65 |    95.16 |     100 |     100 | 40,101,197        
+  Clases.jsx       |   95.65 |    83.33 |     100 |     100 | 29,102            
+  Home.jsx         |   99.01 |    95.08 |   98.24 |     100 | 121,353           
+  ShopPages.jsx    |   96.29 |     90.9 |   95.23 |   97.67 | 104               
+ src/utils         |   89.43 |    87.58 |   92.85 |   96.93 |                   
+  commerce.js      |    89.6 |    88.27 |    90.9 |   96.55 | 31,57,59          
+  storage.js       |   88.23 |       75 |     100 |     100 | 17-21             
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 95.28% ( 849/891 )
+Branches     : 90.55% ( 575/635 )
+Functions    : 96.6% ( 341/353 )
+Lines        : 97.56% ( 720/738 )
+================================================================================
+
+> master-martini-fullstack2-ep2@2.0.0 build
+> vite build
+
+vite v7.3.7 building client environment for production...
+transforming...
+✓ 2046 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   1.05 kB │ gzip:   0.55 kB
+dist/assets/index-BEXmRXpt.css  291.19 kB │ gzip:  43.33 kB
+dist/assets/index-CNde8568.js   353.72 kB │ gzip: 111.01 kB
+✓ built in 5.33s
