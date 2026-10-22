@@ -221,4 +221,6 @@ La plantilla se adaptó a la temática de Master Martini, utilizando React y Boo
 
 ---
 
-**Master Martini · Desarrollo Fullstack II · Duoc UC**
+<p align="center">
+  <strong>Master Martini · Desarrollo Fullstack II · Duoc UC</strong>
+</p>
