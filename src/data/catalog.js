@@ -3,28 +3,28 @@ export const categories = [
     id: 'panaderia',
     name: 'Panadería & Pastelería',
     subtitle: 'Insumos para preparaciones dulces y saladas.',
-    image: '/assets/cat-panaderia.jpg',
+    image: '/assets/prueba.avif',
     description: 'Margarinas, cremas y coberturas para creaciones profesionales.'
   },
   {
     id: 'gelateria',
     name: 'Gelatería',
     subtitle: 'Sabores y texturas de la tradición italiana.',
-    image: '/assets/cat-gelateria.jpg',
+    image: '/assets/ice-cream.jpg',
     description: 'Bases, pastas y complementos para un gelato excepcional.'
   },
   {
     id: 'food-service',
     name: 'Food Service',
     subtitle: 'Soluciones para hoteles y restaurantes.',
-    image: '/assets/cat-foodservice.jpg',
+    image: '/assets/foodservice.jpg',
     description: 'Ingredientes prácticos para profesionales gastronómicos.'
   },
   {
     id: 'retail',
     name: 'Retail',
     subtitle: 'Productos para hogares y negocios.',
-    image: '/assets/cat-retail.jpg',
+    image: '/assets/retail.png',
     description: 'Bebidas vegetales y productos para el consumidor final.'
   }
 ];
@@ -205,7 +205,7 @@ export const posts = [
     tag: 'RECETAS',
     name: 'Croissants de hojaldre',
     desc: 'Técnicas para preparar hojaldres y obtener un acabado profesional.',
-    image: '/assets/blog-croissant-unsplash.webp',
+    image: '/assets/criossants.jpg',
     text: 'El secreto del hojaldre está en la temperatura, el reposo y el laminado uniforme. Prueba la técnica con margarina apta para masas de hoja.'
   },
   {
@@ -213,8 +213,8 @@ export const posts = [
     tag: 'NOVEDADES',
     name: 'Tendencias en pastelería',
     desc: 'Decoraciones, cremas vegetales y nuevas experiencias.',
-    image: '/assets/blog-pastel-unsplash.webp',
-    cardImage: '/assets/blog-pastel-tarjetas-centrado.webp',
+    image: '/assets/tendencias-pasteleria.avif',
+    cardImage: '/assets/tendencias-pasteleria.avif',
     text: 'Explora formas de terminar pasteles con texturas delicadas y productos estables para vitrinas y servicios.'
   },
   {
@@ -222,7 +222,7 @@ export const posts = [
     tag: 'RECETAS',
     name: 'Gelato artesanal',
     desc: 'Bases, sabores y consejos para helados con carácter italiano.',
-    image: '/assets/blog-gelato-unsplash.webp',
+    image: '/assets/helado-artesanal.avif',
     text: 'Trabaja con una base adecuada, sabores de calidad y un proceso controlado para obtener una textura de gelato equilibrada.'
   }
 ];

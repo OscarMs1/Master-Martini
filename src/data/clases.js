@@ -13,7 +13,7 @@ export const clases = [
     duracion: '3 h',
     nivel: 'Medio',
     cupos: 12,
-    imagen: '/assets/blog-croissant-unsplash.webp',
+    imagen: '/assets/pruebareceta3.webp',
     descripcion:
       'Aprende a laminar la masa y lograr un croissant crujiente por fuera y suave por dentro.',
     pasos: [
@@ -37,7 +37,7 @@ export const clases = [
     duracion: '2 h',
     nivel: 'Fácil',
     cupos: 8,
-    imagen: '/assets/blog-gelato-unsplash.webp',
+    imagen: '/assets/helado-de-pistachos-2.webp',
     descripcion: 'Prepara un gelato cremoso usando una base lista y pasta de pistacho.',
     pasos: [
       'Mezclar la base de gelato con la pasta de pistacho.',
@@ -59,7 +59,7 @@ export const clases = [
     duracion: '1 h 30 min',
     nivel: 'Fácil',
     cupos: 30,
-    imagen: '/assets/blog-pastel-unsplash.webp',
+    imagen: '/assets/prueba5.png',
     descripcion: 'Una tartaleta de masa quebrada con crema batida y frambuesas frescas.',
     pasos: [
       'Preparar la masa quebrada con margarina y hornearla.',
@@ -82,7 +82,7 @@ export const clases = [
     duracion: '2 h',
     nivel: 'Medio',
     cupos: 40,
-    imagen: '/assets/cat-retail.jpg',
+    imagen: '/assets/prueba4.png',
     descripcion:
       'Arma una torta de bizcocho con crema vegetal y una base de chocolate, decorada con frutos rojos.',
     pasos: [
