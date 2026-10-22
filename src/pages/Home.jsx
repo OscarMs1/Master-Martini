@@ -23,9 +23,9 @@ const heroSlides = [
     title: ['Ingredientes para', 'grandes creaciones'],
     description:
       'Descubre soluciones para panadería, pastelería, gelatería y food service con la calidad de Master Martini.',
-    image: '/assets/',
+    image: '/assets/Portada.jpg',
     position: 'center center',
-    overlay: 'rgba(215, 31, 31, 0.39)',
+    overlay: 'rgba(0,0,0,.39)',
     button: 'Ver catálogo',
     to: '/catalogo'
   },
@@ -245,7 +245,7 @@ function FeaturedProducts() {
           <p className="text-center muted">No hay productos en esta categoría.</p>
         )}
         <p className="fk-disclaimer">
-          Precios, descuentos y stocks ilustrativos
+          Precios, descuentos y stocks ilustrativos.
         </p>
         <div className="text-center mt-4">
           <Link className="fk-plain-link" to="/catalogo">

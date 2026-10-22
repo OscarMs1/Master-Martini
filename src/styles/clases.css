@@ -31,7 +31,6 @@
 .clase-card > img {
   width: 100%;
   height: 300px;
-  weight: 500px;
   object-fit: cover;
 }
 

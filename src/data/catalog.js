@@ -69,7 +69,7 @@ export const initialProducts = [
     price: 5290,
     stock: 18,
     discount: 15,
-    image: '/assets/crema.jpeg',
+    image: '/assets/catalog-MM-003.webp',
     featured: true
   },
   {
