@@ -1,15 +1,18 @@
+
 <h1 align="center">Master Martini</h1>
 
 <h3 align="center">Tienda online de insumos gastronómicos | Desarrollo Fullstack II</h3>
 
-<p align="center"><strong>Evaluación Parcial 2 · DSY1104 · Duoc UC</strong></p>
+<p align="center">
+  <strong>Evaluación Parcial 2 · DSY1104 · Duoc UC</strong>
+</p>
 
 <p align="center">
-  <img alt="React 19" src="https://img.shields.io/badge/React-19-149ECA?style=flat-square&amp;logo=react&amp;logoColor=white" />
-  <img alt="JavaScript" src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&amp;logo=javascript&amp;logoColor=black" />
-  <img alt="Vite 7" src="https://img.shields.io/badge/Vite-7-646CFF?style=flat-square&amp;logo=vite&amp;logoColor=white" />
-  <img alt="Bootstrap 5" src="https://img.shields.io/badge/Bootstrap-5-7952B3?style=flat-square&amp;logo=bootstrap&amp;logoColor=white" />
-  <img alt="Vitest 5" src="https://img.shields.io/badge/Vitest-5-6E9F18?style=flat-square&amp;logo=vitest&amp;logoColor=white" />
+  <img alt="React 19" src="https://img.shields.io/badge/React-19-149ECA?style=flat-square&logo=react&logoColor=white" />
+  <img alt="JavaScript" src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black" />
+  <img alt="Vite 7" src="https://img.shields.io/badge/Vite-7-646CFF?style=flat-square&logo=vite&logoColor=white" />
+  <img alt="Bootstrap 5" src="https://img.shields.io/badge/Bootstrap-5-7952B3?style=flat-square&logo=bootstrap&logoColor=white" />
+  <img alt="Vitest 5" src="https://img.shields.io/badge/Vitest-5-6E9F18?style=flat-square&logo=vitest&logoColor=white" />
 </p>
 
 <p align="center">
@@ -161,7 +164,9 @@ Para comprobar el funcionamiento del proyecto se utilizaron **Vitest** y **React
 | Cobertura de sentencias | 38,40 % |
 | Compilación con Vite | **Exitosa** |
 
-Las pruebas incluyen descuentos, costos de despacho, validación de RUN y correo, carrito de compras, filtros, inscripciones a clases y visualización de productos. **La cobertura no es del 100 %**: los porcentajes indican qué parte del código se ejecutó durante las pruebas.
+Las pruebas incluyen descuentos, costos de despacho, validación de RUN y correo, carrito de compras, filtros, inscripciones a clases y visualización de productos.
+
+**La cobertura no es del 100 %**: los porcentajes indican qué parte del código se ejecutó durante las pruebas.
 
 Los resultados y las evidencias se explican con más detalle en el [informe de testing](docs/INFORME_TESTING_COBERTURA_EP2.pdf).
 
