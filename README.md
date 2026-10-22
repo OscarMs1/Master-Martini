@@ -1,16 +1,22 @@
-# Master Martini
+<h1 align="center">Master Martini</h1>
 
-### Tienda online de insumos gastronómicos | Desarrollo Fullstack II
+<h3 align="center">Tienda online de insumos gastronómicos | Desarrollo Fullstack II</h3>
 
-**Evaluación Parcial 2 · DSY1104 · Duoc UC**
+<p align="center"><strong>Evaluación Parcial 2 · DSY1104 · Duoc UC</strong></p>
 
-![React](https://img.shields.io/badge/React-19-149ECA?style=flat-square&logo=react&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
-![Vite](https://img.shields.io/badge/Vite-7-646CFF?style=flat-square&logo=vite&logoColor=white)
-![Bootstrap](https://img.shields.io/badge/Bootstrap-5-7952B3?style=flat-square&logo=bootstrap&logoColor=white)
-![Vitest](https://img.shields.io/badge/Vitest-5-6E9F18?style=flat-square&logo=vitest&logoColor=white)
+<p align="center">
+  <img alt="React 19" src="https://img.shields.io/badge/React-19-149ECA?style=flat-square&amp;logo=react&amp;logoColor=white" />
+  <img alt="JavaScript" src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&amp;logo=javascript&amp;logoColor=black" />
+  <img alt="Vite 7" src="https://img.shields.io/badge/Vite-7-646CFF?style=flat-square&amp;logo=vite&amp;logoColor=white" />
+  <img alt="Bootstrap 5" src="https://img.shields.io/badge/Bootstrap-5-7952B3?style=flat-square&amp;logo=bootstrap&amp;logoColor=white" />
+  <img alt="Vitest 5" src="https://img.shields.io/badge/Vitest-5-6E9F18?style=flat-square&amp;logo=vitest&amp;logoColor=white" />
+</p>
 
-[**Repositorio**](https://github.com/OscarMs1/Master-Martini) · [**Requisitos del proyecto**](docs/ERS_MASTER_MARTINI_EP2.pdf) · [**Informe de pruebas**](docs/INFORME_TESTING_COBERTURA_EP2.pdf)
+<p align="center">
+  <a href="https://github.com/OscarMs1/Master-Martini">Repositorio</a> ·
+  <a href="docs/ERS_MASTER_MARTINI_EP2.pdf">Requisitos del proyecto</a> ·
+  <a href="docs/INFORME_TESTING_COBERTURA_EP2.pdf">Informe de pruebas</a>
+</p>
 
 ---
 
