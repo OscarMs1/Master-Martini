@@ -1,5 +1,0 @@
-> npm run check:syntax
-> node testing/check-js-syntax.cjs
-
-Sintaxis 37 archivos JS/JSX: 0 errores
-

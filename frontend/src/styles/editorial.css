@@ -1,0 +1,213 @@
+
+
+.brand-strip { background:var(--beige); }
+.brand-strip > div { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; text-align:center; }
+.brand-strip a { font:22px var(--font-heading); text-decoration:none; color:var(--green); padding:8px 0; }
+.offer-band { display:block; background:var(--beige); color:var(--green); padding:54px 0; }
+.offer-inner { display:flex; align-items:center; justify-content:space-between; gap:30px; }
+.offer-band .eyebrow,.class-feature .eyebrow { color:var(--green); }
+.class-feature { background:var(--paper); display:grid; grid-template-columns:1fr 1fr; height:auto; }
+.class-feature > img { min-height:480px; }
+.class-feature::after { display:none; }
+.class-feature-copy { position:static; align-self:center; padding:60px; color:var(--green); }
+.class-feature-copy > p:not(.eyebrow),.class-feature small { color:var(--muted); }
+.class-feature h2 em { color:#8b7118; }
+.class-feature .btn { border:1px solid var(--green); }
+@media(min-width:992px) and (max-height:760px) {    }
+@media(max-width:991px) {  .class-feature-copy { padding:35px; } }
+@media(max-width:575px) {
+ 
+ 
+ 
+ 
+ .brand-strip > div { grid-template-columns:repeat(2,1fr); gap:12px; }
+ .brand-strip a { font-size:20px; }
+ .offer-inner { flex-direction:column; align-items:flex-start; }
+ .class-feature { grid-template-columns:1fr; }
+ .class-feature > img { min-height:0; height:280px; }
+ .class-feature-copy { padding:35px 20px; }
+}
+
+
+/* Novedades: tres columnas equilibradas y lectura editorial coherente. */
+.novedades-listado .novedades-grid > [class*="col-"] {
+  display: flex;
+}
+.novedades-grid .novedad-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.novedades-grid .novedad-card > img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  margin: 0 0 22px;
+  transition: filter .25s ease;
+}
+.novedades-grid .novedad-card-copy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+.novedades-grid .novedad-card .eyebrow {
+  font-size: 10px;
+  letter-spacing: 1.7px;
+  margin: 0 0 12px;
+}
+.novedades-grid .novedad-card h2 {
+  font-family: var(--font-heading);
+  color: var(--green-deep);
+  font-size: clamp(28px, 2.4vw, 36px);
+  line-height: 1.06;
+  margin: 0 0 12px;
+  min-height: 2.12em;
+}
+.novedades-grid .novedad-card-extracto {
+  margin: 0 0 22px;
+  color: var(--muted);
+  line-height: 1.75;
+  font-size: 13px;
+}
+.novedades-grid .novedad-card .text-link {
+  margin-top: auto;
+  font-size: 12px;
+  padding-bottom: 7px;
+}
+.novedades-grid .novedad-card:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 6px;
+}
+
+/* Detalle: foto, encabezado y texto comparten un mismo eje izquierdo. */
+.novedad-detalle .novedad-detalle-interior {
+  width: min(100%, 1040px);
+  margin-inline: auto;
+}
+.novedad-detalle .novedad-volver {
+  margin-bottom: 30px;
+}
+.novedad-detalle .novedad-encabezado {
+  width: 100%;
+  max-width: 900px;
+  text-align: left;
+  margin: 0 0 30px;
+}
+.novedad-detalle .novedad-encabezado .eyebrow {
+  margin-bottom: 13px;
+}
+.novedad-detalle .novedad-encabezado h1 {
+  max-width: 900px;
+  font-size: clamp(42px, 5vw, 68px);
+  line-height: 1.07;
+  margin-bottom: 16px;
+}
+.novedad-detalle .novedad-encabezado .lead {
+  max-width: 780px;
+  color: var(--muted);
+  font-size: clamp(15px, 1.45vw, 19px);
+  line-height: 1.65;
+  margin: 0;
+}
+.novedad-detalle .novedad-foto {
+  display: block;
+  width: 100%;
+  height: clamp(280px, 43vw, 510px);
+  object-fit: cover;
+}
+.novedad-detalle .novedad-cuerpo {
+  max-width: 850px;
+  margin: 34px 0 0;
+  padding-left: 28px;
+  border-left: 2px solid var(--gold);
+  text-align: left;
+}
+.novedad-detalle .novedad-cuerpo p {
+  font-size: 15px;
+  line-height: 1.9;
+  margin: 0 0 20px;
+}
+.novedad-detalle .novedad-seguir {
+  margin-top: 12px;
+}
+@media (max-width: 991px) {
+  .novedades-grid .novedad-card h2 {
+    font-size: clamp(27px, 3.2vw, 33px);
+  }
+  .novedad-detalle .novedad-foto {
+    height: clamp(290px, 48vw, 450px);
+  }
+}
+@media (max-width: 767px) {
+  .novedades-grid .novedad-card h2 {
+    min-height: 0;
+  }
+  .novedades-grid .novedad-card {
+    padding-bottom: 26px;
+  }
+  .novedades-grid .novedad-card > img {
+    margin-bottom: 18px;
+  }
+  .novedad-detalle .novedad-encabezado {
+    margin-bottom: 22px;
+  }
+  .novedad-detalle .novedad-foto {
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+  .novedad-detalle .novedad-cuerpo {
+    padding-left: 17px;
+    margin-top: 25px;
+  }
+  .novedad-detalle .novedad-cuerpo p {
+    font-size: 14px;
+  }
+}
+
+
+/* Bloque de clases: formato panorámico, sin dejar que la foto vertical alargue la página. */
+@media (min-width: 768px) {
+  .class-feature {
+    height: clamp(500px, 37vw, 570px);
+    min-height: 0;
+    overflow: hidden;
+  }
+  .class-feature > img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    max-height: 100%;
+    object-fit: cover;
+    object-position: center center;
+  }
+  .class-feature-copy {
+    min-width: 0;
+    align-self: center;
+  }
+}
+@media (max-width: 767px) {
+  .class-feature {
+    display: grid;
+    grid-template-columns: 1fr;
+    height: auto;
+    overflow: hidden;
+  }
+  .class-feature > img {
+    width: 100%;
+    height: clamp(250px, 60vw, 330px);
+    min-height: 0;
+    object-fit: cover;
+    object-position: center 45%;
+  }
+  .class-feature-copy {
+    padding: 35px 24px;
+  }
+}

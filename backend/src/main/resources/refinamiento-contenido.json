@@ -1,0 +1,126 @@
+{
+  "productos": [
+    {
+      "nombre": "Margarina para hojaldre",
+      "anterior": "Margarina para hojaldre para explorar nuevas preparaciones en tu cocina. Producto genérico de demostración académica: nombre, formato y condiciones no corresponden a una oferta oficial de Master Martini.",
+      "nuevo": "Materia grasa para trabajar masas laminadas. Se utiliza en hojaldres y croissants, alternando capas de masa y margarina durante el plegado."
+    },
+    {
+      "nombre": "Crema para batir",
+      "anterior": "Crema para batir para explorar nuevas preparaciones en tu cocina. Producto genérico de demostración académica: nombre, formato y condiciones no corresponden a una oferta oficial de Master Martini.",
+      "nuevo": "Crema para elaborar rellenos, acompañamientos y terminaciones de pastelería. Sigue las indicaciones del fabricante para su batido y conservación."
+    },
+    {
+      "nombre": "Cobertura de chocolate",
+      "anterior": "Cobertura de chocolate para explorar nuevas preparaciones en tu cocina. Producto genérico de demostración académica: nombre, formato y condiciones no corresponden a una oferta oficial de Master Martini.",
+      "nuevo": "Chocolate para bañar, moldear y terminar preparaciones dulces. También permite elaborar ganaches y aportar contraste a tartas y postres."
+    },
+    {
+      "nombre": "Base para gelato",
+      "anterior": "Base para gelato para explorar nuevas preparaciones en tu cocina. Producto genérico de demostración académica: nombre, formato y condiciones no corresponden a una oferta oficial de Master Martini.",
+      "nuevo": "Base para preparar helados y explorar combinaciones de sabores. Utilízala siguiendo las proporciones recomendadas para la mezcla."
+    },
+    {
+      "nombre": "Crema para decoración",
+      "anterior": "Crema para decoración para explorar nuevas preparaciones en tu cocina. Producto genérico de demostración académica: nombre, formato y condiciones no corresponden a una oferta oficial de Master Martini.",
+      "nuevo": "Crema para trabajar con manga y dar forma a terminaciones de tortas y postres. Una opción para practicar rosetones, bordes y rellenos."
+    },
+    {
+      "nombre": "Pasta sabor pistacho",
+      "anterior": "Pasta sabor pistacho para explorar nuevas preparaciones en tu cocina. Producto genérico de demostración académica: nombre, formato y condiciones no corresponden a una oferta oficial de Master Martini.",
+      "nuevo": "Pasta para incorporar el sabor del pistacho a helados, cremas y rellenos. Dosifica según la preparación y las indicaciones del producto."
+    },
+    {
+      "nombre": "Base para sorbete",
+      "anterior": "Base para sorbete para explorar nuevas preparaciones en tu cocina. Producto genérico de demostración académica: nombre, formato y condiciones no corresponden a una oferta oficial de Master Martini.",
+      "nuevo": "Ingrediente para preparar sorbetes y combinar frutas en repostería fría. Permite trabajar distintas propuestas de sabor siguiendo una receta equilibrada."
+    },
+    {
+      "nombre": "Crema culinaria",
+      "anterior": "Crema culinaria para explorar nuevas preparaciones en tu cocina. Producto genérico de demostración académica: nombre, formato y condiciones no corresponden a una oferta oficial de Master Martini.",
+      "nuevo": "Crema para integrar en salsas, sopas y otras preparaciones de cocina. Aporta una textura cremosa y acompaña sabores dulces o salados."
+    },
+    {
+      "nombre": "Croissant para hornear",
+      "anterior": "Croissant para hornear para explorar nuevas preparaciones en tu cocina. Producto genérico de demostración académica: nombre, formato y condiciones no corresponden a una oferta oficial de Master Martini.",
+      "nuevo": "Piezas de masa laminada listas para llevar al horno según sus instrucciones. Una alternativa para servir croissants recién horneados en desayunos y meriendas."
+    },
+    {
+      "nombre": "Bebida vegetal de avena",
+      "anterior": "Bebida vegetal de avena para explorar nuevas preparaciones en tu cocina. Producto genérico de demostración académica: nombre, formato y condiciones no corresponden a una oferta oficial de Master Martini.",
+      "nuevo": "Bebida de avena para acompañar desayunos o incorporar a mezclas de cocina y repostería. Revisa su ficha para escoger la aplicación adecuada."
+    },
+    {
+      "nombre": "Bebida vegetal de soya",
+      "anterior": "Bebida vegetal de soya para explorar nuevas preparaciones en tu cocina. Producto genérico de demostración académica: nombre, formato y condiciones no corresponden a una oferta oficial de Master Martini.",
+      "nuevo": "Bebida de soya para servir sola o utilizar como ingrediente en preparaciones dulces y saladas."
+    },
+    {
+      "nombre": "Pasta de avellana",
+      "anterior": "Pasta de avellana para explorar nuevas preparaciones en tu cocina. Producto genérico de demostración académica: nombre, formato y condiciones no corresponden a una oferta oficial de Master Martini.",
+      "nuevo": "Pasta de avellana para helados, cremas y rellenos. Aporta el sabor del fruto seco a distintas preparaciones de pastelería."
+    },
+    {
+      "nombre": "Relleno de frutos rojos",
+      "anterior": "Relleno de frutos rojos para explorar nuevas preparaciones en tu cocina. Producto genérico de demostración académica: nombre, formato y condiciones no corresponden a una oferta oficial de Master Martini.",
+      "nuevo": "Relleno de fruta para tartas, capas de torta y piezas de pastelería. Combina con cremas y masas para aportar contraste de sabor."
+    },
+    {
+      "nombre": "Preparado para muffins",
+      "anterior": "Preparado para muffins para explorar nuevas preparaciones en tu cocina. Producto genérico de demostración académica: nombre, formato y condiciones no corresponden a una oferta oficial de Master Martini.",
+      "nuevo": "Mezcla para elaborar muffins y combinar con frutas o chocolate. Sigue las proporciones y tiempos de horneado indicados en el producto."
+    },
+    {
+      "nombre": "Crema de limón",
+      "anterior": "Crema de limón para explorar nuevas preparaciones en tu cocina. Producto genérico de demostración académica: nombre, formato y condiciones no corresponden a una oferta oficial de Master Martini.",
+      "nuevo": "Crema de limón para rellenar tartaletas, bizcochos y postres en vaso. Su perfil cítrico combina con merengues y bases de galleta."
+    },
+    {
+      "nombre": "Mejorante para panificación",
+      "anterior": "Mejorante para panificación para explorar nuevas preparaciones en tu cocina. Producto genérico de demostración académica: nombre, formato y condiciones no corresponden a una oferta oficial de Master Martini.",
+      "nuevo": "Ingrediente de apoyo para masas de panificación. Utiliza la dosis indicada en su ficha técnica y adapta el proceso a la receta."
+    },
+    {
+      "nombre": "Pasta de avellana",
+      "anterior": "Pasta para aportar sabor a avellanas a helados, rellenos y cremas.",
+      "nuevo": "Pasta de avellana para helados, cremas y rellenos. Aporta el sabor del fruto seco a distintas preparaciones de pastelería."
+    },
+    {
+      "nombre": "Relleno de frutos rojos",
+      "anterior": "Relleno de frutos rojos para tartas, capas de torta y piezas de pastelería.",
+      "nuevo": "Relleno de fruta para tartas, capas de torta y piezas de pastelería. Combina con cremas y masas para aportar contraste de sabor."
+    },
+    {
+      "nombre": "Preparado para muffins",
+      "anterior": "Mezcla base para preparar muffins y combinar con frutas o chocolate.",
+      "nuevo": "Mezcla para elaborar muffins y combinar con frutas o chocolate. Sigue las proporciones y tiempos de horneado indicados en el producto."
+    },
+    {
+      "nombre": "Crema de limón",
+      "anterior": "Crema de limón para rellenar tartaletas, postres en vaso y bizcochos.",
+      "nuevo": "Crema de limón para rellenar tartaletas, bizcochos y postres en vaso. Su perfil cítrico combina con merengues y bases de galleta."
+    },
+    {
+      "nombre": "Mejorante para panificación",
+      "anterior": "Ingrediente de apoyo para masas de panificación; seguir la dosificación de la ficha del insumo.",
+      "nuevo": "Ingrediente de apoyo para masas de panificación. Utiliza la dosis indicada en su ficha técnica y adapta el proceso a la receta."
+    }
+  ],
+  "novedades": [
+    {
+      "slug": "el-arte-del-laminado",
+      "anterior": "El laminado es un diálogo entre masa y materia grasa. Al plegar y estirar se forman capas que se separan durante el horneado. Una superficie uniforme y un trabajo cuidadoso ayudan a conservar esa estructura.\n\nTrabaja en un ambiente fresco y deja reposar la masa entre vueltas. Si la materia grasa se ablanda demasiado, vuelve al frío; si se quiebra, espera a que su consistencia se acerque a la de la masa.\n\nPractica con una receta de referencia y registra temperatura, tiempos y resultados. Este artículo es contenido educativo del proyecto y no sustituye las instrucciones técnicas de un fabricante.",
+      "nuevo": "El laminado es un diálogo entre masa y materia grasa. Al plegar y estirar se forman capas que se separan durante el horneado. Una superficie uniforme y un trabajo cuidadoso ayudan a conservar esa estructura.\n\nTrabaja en un ambiente fresco y deja reposar la masa entre vueltas. Si la materia grasa se ablanda demasiado, vuelve al frío; si se quiebra, espera a que su consistencia se acerque a la de la masa.\n\nRegistra los tiempos de reposo y compara el desarrollo de las capas después del horneado."
+    },
+    {
+      "slug": "texturas-de-chocolate",
+      "anterior": "Una terminación de chocolate puede aportar contraste, brillo o una sensación crujiente. Antes de elegirla, piensa en la temperatura de servicio y la textura del postre.\n\nCoberturas de chocolate y sucedáneos tienen composiciones y procesos distintos. Revisa la ficha técnica del insumo: no todos requieren templado ni admiten las mismas temperaturas.\n\nCombina elementos suaves y crujientes en porciones equilibradas. La fotografía es referencial y este contenido fue creado para la experiencia académica.",
+      "nuevo": "Una terminación de chocolate puede aportar contraste, brillo o una sensación crujiente. Antes de elegirla, piensa en la temperatura de servicio y la textura del postre.\n\nCoberturas de chocolate y sucedáneos tienen composiciones y procesos distintos. Revisa la ficha técnica del insumo: no todos requieren templado ni admiten las mismas temperaturas.\n\nPrueba una misma preparación con distintas terminaciones para comparar textura y temperatura de servicio."
+    },
+    {
+      "slug": "un-gelato-con-identidad",
+      "anterior": "La textura del gelato depende de una formulación equilibrada y del proceso de congelación. Elegir un sabor es solo el comienzo: también importan los sólidos, el agua y los azúcares.\n\nAl trabajar con una base preparada, sigue las proporciones y condiciones de conservación indicadas por su fabricante. Cambiar ingredientes sin ajustar la receta puede alterar el resultado.\n\nLa práctica guiada permite comparar resultados y aprender a reconocer consistencias. Explora las clases de demostración de esta aplicación; no corresponden a una agenda comercial oficial.",
+      "nuevo": "La textura del gelato depende de una formulación equilibrada y del proceso de congelación. Elegir un sabor es solo el comienzo: también importan los sólidos, el agua y los azúcares.\n\nAl trabajar con una base preparada, sigue las proporciones y condiciones de conservación indicadas por su fabricante. Cambiar ingredientes sin ajustar la receta puede alterar el resultado.\n\nCompara pequeñas pruebas de sabor antes de preparar un lote completo y registra las proporciones que mejor funcionan."
+    }
+  ]
+}

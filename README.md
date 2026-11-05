@@ -1,230 +1,231 @@
+# Master Martini
 
-<h1 align="center">Master Martini</h1>
+**Aplicación web fullstack | Evaluación 3 · Ingeniería Informática**
 
-<h3 align="center">Tienda online de insumos gastronómicos | Desarrollo Fullstack II</h3>
+Proyecto académico desarrollado con React, Vite, Spring Boot y MySQL. Integra un catálogo gastronómico, detalle de productos, ofertas, carrito, compra simulada, clases, novedades, contacto, cuentas de usuario y un panel de administración.
 
-<p align="center">
-  <strong>Evaluación Parcial 2 · DSY1104 · Duoc UC</strong>
-</p>
+> **Proyecto de demostración académica, no oficial.** No está afiliado comercialmente a Master Martini Chile. No procesa pagos reales ni envía pedidos a la empresa.
 
-<p align="center">
-  <img alt="React 19" src="https://img.shields.io/badge/React-19-149ECA?style=flat-square&logo=react&logoColor=white" />
-  <img alt="JavaScript" src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black" />
-  <img alt="Vite 7" src="https://img.shields.io/badge/Vite-7-646CFF?style=flat-square&logo=vite&logoColor=white" />
-  <img alt="Bootstrap 5" src="https://img.shields.io/badge/Bootstrap-5-7952B3?style=flat-square&logo=bootstrap&logoColor=white" />
-  <img alt="Vitest 5" src="https://img.shields.io/badge/Vitest-5-6E9F18?style=flat-square&logo=vitest&logoColor=white" />
-</p>
+## Tecnologías
 
-<p align="center">
-  <a href="https://github.com/OscarMs1/Master-Martini">Repositorio</a> ·
-  <a href="docs/ERS_MASTER_MARTINI_EP2.pdf">Requisitos del proyecto</a> ·
-  <a href="docs/INFORME_TESTING_COBERTURA_EP2.pdf">Informe de pruebas</a>
-</p>
-
----
-
-## Sobre el proyecto
-
-**Master Martini** es una página web de comercio electrónico desarrollada para la asignatura **Desarrollo Fullstack II**. Está enfocada en la venta de insumos para **panadería, pastelería, gelatería y food service**.
-
-El objetivo del proyecto es aplicar los conocimientos de desarrollo frontend en una tienda que permita navegar por productos, gestionar un carrito, completar una compra de prueba y utilizar distintas funciones según el tipo de usuario.
-
-La aplicación se desarrolló con **React** y utiliza componentes reutilizables, navegación entre páginas, formularios con validaciones y almacenamiento local para conservar información durante el uso.
-
-## Tecnologías utilizadas
-
-| Tecnología | Uso en el proyecto |
+| Capa | Tecnologías |
 | --- | --- |
-| **React 19** | Construcción de las páginas y componentes |
-| **JavaScript** | Funciones, validaciones y lógica de la tienda |
-| **React Router 8** | Navegación entre secciones |
-| **Vite 7** | Ejecución local y compilación |
-| **Bootstrap 5 y CSS** | Diseño visual y adaptación a distintas pantallas |
-| **Context API** | Compartir información como el carrito y las inscripciones |
-| **Node.js** | Ejecución de pruebas y API local de demostración |
-| **Vitest y React Testing Library** | Pruebas de funciones y componentes |
-| **Playwright** | Pruebas de navegación en el navegador |
+| Frontend | React 19, Vite 7, React Router, Bootstrap 5 |
+| Backend | Java 17+, Spring Boot 3, Spring Security, Spring Data JPA |
+| Base de datos | MySQL 8 |
+| Pruebas | Vitest (frontend), JUnit/Spring Boot Test (backend) |
+| Construcción del backend | Maven Wrapper, incluido en el repositorio |
 
-## Funcionalidades principales
+El frontend consulta los endpoints `/api` a través del proxy de Vite, que apunta al backend local. Los productos, clases, usuarios y pedidos se gestionan mediante el backend y MySQL.
 
-### Tienda y compras
+## Funcionalidades
 
-- Inicio con carrusel de imágenes, categorías, novedades y ofertas.
-- Catálogo de **12 productos de demostración** con búsqueda, filtros y ordenamiento.
-- Información detallada de los productos.
-- Carrito con selección de cantidades, cálculo de totales y revisión del stock disponible.
-- Proceso de compra simulado con validación de los datos ingresados.
+- Navegación por Inicio, Nosotros, Productos, Ofertas, Clases, Novedades y Contacto.
+- Catálogo y fichas de productos con precios, cantidades y disponibilidad.
+- Carrito de compras y proceso de pedido **simulado**, sin pasarela de pagos.
+- Registro, inicio y cierre de sesión, además de un área de cuenta.
+- Administración de contenidos y consultas mediante acceso restringido por rol.
+- Inscripción a clases y almacenamiento de mensajes de contacto.
+- Página de créditos fotográficos y documentación de fuentes.
 
-### Usuarios y administración
-
-- Registro e inicio de sesión para cuentas de demostración.
-- Perfiles de **cliente, vendedor y administrador**.
-- Sección de administración para agregar, consultar, editar y eliminar productos.
-- Consulta de pedidos e información de la cuenta.
-- Almacenamiento local de datos como el carrito, los usuarios y los pedidos.
-
-### Clases de recetas
-
-La sección **Clases de recetas** (`/clases`) permite consultar actividades relacionadas con los productos de la tienda.
-
-- Ver recetas, fechas, cupos y modalidad de cada clase.
-- Filtrar clases presenciales y online.
-- Inscribirse en actividades disponibles.
-- Agregar al carrito los insumos necesarios para una receta.
-- Revisar las inscripciones desde **Mi cuenta → Mis clases de recetas**.
-
-## Organización del proyecto
+## Estructura del proyecto
 
 ```text
 master-martini/
-├── public/assets/       # Imágenes y recursos de la página
-├── src/
-│   ├── components/      # Componentes reutilizables
-│   ├── contexts/        # Información compartida de la tienda
-│   ├── data/            # Productos y contenido inicial
-│   ├── pages/           # Páginas del sitio
-│   ├── styles/          # Estilos CSS
-│   ├── tests/           # Pruebas de React con Vitest
-│   ├── utils/           # Validaciones y funciones de apoyo
-│   ├── App.jsx          # Rutas principales
-│   └── main.jsx         # Inicio de la aplicación
-├── server/              # API local de demostración
-├── testing/             # Otras pruebas y evidencias
-├── docs/                # Documentos de la evaluación
-├── package.json
-└── vite.config.js
+├── frontend/                 Aplicación React y recursos visuales
+│   ├── public/
+│   ├── src/
+│   ├── package.json
+│   └── package-lock.json
+├── backend/                  API REST de Spring Boot
+│   ├── .mvn/                 Configuración de Maven Wrapper
+│   ├── src/
+│   ├── mvnw                   Maven Wrapper para macOS/Linux
+│   ├── mvnw.cmd               Maven Wrapper para Windows
+│   ├── pom.xml
+│   └── .env.example           Referencia de variables, sin claves
+├── docs/                     Guía técnica, verificación y fuentes
+├── scripts/                  Herramientas auxiliares opcionales
+└── README.md
 ```
 
-El proyecto está dividido en carpetas para mantener organizadas las páginas, los componentes, los datos y las funciones. Así es más fácil encontrar el código y realizar cambios sin afectar otras secciones.
+**La instalación y ejecución son manuales.** No se necesitan archivos iniciadores `.bat`. `backend/mvnw.cmd` se conserva porque forma parte de Maven Wrapper, no es un iniciador personalizado.
 
-## Cómo ejecutar el proyecto
+## Requisitos previos
 
-### Requisitos
+1. **Node.js 22.12 o superior** y npm (se recomienda Node.js 22 LTS o 24 LTS).
+2. **JDK 17 o superior**, preferentemente Java 21. Debe poder ejecutarse `java` desde la terminal.
+3. **MySQL 8** en ejecución (puedes utilizar el MySQL de XAMPP si está configurado correctamente).
+4. Conexión a Internet durante la primera instalación para descargar dependencias npm y Maven.
+5. Dos terminales para mantener frontend y backend ejecutándose por separado.
 
-- **Node.js 22.22.2 o superior (línea 22)** o **Node.js 24.15.0 o superior (línea 24)**, con npm.
-- Visual Studio Code u otro editor de código.
-- Un navegador web actualizado.
+Comprueba las versiones en PowerShell:
 
-### 1. Descargar el proyecto
-
-```bash
-git clone https://github.com/OscarMs1/Master-Martini.git
-cd Master-Martini
+```powershell
+node --version
+npm --version
+java -version
 ```
 
-También se puede descargar el repositorio como ZIP desde GitHub y abrir la carpeta que contiene `package.json`.
+Si un comando no se reconoce, instala la herramienta correspondiente y abre otra terminal. Maven **no necesita instalarse por separado**: el proyecto incluye Maven Wrapper.
 
-### 2. Instalar las dependencias
+## Instalación manual en Windows
 
-```bash
-npm install
+Los pasos siguientes se realizan una sola vez por computador, salvo la ejecución de frontend y backend, que se repite cada vez que quieras usar la aplicación.
+
+### 1. Obtener el proyecto
+
+Descarga el ZIP desde GitHub y descomprímelo o clona el repositorio. Abre PowerShell en la carpeta `master-martini`, donde están `frontend/`, `backend/` y este README.
+
+> Todos los comandos que indican `cd frontend` o `cd backend` parten de la carpeta raíz `master-martini`. Usa terminales separadas o vuelve a la raíz antes de cambiar de carpeta.
+
+### 2. Iniciar MySQL y crear la base de datos
+
+Inicia **MySQL** desde XAMPP o desde el servicio instalado. Abre phpMyAdmin o MySQL Workbench con una cuenta que tenga permisos para crear bases y usuarios, y ejecuta:
+
+```sql
+CREATE DATABASE IF NOT EXISTS master_martini
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+CREATE USER IF NOT EXISTS 'master_martini'@'localhost'
+  IDENTIFIED BY 'CAMBIA_ESTA_CLAVE';
+CREATE USER IF NOT EXISTS 'master_martini'@'127.0.0.1'
+  IDENTIFIED BY 'CAMBIA_ESTA_CLAVE';
+
+GRANT ALL PRIVILEGES ON master_martini.*
+  TO 'master_martini'@'localhost';
+GRANT ALL PRIVILEGES ON master_martini.*
+  TO 'master_martini'@'127.0.0.1';
+FLUSH PRIVILEGES;
 ```
 
-### 3. Iniciar la página
+**Importante:** reemplaza `CAMBIA_ESTA_CLAVE` por una contraseña propia antes de ejecutar el SQL. Si el usuario ya existía, `CREATE USER IF NOT EXISTS` no reemplaza su contraseña: utiliza la clave existente o modifícala desde MySQL. No subas contraseñas a GitHub.
 
-```bash
+No necesitas importar manualmente un script de tablas: en esta configuración, Hibernate utiliza `ddl-auto=update` para generar o actualizar el esquema en el entorno de desarrollo. Los datos iniciales se cargan al iniciar, si `SEED_ENABLED` está habilitado (valor por defecto).
+
+### 3. Configurar e iniciar el backend
+
+**Terminal 1 — PowerShell**, desde `master-martini`:
+
+```powershell
+cd backend
+$env:DB_URL = 'jdbc:mysql://127.0.0.1:3306/master_martini?serverTimezone=America/Santiago'
+$env:DB_USER = 'master_martini'
+$env:DB_PASSWORD = [System.Net.NetworkCredential]::new('', (Read-Host 'Contraseña de MySQL' -AsSecureString)).Password
+$env:ADMIN_EMAIL = 'admin@gmail.com'
+$env:ADMIN_PASSWORD = [System.Net.NetworkCredential]::new('', (Read-Host 'Contraseña inicial del administrador' -AsSecureString)).Password
+.\mvnw.cmd spring-boot:run
+```
+
+Escribe las contraseñas en las solicitudes que aparecerán en la terminal. No se muestran en pantalla ni quedan escritas en el README.
+
+- El backend escucha en **`http://127.0.0.1:8080`** por defecto.
+- El usuario administrador se crea la primera vez **solo si** se configura `ADMIN_PASSWORD`, tiene entre 8 y 72 bytes y todavía no existe un usuario con ese correo.
+- La contraseña se guarda como **hash BCrypt** en MySQL. Reiniciar el backend no la modifica si la cuenta ya existe.
+- Debes configurar las variables **en la misma terminal** desde la que arrancas Spring Boot. Son variables temporales de esa sesión.
+- Si MySQL utiliza otro puerto o credenciales diferentes, adapta `DB_URL`, `DB_USER` y `DB_PASSWORD`.
+
+La plantilla `backend/.env.example` es únicamente una referencia. **Spring Boot no carga automáticamente ese archivo** con esta configuración; utiliza las variables de entorno de la terminal.
+
+### 4. Instalar e iniciar el frontend
+
+**Terminal 2 — PowerShell**, desde `master-martini`:
+
+```powershell
+cd frontend
+npm ci
 npm run dev
 ```
 
-Abrir en el navegador la dirección que aparece en la terminal, normalmente **http://localhost:5173/**.
+Abre en el navegador:
 
-### 4. Generar la versión de producción
+**http://127.0.0.1:5173**
 
-```bash
+`npm ci` instala exactamente las dependencias registradas en `package-lock.json`. Se ejecuta durante la instalación inicial y cuando cambian las dependencias. Para iniciar la aplicación después, basta con `npm run dev` en `frontend/` y el comando del backend en otra terminal.
+
+### 5. Comprobar la aplicación
+
+Con MySQL, backend y frontend encendidos:
+
+1. Comprueba que carguen Inicio y el catálogo de productos.
+2. Abre una ficha, revisa el carrito y el checkout simulado.
+3. Prueba el registro e inicio de sesión de un cliente.
+4. Inicia sesión como administrador en **`/login`**, usando el correo y la contraseña inicial configurados en el paso 3, y accede a **`/admin`**.
+5. Verifica las páginas Clases, Novedades, Contacto y Créditos.
+
+Si MySQL contiene un administrador creado anteriormente, ingresar una contraseña nueva en `ADMIN_PASSWORD` **no restablecerá la contraseña existente**.
+
+## Ejecución en los siguientes usos
+
+Con MySQL ya iniciado, solo debes abrir dos terminales:
+
+- **Backend:** entra a `backend/`, configura las variables de entorno necesarias (como en el paso 3) y ejecuta `.\mvnw.cmd spring-boot:run`.
+- **Frontend:** entra a `frontend/` y ejecuta `npm run dev`.
+
+No vuelvas a crear la base de datos ni reinstales las dependencias si ya existen y no han cambiado.
+
+## Ejecutar pruebas y compilar
+
+Desde la carpeta raíz `master-martini`:
+
+**Frontend:**
+
+```powershell
+cd frontend
+npm run test
 npm run build
-npm run preview
+npm run test:coverage
 ```
 
-El primer comando prepara los archivos optimizados dentro de `dist/`, y el segundo permite revisarlos en el navegador.
+**Backend:** abre otra terminal en la raíz y ejecuta:
 
-## Pruebas realizadas
+```powershell
+cd backend
+.\mvnw.cmd test
+.\mvnw.cmd verify
+```
 
-Para comprobar el funcionamiento del proyecto se utilizaron **Vitest** y **React Testing Library**. Las pruebas revisan cálculos de la tienda, validaciones de formularios y algunas interacciones con componentes React.
+`npm run build` genera la compilación de producción del frontend en `frontend/dist/`. Esta carpeta se ignora en Git; no es necesario incluirla en el repositorio. Los tests requieren las dependencias instaladas y no sustituyen una revisión visual del proyecto.
 
-| Comando | ¿Qué hace? |
-| --- | --- |
-| `npm test` | Ejecuta las pruebas de React |
-| `npm run test:coverage` | Muestra qué parte del código fue revisada por las pruebas |
-| `npm run test:watch` | Permite ejecutar las pruebas mientras se desarrolla |
-| `npm run test:node` | Revisa funciones de la tienda |
-| `npm run test:assets` | Comprueba las referencias a imágenes y otros recursos |
-| `npm run test:api` | Prueba la API local |
-| `npm run check:syntax` | Revisa la sintaxis de archivos JavaScript |
-| `npm run check:logic` | Realiza comprobaciones generales del proyecto |
-| `npm run test:e2e` | Ejecuta pruebas de navegador con la página iniciada |
+## Ejecución manual en macOS o Linux
 
-### Resultados de la evaluación
-
-| Resultado | Valor |
-| --- | ---: |
-| Pruebas de Vitest aprobadas | **62 de 62** |
-| Cobertura de líneas | **97,56 %** |
-| Cobertura de funciones | 96,60 % |
-| Cobertura de ramas | 90,55 % |
-| Cobertura de sentencias | 95,28 % |
-| Compilación con Vite | **Exitosa** |
-
-La suite incluye 44 casos de componentes o vistas React: props, eventos, filtros, cantidades, checkout aprobado y rechazado, credenciales, registro, CRUD, clases y persistencia. También se prueban carrusel, temporizadores, rutas, recuperación de errores y la integración del contexto con la API.
-
-La cobertura de Vitest incluye `src/**/*.{js,jsx}`, excepto las pruebas y `main.jsx` (arranque del DOM). Se incluyen archivos sin ejecución. Las pruebas de Node y de navegador se informan por separado, sin sumarlas a los porcentajes de cobertura del frontend.
-
-La validación exige como mínimo 95 % de líneas, sentencias y funciones, y 90 % de ramas. Ejecuta `npm run validate:all` para revisar sintaxis, lógica, recursos, API, cobertura y build. `npm run test:e2e:api` inicia servidores y datos temporales para cinco escenarios con backend real; en Windows requiere Chrome. El workflow `.github/workflows/quality.yml` permite ejecutar comprobaciones automáticas desde GitHub Actions una vez publicado el repositorio.
-
-**La cobertura no es del 100 %**: los porcentajes indican qué parte del código se ejecutó durante las pruebas.
-
-Los resultados y las evidencias se explican con más detalle en el [informe de testing](docs/INFORME_TESTING_COBERTURA_EP2.pdf).
-
-## Cuentas para probar la aplicación
-
-| Perfil | Correo | Contraseña |
-| --- | --- | --- |
-| Administrador | `admin@demo.cl` | `Admin123` |
-| Vendedor | `vendedor@demo.cl` | `Venta123` |
-| Cliente | `cliente@demo.cl` | `Cliente123` |
-
-Estas cuentas se utilizan solo para mostrar el funcionamiento de la aplicación durante la evaluación.
-
-## API local (opcional)
-
-El proyecto puede funcionar utilizando los datos incluidos en la aplicación y `localStorage`. También cuenta con una API local de ejemplo en `server/api.mjs` para realizar pruebas.
-
-Para utilizarla, copiar `.env.example` como `.env`, cambiar el valor `VITE_USE_BACKEND` a `true` y ejecutar estos comandos en dos terminales distintas:
-
-**Terminal 1:**
+La aplicación usa las mismas herramientas y la misma base de datos. En una terminal de `backend/`, configura `DB_URL`, `DB_USER`, `DB_PASSWORD`, `ADMIN_EMAIL` y `ADMIN_PASSWORD` mediante `export`, y después ejecuta:
 
 ```bash
-npm run api
+chmod +x ./mvnw
+./mvnw spring-boot:run
 ```
 
-**Terminal 2:**
+En otra terminal de `frontend/`, ejecuta `npm ci` y `npm run dev`. Mantén las credenciales fuera de los archivos públicos del repositorio.
 
-```bash
-npm run dev
-```
+## Problemas frecuentes
 
-Si se modifica el archivo `.env`, se debe reiniciar Vite para aplicar el cambio.
-
-## Documentación
-
-| Documento | Contenido |
+| Problema | Qué revisar |
 | --- | --- |
-| [Especificación de Requisitos (ERS)](docs/ERS_MASTER_MARTINI_EP2.pdf) | Objetivos, alcance y requisitos del sistema |
-| [Informe de Testing y Cobertura](docs/INFORME_TESTING_COBERTURA_EP2.pdf) | Pruebas, resultados y evidencias |
+| `npm` o `node` no se reconoce | Instalar Node.js y abrir una terminal nueva. |
+| `java` no se reconoce | Instalar un JDK 17+ y configurar `JAVA_HOME` y `PATH` si es necesario. |
+| El backend no conecta con MySQL | Iniciar MySQL, verificar el puerto 3306 y revisar `DB_URL`, usuario, contraseña y permisos. |
+| El catálogo no carga | Comprobar que Spring Boot siga abierto en el puerto 8080 y que Vite esté en el 5173. |
+| El puerto 5173 o 8080 está ocupado | Cerrar el proceso anterior o identificar qué aplicación está utilizando ese puerto. |
+| No se crea el administrador | Verificar `ADMIN_PASSWORD`, `ADMIN_EMAIL`, `SEED_ENABLED` y si ya existe la cuenta en MySQL. |
+| Maven Wrapper tarda en iniciar | En la primera ejecución puede descargar Maven y dependencias; requiere Internet. |
+| El frontend muestra otro proyecto | Verificar que la terminal esté dentro del `frontend/` de esta copia y abrir la URL que muestra Vite. |
 
-## Diseño y créditos
+## Seguridad y publicación
 
-El diseño de Master Martini se desarrolló tomando como referencia la plantilla **Fruitkha — Free Bootstrap 4 Responsive Food Business Template**, disponible en [ThemeWagon](https://themewagon.com/themes/fruitkha-free-bootstrap-4-responsive-food-business-template/) y atribuida a **Free CSS** en su publicación.
+- No subas contraseñas, credenciales reales, archivos `.env`, datos privados ni contenido de `.local/`.
+- Los archivos `node_modules/`, `dist/`, `target/` y `coverage/` están excluidos del repositorio mediante `.gitignore`.
+- La contraseña inicial del administrador es **solo para desarrollo local y defensa**; cámbiala por una contraseña fuerte y privada antes de un despliegue real.
+- Para servir la aplicación por HTTPS, configura `COOKIE_SECURE=true`, un origen CORS apropiado y las demás medidas de seguridad necesarias para producción.
+- Los pagos, despachos y actividades son parte de una simulación académica. El formulario de contacto no envía mensajes a una empresa real.
 
-La plantilla se adaptó a la temática de Master Martini, utilizando React y Bootstrap 5 para la implementación actual. Los recursos fotográficos y gráficos mantienen las condiciones de uso correspondientes a sus fuentes originales.
+## Documentación y fuentes
 
-[Consultar la licencia de ThemeWagon](https://themewagon.com/license/)
+- [Guía académica EV3](docs/GUIA-EV3.md): arquitectura, endpoints y recorrido de defensa.
+- [Verificación](docs/VERIFICACION.md): pruebas y límites de validación.
+- [Requisitos del sistema](docs/ERS-ACTUAL.md): descripción funcional.
+- [Fuentes visuales](docs/FUENTES_IMAGENES.md): créditos y procedencia documentada de fotografías.
+- [Auditoría de publicación](docs/AUDITORIA_GITHUB.md): limpieza y comprobaciones de la copia distribuida.
 
-## Alcance del proyecto
-
-**Master Martini es un proyecto académico de demostración.** Los usuarios, pedidos, existencias y pagos se utilizan para probar las funcionalidades de la aplicación. El checkout no realiza cobros reales y los formularios de contacto y suscripción no envían mensajes a servicios externos.
-
----
-
-<p align="center">
-  <strong>Master Martini · Desarrollo Fullstack II · Duoc UC</strong>
-</p>
+La portada actual utiliza `frontend/public/assets/images/hero-chocolate-editorial.webp`. Los créditos se encuentran también en la ruta `/creditos`. La procedencia pública original de esta composición no está verificada; por ese motivo no se asigna una atribución inventada.

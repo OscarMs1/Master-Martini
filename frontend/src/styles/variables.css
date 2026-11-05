@@ -1,0 +1,21 @@
+:root {
+  --green: #075347;
+  --green-deep: #082f2a;
+  --gold: #c1a01d;
+  --gold-light: #ecd778;
+  --cream: #f5f1e9;
+  --paper: #ffffff;
+  --beige: #faf9f6;
+  --ink: #193831;
+  --muted: #52615a;
+  --border: #dedfd6;
+  --danger: #ab352e;
+  --font-body: "Manrope", "Segoe UI", sans-serif;
+  --font-heading: "Cormorant Garamond", Georgia, serif;
+  --bs-primary: var(--green);
+  --bs-body-color: var(--ink);
+  --bs-body-bg: var(--paper);
+  --bs-link-color: var(--green);
+  --bs-link-hover-color: var(--green-deep);
+  --bs-border-color: var(--border);
+}
