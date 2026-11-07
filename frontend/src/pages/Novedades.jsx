@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import useNovedades from "../services/useNovedades";
 import Estado from "../components/Estado";
+import { imagenParaNovedad, altParaNovedad } from "../data/imagenesNovedades";
 
 export default function Novedades() {
   const { articulos, loading, error } = useNovedades();
@@ -25,7 +26,7 @@ export default function Novedades() {
           {articulos.map((articulo) => (
             <div key={articulo.slug} className="col-md-4 d-flex">
               <Link className="editorial-card novedad-card" to={`/novedades/${articulo.slug}`}>
-                <img loading="lazy" src={articulo.imagen} alt={articulo.titulo} />
+                <img loading="lazy" src={imagenParaNovedad(articulo)} alt={altParaNovedad(articulo)} />
                 <div className="novedad-card-copy">
                   <p className="eyebrow">{new Intl.DateTimeFormat('es-CL', {dateStyle:'long'}).format(new Date(articulo.fecha + 'T12:00:00'))}</p>
                   <h2>{articulo.titulo}</h2>

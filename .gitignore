@@ -1,23 +1,27 @@
-node_modules/
-dist/
-target/
-coverage/
+# Configuración privada y datos de ejecución (nunca versionar).
 .env
 .env.*
 !.env.example
-.local/
+**/.local/
+**/uploads/
+*-export.sql
+*backup*.sql
+*.sql.gz
+*.dump
+*.bak
 *.log
+
+# Dependencias, compilados, caché y archivos del editor.
+**/node_modules/
+**/dist/
+**/target/
+**/coverage/
+**/.vite/
+**/build/
+**/__pycache__/
+**/*.pyc
 .idea/
 .vscode/
-*.zip
-
-__pycache__/
-*.pyc
-tmp/
-.tools/
-
-# Local work artifacts and credentials
-*.bak
-*.tmp
 .DS_Store
 Thumbs.db
+*.zip

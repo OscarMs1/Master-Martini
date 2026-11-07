@@ -1,6 +1,5 @@
-"""Verificaciones REST de integración, separadas de las 14 pruebas Vitest.
-Ejecutar solo contra la base académica local. Crea usuarios/pedidos de prueba.
-Usa .local/config.json o ADMIN_EMAIL / ADMIN_PASSWORD del entorno.
+"""Pruebas REST en la instalación de demostración.
+Crea usuarios, pedidos y mensajes de prueba; no usar en producción.
 """
 import concurrent.futures
 import http.cookiejar
@@ -14,9 +13,20 @@ import urllib.request
 import uuid
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = os.environ.get('API_URL', 'http://127.0.0.1:8080/api')
-config_path = ROOT / '.local/config.json'
-CONFIG = json.loads(config_path.read_text()) if config_path.exists() else os.environ
+BASE = os.environ.get('API_URL', 'http://127.0.0.1:8095/api')
+
+def local_config():
+    data = {'ADMIN_EMAIL': 'admin@gmail.com'}
+    file = ROOT / '.env'
+    if file.exists():
+        for line in file.read_text(encoding='utf-8-sig').splitlines():
+            if '=' in line and not line.lstrip().startswith('#'):
+                key, value = line.split('=', 1)
+                data[key.strip()] = value.strip().strip('\"').strip("'")
+    data.update(os.environ)
+    return data
+
+CONFIG = local_config()
 results = []
 
 
@@ -114,10 +124,17 @@ def run():
     check('Pedido conserva detalle tras eliminar producto', any(p['lineas'][0]['productoId'] == pid for p in client.request('GET', '/pedidos/mis-pedidos')[1]))
     check('Producto eliminado devuelve 404', guest.request('GET', f'/productos/{pid}')[0] == 404)
     check('Logout invalida sesión en servidor', client.request('POST', '/auth/logout')[0] == 204 and client.request('GET', '/auth/me')[0] == 401)
-    # Datos de acceso de demostración quedan solo en la carpeta ignorada.
-    local = ROOT / '.local'
-    local.mkdir(exist_ok=True)
-    (local / 'cliente-demo.json').write_text(json.dumps({'email': delivery['email'], 'password': password, 'id': profile['id']}, indent=2))
+    check('Cambio de contraseña anónimo bloqueado', guest.request('POST', '/auth/password', {'actual': password, 'nueva': password + '9'})[0] == 401)
+    check('Cliente vuelve a iniciar sesión', client.request('POST', '/auth/login', {'email': delivery['email'], 'password': password})[0] == 200)
+    check('Cambio exige CSRF', client.request('POST', '/auth/password', {'actual': password, 'nueva': password + '9'}, csrf=False)[0] == 403)
+    check('Cambio rechaza contraseña actual incorrecta', client.request('POST', '/auth/password', {'actual': 'incorrecta', 'nueva': password + '9'})[0] == 400)
+    check('Cambio rechaza contraseña nueva débil', client.request('POST', '/auth/password', {'actual': password, 'nueva': '123'})[0] == 400)
+    check('Cambio guarda nueva clave y cierra sesión actual', client.request('POST', '/auth/password', {'actual': password, 'nueva': password + '9'})[0] == 204 and client.request('GET', '/auth/me')[0] == 401)
+    check('Clave anterior ya no autentica', client.request('POST', '/auth/login', {'email': delivery['email'], 'password': password})[0] == 401)
+    check('Clave nueva autentica', client.request('POST', '/auth/login', {'email': delivery['email'], 'password': password + '9'})[0] == 200)
+    status, offers = guest.request('GET', '/productos/ofertas')
+    check('Ofertas públicas solo incluyen descuentos vigentes', status == 200 and len(offers) > 0 and all(p['descuento'] > 0 and not p['retirado'] for p in offers))
+
 
 
 if __name__ == '__main__':
@@ -125,6 +142,7 @@ if __name__ == '__main__':
     try:
         run()
     finally:
-        evidence = ROOT / '.local/verificacion/api-resultados.json'
-        evidence.parent.mkdir(parents=True, exist_ok=True)
-        evidence.write_text(json.dumps(results, ensure_ascii=False, indent=2), encoding='utf-8')
+        if os.environ.get('TEST_RESULTS_PATH'):
+            evidence = Path(os.environ['TEST_RESULTS_PATH'])
+            evidence.parent.mkdir(parents=True, exist_ok=True)
+            evidence.write_text(json.dumps(results, ensure_ascii=False, indent=2), encoding='utf-8')

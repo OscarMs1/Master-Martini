@@ -24,16 +24,19 @@ const producto = {
 };
 function CarritoPrueba() {
   const { agregar, items } = useShop();
+  function agregarProducto() {
+    try { agregar(producto); } catch { /* El ShopProvider muestra el único aviso. */ }
+  }
   return (
     <>
-      <button onClick={() => agregar(producto)}>Agregar</button>
+      <button onClick={agregarProducto}>Agregar</button>
       <output aria-label="Unidades">
         {items.reduce((s, i) => s + i.cantidad, 0)}
       </output>
     </>
   );
 }
-function PruebaCantidad() {
+function PruebaCantidad({ stock = 15, flechas = false }) {
   const [cantidad, setCantidad] = useState(1);
   const [valida, setValida] = useState(true);
   return (
@@ -42,7 +45,8 @@ function PruebaCantidad() {
         id="cantidad-prueba"
         label="Cantidad de prueba"
         valor={cantidad}
-        stock={15}
+        stock={stock}
+        flechas={flechas}
         onChange={setCantidad}
         onValidez={setValida}
       />
@@ -52,7 +56,7 @@ function PruebaCantidad() {
   );
 }
 describe("Carrito y formularios", () => {
-  it("6. Agrega desde el contexto y persiste únicamente IDs y cantidades del carrito", async () => {
+  it("6. Persiste el carrito y confirma las altas, sin mostrar éxito al superar el stock", async () => {
     productosApi.listar.mockResolvedValue([producto]);
     render(
       <ShopProvider>
@@ -64,6 +68,34 @@ describe("Carrito y formularios", () => {
     expect(JSON.parse(localStorage.getItem("mm2-carrito"))).toEqual([
       { id: 1, cantidad: 1 },
     ]);
+    expect(screen.getByText("Agregado al carrito")).toBeInTheDocument();
+    expect(screen.getByText("Producto añadido correctamente.")).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "Agregar" }));
+    await userEvent.click(screen.getByRole("button", { name: "Agregar" }));
+    expect(screen.getByLabelText("Unidades")).toHaveTextContent("3");
+    expect(screen.getByText("Agregado al carrito")).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "Agregar" }));
+    expect(screen.getByRole("alert")).toHaveTextContent("Límite de unidades");
+    expect(screen.getByRole("alert")).toHaveTextContent("Solo quedan 3 disponibles.");
+    expect(screen.getAllByRole("alert")).toHaveLength(1);
+    expect(screen.getByRole("alert")).toHaveClass("shop-toast--limit");
+    expect(screen.queryByText("Agregado al carrito")).not.toBeInTheDocument();
+    expect(JSON.parse(localStorage.getItem("mm2-carrito"))).toEqual([
+      { id: 1, cantidad: 3 },
+    ]);
+  });
+  it("Muestra el estado agotado en el aviso inferior y permite cerrarlo", async () => {
+    productosApi.listar.mockResolvedValue([producto]);
+    function PruebaAgotado() {
+      const { agregar } = useShop();
+      return <button onClick={() => { try { agregar({ ...producto, stock: 0 }); } catch { /* aviso global */ } }}>Agotado</button>;
+    }
+    render(<ShopProvider><PruebaAgotado /></ShopProvider>);
+    await userEvent.click(screen.getByRole("button", { name: "Agotado" }));
+    expect(screen.getByRole("alert")).toHaveTextContent("Producto agotado");
+    expect(screen.getByRole("alert")).toHaveTextContent("Sin stock por el momento.");
+    await userEvent.click(screen.getByRole("button", { name: "Cerrar notificación" }));
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
   it("7. Rechaza una cantidad negativa sin modificar el carrito", () => {
     const items = [{ id: 1, cantidad: 1 }];
@@ -102,8 +134,20 @@ describe("Carrito y formularios", () => {
     expect(screen.getByLabelText("Cantidad confirmada")).toHaveTextContent("15");
     await user.clear(campo);
     await user.type(campo, "16");
-    expect(screen.getByRole("alert")).toHaveTextContent("15 unidades disponibles");
+    expect(screen.getByRole("alert")).toHaveTextContent("Máximo disponible: 15 unidades.");
     expect(screen.getByLabelText("Cantidad confirmada")).toHaveTextContent("1");
+    expect(screen.getByLabelText("Cantidad válida")).toHaveTextContent("false");
+  });
+  it("Las flechas respetan el stock y un producto agotado no presenta un error duplicado", async () => {
+    const user = userEvent.setup();
+    const { rerender } = render(<PruebaCantidad stock={2} flechas />);
+    expect(screen.getByRole("button", { name: "Disminuir cantidad" })).toBeDisabled();
+    await user.click(screen.getByRole("button", { name: "Aumentar cantidad" }));
+    expect(screen.getByRole("spinbutton")).toHaveValue(2);
+    expect(screen.getByRole("button", { name: "Aumentar cantidad" })).toBeDisabled();
+    rerender(<PruebaCantidad stock={0} flechas />);
+    expect(screen.getByRole("spinbutton")).toBeDisabled();
+    expect(screen.getByRole("alert")).toBeEmptyDOMElement();
     expect(screen.getByLabelText("Cantidad válida")).toHaveTextContent("false");
   });
   it("Permite vaciar y reescribir los campos numéricos del administrador", async () => {

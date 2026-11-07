@@ -1,0 +1,43 @@
+#!/bin/sh
+set -eu
+export MYSQL_PWD="$DB_ROOT_PASSWORD"
+for spec in "mm_auth:auth_app:$AUTH_DB_PASSWORD" "mm_catalog:catalog_app:$CATALOG_DB_PASSWORD" "mm_orders:orders_app:$ORDERS_DB_PASSWORD" "mm_classes:classes_app:$CLASSES_DB_PASSWORD"; do
+  db=${spec%%:*}
+  rest=${spec#*:}
+  user=${rest%%:*}
+  password=${rest#*:}
+  case "$password" in
+    *[!a-zA-Z0-9]*|'') echo "Las contraseñas de esquemas deben contener solo letras y números." >&2; exit 1 ;;
+  esac
+  mysql --host=db --user=root <<SQL
+CREATE DATABASE IF NOT EXISTS $db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER IF NOT EXISTS '$user'@'%' IDENTIFIED BY '$password';
+ALTER USER '$user'@'%' IDENTIFIED BY '$password';
+GRANT ALL PRIVILEGES ON $db.* TO '$user'@'%';
+SQL
+done
+
+# Esquema de sesiones JDBC, creado una vez de forma idempotente.
+# No se sobrescriben las sesiones existentes durante los reinicios.
+mysql --host=db --user=root mm_auth <<'SQL'
+CREATE TABLE IF NOT EXISTS SPRING_SESSION (
+  PRIMARY_ID CHAR(36) NOT NULL,
+  SESSION_ID CHAR(36) NOT NULL,
+  CREATION_TIME BIGINT NOT NULL,
+  LAST_ACCESS_TIME BIGINT NOT NULL,
+  MAX_INACTIVE_INTERVAL INT NOT NULL,
+  EXPIRY_TIME BIGINT NOT NULL,
+  PRINCIPAL_NAME VARCHAR(100),
+  CONSTRAINT SPRING_SESSION_PK PRIMARY KEY (PRIMARY_ID),
+  UNIQUE KEY SPRING_SESSION_IX1 (SESSION_ID),
+  INDEX SPRING_SESSION_IX2 (EXPIRY_TIME),
+  INDEX SPRING_SESSION_IX3 (PRINCIPAL_NAME)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+CREATE TABLE IF NOT EXISTS SPRING_SESSION_ATTRIBUTES (
+  SESSION_PRIMARY_ID CHAR(36) NOT NULL,
+  ATTRIBUTE_NAME VARCHAR(200) NOT NULL,
+  ATTRIBUTE_BYTES BLOB NOT NULL,
+  CONSTRAINT SPRING_SESSION_ATTRIBUTES_PK PRIMARY KEY (SESSION_PRIMARY_ID, ATTRIBUTE_NAME),
+  CONSTRAINT SPRING_SESSION_ATTRIBUTES_FK FOREIGN KEY (SESSION_PRIMARY_ID) REFERENCES SPRING_SESSION(PRIMARY_ID) ON DELETE CASCADE
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+SQL

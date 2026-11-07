@@ -57,13 +57,12 @@ export default function Header() {
 
   function navbar() {
     const menuId = "menu-principal";
-    const enabled = true;
     return (
       <nav className="container-xl navbar navbar-expand-lg" aria-label="Navegación principal">
         <Link to="/" className="brand" aria-label="Master Martini, inicio" onClick={() => setOpen(false)}>
           <img src="/assets/logo/master-martini.png" alt="Master Martini" width="180" height="110" />
         </Link>
-        <div className={`nav-links ${enabled && open ? "is-open" : ""}`} id={menuId} ref={menuRef}>
+        <div className={`nav-links ${open ? "is-open" : ""}`} id={menuId} ref={menuRef}>
           {menuLinks.map(([to, label]) => (
             <NavLink end={to === "/"} key={to} to={to} onClick={() => setOpen(false)}>{label}</NavLink>
           ))}
@@ -77,7 +76,7 @@ export default function Header() {
             <ShoppingBag size={21} />{cartCount > 0 && <span>{cartCount}</span>}
           </Link>
           <button type="button" ref={toggleRef} className="menu-toggle" onClick={() => setOpen(!open)}
-            aria-label={open ? "Cerrar menú" : "Abrir menú"} aria-expanded={enabled && open} aria-controls={menuId}>
+            aria-label={open ? "Cerrar menú" : "Abrir menú"} aria-expanded={open} aria-controls={menuId}>
             {open ? <X /> : <Menu />}
           </button>
         </div>

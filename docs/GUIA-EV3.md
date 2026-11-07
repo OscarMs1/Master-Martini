@@ -1,24 +1,31 @@
-# Guía de defensa EV3
+# Funcionalidades para la revisión del proyecto
 
-## Arquitectura
-React → proxy Vite `/api` → controladores Spring REST → servicios transaccionales → repositorios JPA → MySQL.
-El navegador no decide precios ni permisos. BCrypt (coste 12) protege contraseñas; sesión HttpOnly, SameSite Lax y CSRF protegen las operaciones. CLIENTE y ADMINISTRADOR tienen permisos diferentes.
+La aplicación contiene un frontend React que consume operaciones REST de cuatro aplicaciones Spring Boot con MySQL. Las siguientes comprobaciones sirven para demostrar el funcionamiento del caso académico.
 
-## Demostración
-1. IL3.1: crear un producto de prueba y un cliente; reiniciar servicios y consultar los mismos IDs en MySQL/API.
-2. IL3.2: administrador crea, lista, edita y elimina un producto temporal. Subir JPG/PNG/WEBP, comprobar vista previa y persistencia. Comprar con pago simulado y mostrar pedido y reducción de stock.
-3. IL3.3: registrar cliente, iniciar sesión, inscribirse y repetir inscripción (rechazo). Intentar acceder a `/api/admin/usuarios` con cliente (403); cerrar sesión y comprobar 401.
-4. Mostrar pruebas Vitest, JUnit y `scripts/verificar-api.py`. Explicar bloqueo pesimista para stock/cupos y requestKey para evitar pedidos duplicados.
+## Navegación y catálogo
 
-## Endpoints
-- GET /api/productos, /api/productos/{id}, /api/clases, /api/novedades.
-- POST /api/auth/registro, /api/auth/login, /api/auth/logout; GET /api/auth/me, /api/auth/csrf.
-- POST/PUT/DELETE /api/productos (PUT/DELETE con /{id}): administrador.
-- POST /api/pedidos; GET /api/pedidos/mis-pedidos.
-- POST /api/inscripciones; GET /api/inscripciones/mis-inscripciones.
-- POST /api/contactos; GET /api/admin/contactos.
-- POST /api/admin/imagenes; GET /api/imagenes/{archivo}.
-- GET /api/admin/usuarios, /api/admin/pedidos, /api/admin/inscripciones, /api/admin/novedades.
+1. Abrir `http://127.0.0.1:8095` y recorrer el inicio, el catálogo y las ofertas.
+2. Probar las categorías, la ficha de un producto, el descuento y los indicadores de stock.
+3. Consultar novedades y clases desde sus páginas públicas.
+4. Comprobar que la presentación se adapta a distintos tamaños de pantalla.
 
-## Límites
-Pago y agenda académicos; sin cobros ni correos reales. El esquema usa Hibernate update para desarrollo, no migraciones de producción. No existe recuperación de contraseña. Para publicación HTTPS, configurar COOKIE_SECURE=true y origen CORS exacto. El autor/licencia de la portada suministrada en el ZIP no está verificado: se conserva por solicitud, sin atribuirla falsamente a Unsplash. Las otras fotografías tienen fuentes documentadas.
+## Cuenta y compra simulada
+
+1. Registrar un cliente con datos válidos y comprobar las validaciones.
+2. Iniciar sesión y modificar los datos permitidos de la cuenta.
+3. Agregar productos al carrito y completar una compra simulada.
+4. Abrir el historial y confirmar que se registró el pedido.
+5. Comprobar rechazo por falta de stock, rechazo de pagos simulados y prevención de envío repetido.
+6. Consultar la inscripción a clases y comprobar que los cupos se reducen correctamente.
+
+## Administración y seguridad
+
+1. Acceder con un usuario administrador y visualizar el panel.
+2. Crear o modificar un producto, cambiar su disponibilidad y revisar los pedidos.
+3. Gestionar una novedad y consultar las inscripciones y los contactos recibidos.
+4. Confirmar que un cliente normal no tiene acceso a operaciones administrativas.
+5. Detener y reiniciar contenedores sin eliminar los volúmenes; los datos deben permanecer.
+
+**Importante:** las compras y clases forman parte de una simulación académica; no existe cobro real, despacho físico ni inscripción en un establecimiento oficial.
+
+Para las pruebas automatizadas y la estructura de servicios, consultar `VERIFICACION.md` y `ARQUITECTURA_MICROSERVICIOS.md`.

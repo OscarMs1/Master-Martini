@@ -10,19 +10,37 @@ export default function CantidadEditable({
   stock,
   onChange,
   onValidez,
+  flechas = false,
+  mostrarError = true,
+  onErrorChange,
+  describedBy,
 }) {
   const [texto, setTexto] = useState(String(valor));
   const [error, setError] = useState("");
 
   useEffect(() => {
     setTexto(String(valor));
+    setError("");
   }, [valor]);
+
+  useEffect(() => {
+    if (!stock) {
+      setError("");
+      onErrorChange?.("");
+      onValidez?.(false);
+    } else {
+      try { leerCantidad(texto); onErrorChange?.(""); onValidez?.(true); }
+      catch (e) { setError(e.message); onErrorChange?.(e.message); onValidez?.(false); }
+    }
+  }, [stock]);
 
   function leerCantidad(entrada) {
     if (!/^\d+$/.test(entrada)) {
       throw new Error("Ingresa una cantidad entera.");
     }
     const cantidad = Number(entrada);
+    if (cantidad > stock && stock > 0)
+      throw new Error(`Máximo disponible: ${stock} unidades.`);
     validarCantidad(cantidad, stock);
     return cantidad;
   }
@@ -31,6 +49,7 @@ export default function CantidadEditable({
     setTexto(entrada);
     if (entrada === "") {
       setError(""); // Puede borrarse temporalmente para escribir otra cantidad.
+      onErrorChange?.("Ingresa una cantidad.");
       onValidez?.(false);
       return;
     }
@@ -38,29 +57,37 @@ export default function CantidadEditable({
       const cantidad = leerCantidad(entrada);
       if (cantidad !== valor) onChange(cantidad);
       setError("");
+      onErrorChange?.("");
       onValidez?.(true);
     } catch (e) {
       setError(e.message);
+      onErrorChange?.(e.message);
       onValidez?.(false);
     }
   }
 
   function confirmar() {
+    if (!stock) return;
     try {
       const cantidad = leerCantidad(texto);
       if (cantidad !== valor) onChange(cantidad);
       setTexto(String(cantidad)); // 015 pasa a 15 al terminar de editar.
       setError("");
+      onErrorChange?.("");
       onValidez?.(true);
     } catch (e) {
-      setError(texto === "" ? "Ingresa una cantidad." : e.message);
+      const mensaje = texto === "" ? "Ingresa una cantidad." : e.message;
+      setError(mensaje);
+      onErrorChange?.(mensaje);
       onValidez?.(false);
     }
   }
 
   return (
-    <div className="quantity-field">
+    <div className={`quantity-field${flechas ? " quantity-with-arrows" : ""}`}>
       <label className="visually-hidden" htmlFor={id}>{label}</label>
+      <div className="quantity-controls">
+      {flechas && <button type="button" aria-label="Disminuir cantidad" disabled={!stock || Number(texto) <= 1} onClick={() => editar(String(Math.max(1, (Number(texto) || 1) - 1)))}>‹</button>}
       <input
         id={id}
         className={`form-control quantity-input${error ? " is-invalid" : ""}`}
@@ -71,6 +98,7 @@ export default function CantidadEditable({
         step="1"
         autoComplete="off"
         value={texto}
+        disabled={!stock}
         onChange={(e) => editar(e.target.value)}
         onBlur={confirmar}
         onKeyDown={(e) => {
@@ -80,9 +108,11 @@ export default function CantidadEditable({
           }
         }}
         aria-invalid={!!error}
-        aria-describedby={error ? `${id}-error` : undefined}
+        aria-describedby={describedBy || (error && mostrarError ? `${id}-error` : undefined)}
       />
-      {error && <p className="quantity-error" role="alert" id={`${id}-error`}>{error}</p>}
+      {flechas && <button type="button" aria-label="Aumentar cantidad" disabled={!stock || Number(texto) >= stock} onClick={() => editar(String(Math.min(stock, (Number(texto) || 0) + 1)))}>›</button>}
+      </div>
+      {mostrarError && <p className="quantity-error" role="alert" id={`${id}-error`}>{stock > 0 ? error : ""}</p>}
     </div>
   );
 }

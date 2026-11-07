@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { api } from "../services/api";
 import { dinero } from "../utils/comercio";
+import CambiarPassword from "../components/CambiarPassword";
+import MisFavoritosDirecciones from "../components/MisFavoritosDirecciones";
 import Estado from "../components/Estado";
 export default function MiCuenta() {
   const { user, logout } = useAuth(),
@@ -62,7 +64,7 @@ export default function MiCuenta() {
       </div>
       <div className="row g-5">
         <div className="col-lg-4">
-          <aside className="summary-panel">
+          <aside className="summary-panel account-data-static">
             <h2>Tus datos</h2>
             <p>
               <strong>{user.nombre}</strong>
@@ -144,6 +146,12 @@ export default function MiCuenta() {
               ))
             )}
           </Estado>
+          <MisFavoritosDirecciones />
+          <div className="account-security mt-5">
+            <p className="eyebrow">SEGURIDAD DE TU CUENTA</p>
+            <h2 className="account-security-title">Protege tu cuenta</h2>
+            <CambiarPassword />
+          </div>
         </div>
       </div>
     </section>

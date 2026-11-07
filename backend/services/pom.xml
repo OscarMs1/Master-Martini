@@ -1,0 +1,1 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"><modelVersion>4.0.0</modelVersion><groupId>cl.mastermartini</groupId><artifactId>mm-services</artifactId><version>3.0.0</version><packaging>pom</packaging><modules><module>common</module><module>auth-usuarios</module><module>catalogo</module><module>pedidos</module><module>clases-contacto</module></modules></project>

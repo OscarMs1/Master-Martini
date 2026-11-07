@@ -70,7 +70,7 @@ export default function Creditos() {
       <div className="row g-4 my-4">
         <div className="col-sm-6 col-lg-3">
           <img className="credit-image" src="/assets/images/hero-chocolate-editorial.webp" alt="Composición editorial de chocolates sobre fondo claro utilizada en la portada" loading="lazy" />
-          <p className="mt-2"><a href="/assets/images/hero-torta-fondo-final.png" target="_blank" rel="noreferrer">Portada principal · Ver imagen original ↗</a></p>
+          <p className="mt-2"><a href="/assets/images/hero-chocolate-editorial.webp" target="_blank" rel="noreferrer">Portada principal · Ver recurso ↗</a></p>
         </div>
         {fotos.map(([file, autor, slug]) => (
           <div className="col-sm-6 col-lg-3" key={file}>

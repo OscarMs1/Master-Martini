@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import DatosEntrega, { entregaVacia } from "../components/DatosEntrega";
 import ResumenPedido from "../components/ResumenPedido";
 import { validarEntrega } from "../utils/validaciones";
+import { esUbicacionValida, regionCanonica } from "../data/regionesComunasChile";
 import { totales } from "../utils/comercio";
 import { api } from "../services/api";
 export default function Checkout() {
@@ -25,13 +26,24 @@ export default function Checkout() {
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false);
   const [requestKey] = useState(() => crypto.randomUUID());
+  const [direccionesGuardadas, setDireccionesGuardadas] = useState([]);
   useEffect(() => {
-    if (user)
-      setData(
-        Object.fromEntries(
-          Object.keys(entregaVacia).map((key) => [key, user[key] || ""]),
-        ),
+    let active = true;
+    if (!user) { setDireccionesGuardadas([]); return undefined; }
+    api("/direcciones").then(list => { if(active) setDireccionesGuardadas(list); }).catch(() => {});
+    return () => { active=false; };
+  }, [user?.id]);
+  useEffect(() => {
+    if (user) {
+      const guardados = Object.fromEntries(
+        Object.keys(entregaVacia).map((key) => [key, user[key] || ""]),
       );
+      guardados.region = regionCanonica(guardados.region);
+      if (!esUbicacionValida(guardados.region, guardados.comuna)) {
+        guardados.comuna = "";
+      }
+      setData(guardados);
+    }
   }, [user]);
   async function submit(e) {
     e.preventDefault();
@@ -79,12 +91,37 @@ export default function Checkout() {
       <form noValidate onSubmit={submit} className="row g-5 mt-2">
         <div className="col-lg-8">
           <h2 className="h3 mb-4">01. Tus datos de entrega</h2>
+          {direccionesGuardadas.length > 0 && <div className="mb-3">
+            <label className="form-label" htmlFor="checkout-saved-address">Usar una dirección guardada</label>
+            <select id="checkout-saved-address" className="form-select" defaultValue="" onChange={e=>{
+              const found=direccionesGuardadas.find(a=>String(a.id)===e.target.value);
+              const source=found || user || entregaVacia;
+              const next=Object.fromEntries(Object.keys(entregaVacia).map(k=>[k,source[k]||""]));
+              next.region=regionCanonica(next.region);
+              if(!esUbicacionValida(next.region,next.comuna)) next.comuna="";
+              setData(next);
+              setErrors({});
+            }}>
+              <option value="">Completar manualmente</option>
+              {direccionesGuardadas.map(a=><option key={a.id} value={a.id}>{a.etiqueta} · {a.comuna}</option>)}
+            </select>
+          </div>}
           <DatosEntrega
             data={data}
             errors={errors}
-            onChange={(e) =>
-              setData({ ...data, [e.target.name]: e.target.value })
-            }
+            onChange={(e) => {
+              const { name, value } = e.target;
+              setData((actual) => ({
+                ...actual,
+                [name]: value,
+                ...(name === "region" ? { comuna: "" } : {}),
+              }));
+              setErrors((actual) => ({
+                ...actual,
+                [name]: undefined,
+                ...(name === "region" ? { comuna: undefined } : {}),
+              }));
+            }}
           />
           <fieldset className="my-4">
             <legend className="h3">02. ¿Cómo lo recibes?</legend>

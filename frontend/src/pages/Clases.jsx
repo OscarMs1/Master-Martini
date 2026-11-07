@@ -42,12 +42,10 @@ export default function Clases() {
     setMessage("");
     try {
       await api("/inscripciones", { method: "POST", body: { claseId: id } });
-      setMessage(
-        "Tu inscripción quedó guardada. Puedes consultarla en Mi cuenta.",
-      );
+      setMessage({ id, error: false, text: "Inscripción confirmada. Puedes consultarla en Mi cuenta." });
       await cargar();
     } catch (e) {
-      setMessage(e.message);
+      setMessage({ id, error: true, text: e.message });
     } finally {
       setBusy(null);
     }
@@ -82,11 +80,6 @@ export default function Clases() {
             <option>Online</option>
           </select>
         </div>
-        {message && (
-          <div role="status" className="alert alert-info">
-            {message}
-          </div>
-        )}
         <Estado loading={loading} error={error} retry={cargar}>
           <div className="row g-4">
             {clases
@@ -94,7 +87,7 @@ export default function Clases() {
               .map((c) => (
                 <div className="col-md-6" key={c.id}>
                   <article className="class-card">
-                    <img src={c.imagen} alt={c.titulo} />
+                    <img src={c.imagen} alt={c.titulo} loading="lazy" />
                     <div className="p-4">
                       <p className="eyebrow">
                         {c.modalidad} · {c.nivel}
@@ -133,7 +126,8 @@ export default function Clases() {
                         disabled={
                           inscritas.includes(c.id) ||
                           !c.cuposDisponibles ||
-                          busy === c.id
+                          busy !== null ||
+                          new Date(c.fecha).getTime() <= Date.now()
                         }
                         onClick={() => inscribir(c.id)}
                       >
@@ -141,10 +135,15 @@ export default function Clases() {
                           ? "Ya estás inscrito ✓"
                           : busy === c.id
                             ? "Reservando…"
-                            : !c.cuposDisponibles
+                            : new Date(c.fecha).getTime() <= Date.now()
+                              ? "Clase finalizada"
+                              : !c.cuposDisponibles
                               ? "Sin cupos"
                               : "Inscribirme →"}
                       </button>
+                      {message?.id === c.id && (
+                        <p className={`class-feedback ${message.error ? "text-danger" : "text-success"}`} role={message.error ? "alert" : "status"}>{message.text}</p>
+                      )}
                     </div>
                   </article>
                 </div>

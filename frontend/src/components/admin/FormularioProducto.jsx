@@ -23,7 +23,7 @@ export default function FormularioProducto({
   const [uploading, setUploading] = useState(false);
   function submit(e) {
     e.preventDefault();
-    const { id, ...payload } = data;
+    const payload = Object.fromEntries(Object.keys(vacio).map(key => [key, data[key]]));
     // El campo puede estar vacío mientras se edita, pero nunca al guardar.
     guardar({
       ...payload,

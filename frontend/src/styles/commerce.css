@@ -65,7 +65,7 @@
   flex: 1;
   flex-direction: column;
   min-height: 0;
-  padding: 21px 20px 20px;
+  padding: 21px 20px 6px;
 }
 .product-category {
   font-size: 11px;
@@ -105,7 +105,7 @@
 }
 .product-bottom del {
   color: var(--muted);
-  font-size: 10px;
+  font-size: 12px;
 }
 .add-product {
   border: 1px solid var(--border);
@@ -121,40 +121,27 @@
   background: var(--green);
   color: var(--paper);
 }
-.add-product:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
+.add-product.is-out-of-stock {
+  opacity: 0.55;
 }
-.add-product[aria-disabled="true"] {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-.add-product[aria-disabled="true"]:hover {
+.add-product.is-out-of-stock:hover {
   color: var(--green);
   background: transparent;
 }
-/* Avisos sobre la fotografía: visibles y accesibles, pero nunca aumentan
-   la altura de las tarjetas ni mueven el precio o el botón de compra. */
+/* Una reserva compacta admite dos líneas sin desplazar el precio al agregar. */
 .product-feedback {
-  position: absolute;
-  z-index: 2;
-  left: 12px;
-  right: 12px;
-  bottom: 12px;
-  pointer-events: none;
-  overflow-wrap: anywhere;
+  min-height: 30px;
+  padding: 0 20px 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 .product-feedback p {
-  display: inline-block;
-  max-width: 100%;
-  padding: 9px 12px;
   margin: 0;
   font-size: 12px;
-  line-height: 1.4;
-  border-left: 3px solid currentColor;
-  border-radius: 2px;
-  background: rgba(255, 255, 255, 0.97);
-  box-shadow: 0 3px 16px rgba(14, 34, 28, 0.14);
+  line-height: 14px;
+  transform: translateY(-3px);
 }
 .catalog-filters {
   display: grid;
@@ -466,10 +453,16 @@
   color: var(--danger);
 }
 .class-card {
+  display: flex;
+  flex-direction: column;
   border: 1px solid var(--border);
   height: 100%;
   background: var(--paper);
 }
+.class-card > .p-4 { display:flex; flex-direction:column; flex:1; }
+.class-card .class-supplies { margin-top:auto; }
+.class-card .btn { align-self:flex-start; }
+.class-feedback { margin:12px 0 0; font-size:13px; line-height:1.5; }
 .class-card > img {
   width: 100%;
   height: 300px;
@@ -655,7 +648,10 @@
     font-size: 30px;
   }
   .product-info {
-    padding: 24px;
+    padding: 24px 24px 6px;
+  }
+  .product-feedback {
+    padding-inline: 24px;
   }
   .product-format {
     font-size: 12px;
@@ -689,7 +685,11 @@
   .quantity-input {
     max-width: 78px;
   }
-  .class-card > img {
+  .class-card > .p-4 { display:flex; flex-direction:column; flex:1; }
+.class-card .class-supplies { margin-top:auto; }
+.class-card .btn { align-self:flex-start; }
+.class-feedback { margin:12px 0 0; font-size:13px; line-height:1.5; }
+.class-card > img {
     height: 240px;
   }
   .class-card h2 {
@@ -705,3 +705,175 @@
 }
 
 .product-card img[src$="bebida-soya-real.jpg"] { object-position: center 22%; }
+
+/* Cantidad y confirmación con espacio reservado. */
+.quantity-controls { display:flex; gap:4px; align-items:center; }
+.quantity-with-arrows { width:146px; }
+.quantity-with-arrows .quantity-input { width:54px; min-width:0; height:44px; padding:4px; }
+.quantity-controls button { width:42px; height:44px; flex-shrink:0; background:var(--paper); color:var(--ink); border:1px solid var(--border); font-size:22px; }
+.quantity-controls button:disabled { opacity:.45; }
+.quantity-input.is-invalid { background-image:none; padding-inline:4px; }
+.quantity-error { min-height:36px; font-size:12px; }
+.cart-row { position:relative; padding-bottom:48px; }
+.cart-row .quantity-error { position:absolute; bottom:0; left:0; width:100%; margin:0; }
+.detail-purchase { display:grid; grid-template-columns:146px minmax(0, 1fr); gap:16px; align-items:flex-start; padding-bottom:36px; position:relative; }
+.detail-purchase .detail-add { justify-self:start; min-width:0; font-size:12px; gap:10px; min-height:44px; padding:10px 12px; background:var(--paper); color:var(--ink); border-color:var(--border); }
+.detail-purchase .detail-add:hover { background:var(--beige); }
+@media(max-width:430px) { .detail-purchase { grid-template-columns:138px minmax(0, 1fr); gap:12px; } .detail-purchase .detail-add { font-size:12px; padding:10px 12px; } }
+.contact-page { background:var(--beige); padding-inline:clamp(24px,4vw,64px); margin-block:32px; }
+.contact-page .form-panel { background:var(--paper); }
+.contact-details { border-top:1px solid var(--border); padding-top:24px; }
+@media(max-width:575px) { .quantity-with-arrows { width:138px; } .quantity-with-arrows .quantity-input { width:46px; } .contact-page { margin-block:0; } }
+
+
+/* Contacto: superficie crema a todo el ancho del contenido, sin alterar header ni footer. */
+.contact-page-background {
+  width: 100%;
+  background: #faf9f6;
+}
+.contact-page-background .contact-page {
+  margin-block: 0;
+  background: transparent;
+}
+
+/* Mi cuenta: formulario de contraseña en columna amplia, sin solapamiento con tarjeta sticky. */
+.account-security-title {
+  margin-bottom: 24px;
+  font-size: clamp(30px, 3.1vw, 42px);
+}
+.account-password-panel {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  margin: 0;
+  overflow: visible;
+}
+.account-password-panel > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 22px 26px;
+  list-style: none;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--green-deep);
+}
+.account-password-panel > summary::-webkit-details-marker { display: none; }
+.account-password-panel > summary:focus-visible { outline-offset: -4px; }
+.account-password-panel .account-password-toggle::after {
+  content: "+";
+  display: inline-block;
+  font-size: 23px;
+  font-weight: 400;
+  line-height: 1;
+}
+.account-password-panel[open] .account-password-toggle::after { content: "−"; }
+.account-password-panel[open] > summary { border-bottom: 1px solid var(--border); }
+.account-password-content { padding: 25px 26px 28px; }
+.account-password-content > p { margin: 0 0 20px; }
+.account-password-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 18px;
+}
+.account-password-current { grid-column: 1 / -1; }
+.account-password-panel input { width: 100%; }
+.account-password-panel button { min-width: 205px; }
+@media (max-width: 575px) {
+  .account-password-panel > summary { padding: 18px; }
+  .account-password-content { padding: 18px; }
+  .account-password-fields { grid-template-columns: 1fr; }
+  .account-password-panel button { width: 100%; }
+}
+
+/* Solo Mi cuenta: Tus datos queda en su lugar original, no acompana el scroll.
+   El resumen de Checkout conserva su comportamiento sticky. */
+.account-data-static {
+  position: static;
+  top: auto;
+}
+
+
+/* Detalle de producto: aviso de stock separado del control de cantidad.
+   Compatible tanto con el aviso dentro de .detail-action como con el aviso
+   directamente dentro de .detail-purchase. No modifica carrito ni inventario. */
+.product-detail .detail-purchase {
+  display: grid;
+  grid-template-columns: 146px minmax(0, 1fr);
+  column-gap: 16px;
+  row-gap: 14px;
+  align-items: start;
+  padding-bottom: 0;
+  position: relative;
+}
+/* Evita que el contenedor del boton limite el ancho del aviso. */
+.product-detail .detail-action {
+  display: contents;
+}
+.product-detail .detail-purchase .detail-add {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: start;
+}
+.product-detail .detail-action-notice {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+}
+.product-detail .detail-action-notice:empty {
+  display: none;
+}
+.product-detail .detail-action-notice p {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+}
+.product-detail .detail-action-notice svg {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+}
+@media (max-width: 430px) {
+  .product-detail .detail-purchase {
+    grid-template-columns: 138px minmax(0, 1fr);
+    column-gap: 12px;
+  }
+}
+@media (max-width: 375px) {
+  .product-detail .detail-purchase {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 12px;
+  }
+  .product-detail .detail-purchase .detail-add {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .product-detail .detail-action-notice {
+    grid-column: 1;
+    grid-row: 3;
+  }
+}
+
+.product-detail .detail-add[aria-disabled="true"] { color:var(--muted); background:var(--beige); }
+.admin-form-area { scroll-margin-top:calc(var(--header-height) + 24px); }
+
+/* Microservicios de favoritos, reseñas y direcciones: integración discreta */
+.product-community { margin: 1rem 0 0; border-top:1px solid rgba(5,57,42,.16); padding:2rem 0 0; }
+.product-community .product-favorite { display:inline-flex; align-items:center; gap:.55rem; white-space:normal; }
+.product-review-list {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:1rem;margin:1.5rem 0;}
+.product-review {padding:1.1rem 1.3rem;border-radius:14px;background:#faf9f6;border:1px solid rgba(5,57,42,.09);}
+.product-review-stars {letter-spacing:.07em;color:#b18b48;}
+.product-review-write {margin-top:1rem;max-width:680px;}
+.product-review-write > summary, .account-address-form > summary {cursor:pointer;color:var(--green,#165743);font-weight:600;}
+.product-review-write .product-review-rating {max-width:220px;}
+.product-review-write textarea {resize:vertical;}
+.account-address-item {display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
+.account-address-form {padding:1rem;border:1px solid rgba(5,57,42,.14);border-radius:14px;}

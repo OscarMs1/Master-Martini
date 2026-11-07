@@ -6,11 +6,7 @@ import Beneficios from "../components/home/Beneficios";
 import ProductosDestacados from "../components/home/ProductosDestacados";
 import useNovedades from "../services/useNovedades";
 import Estado from "../components/Estado";
-const imagenesInicio = {
-  "el-arte-del-laminado": "/assets/images/inicio-laminado.jpg",
-  "texturas-de-chocolate": "/assets/images/inicio-cacao.jpg",
-  "un-gelato-con-identidad": "/assets/images/editorial-gelato.jpg",
-};
+import { imagenParaNovedad, altParaNovedad } from "../data/imagenesNovedades";
 export default function Home() {
   const { articulos, loading, error } = useNovedades();
   return (
@@ -112,8 +108,8 @@ export default function Home() {
             <div className="col-md-4" key={a.slug}>
               <Link className="editorial-card" to={`/novedades/${a.slug}`}>
                 <img
-                  src={imagenesInicio[a.slug] || a.imagen}
-                  alt={a.titulo}
+                  src={imagenParaNovedad(a)}
+                  alt={altParaNovedad(a)}
                   loading="lazy"
                 />
                 <p className="eyebrow">{new Intl.DateTimeFormat('es-CL', {dateStyle:'long'}).format(new Date(a.fecha + 'T12:00:00'))}</p>

@@ -73,21 +73,19 @@ describe("Catálogo y presentación", () => {
     expect(screen.getByText("$5.400")).toBeInTheDocument();
     expect(screen.getByText("$6.000").tagName).toBe("DEL");
   });
-  it("3. Confirma el producto agregado sobre la foto, sin aumentar la altura de la tarjeta", async () => {
+  it("3. Usa exclusivamente el aviso global al añadir un producto", async () => {
     const onAgregar = vi.fn();
     const { container } = render(
       <MemoryRouter>
         <TarjetaProducto producto={productos[0]} onAgregar={onAgregar} />
       </MemoryRouter>,
     );
-    expect(container.querySelector(".product-media > .product-feedback")).toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: /Agregar Margarina de hojaldre/i }));
     expect(onAgregar).toHaveBeenCalledWith(productos[0]);
-    expect(screen.getByRole("status")).toHaveTextContent("Margarina de hojaldre agregado al carrito.");
-    expect(container.querySelectorAll(".product-feedback")).toHaveLength(1);
-    expect(container.querySelector(".product-info .product-feedback")).toBeNull();
+    expect(container.querySelector(".product-feedback")).toBeNull();
+    expect(screen.queryByText("Agregado al carrito.")).not.toBeInTheDocument();
   });
-  it("4. Permite consultar un producto agotado, avisa y no modifica el carrito", async () => {
+  it("4. Permite consultar el estado agotado sin añadir mensajes bajo la tarjeta", async () => {
     const agotado = { ...productos[1], stock: 0 };
     const onAgregar = vi.fn();
     const { container } = render(
@@ -96,22 +94,50 @@ describe("Catálogo y presentación", () => {
       </MemoryRouter>,
     );
     const boton = screen.getByRole("button", { name: /Sin stock: Base para gelato/i });
-    expect(boton).toHaveAttribute("aria-disabled", "true");
     await userEvent.click(boton);
-    expect(screen.getByRole("alert")).toHaveTextContent("Sin stock. Este producto no se puede agregar al carrito.");
-    expect(onAgregar).not.toHaveBeenCalled();
-    expect(container.querySelector(".product-feedback")).toBeInTheDocument();
+    expect(onAgregar).toHaveBeenCalledWith(agotado);
+    expect(container.querySelector(".product-feedback")).toBeNull();
   });
-  it("5. Muestra un error de stock al alcanzar el límite sin mostrar éxito", async () => {
+  it("5. No duplica errores dentro de la tarjeta", async () => {
     const onAgregar = vi.fn(() => { throw new Error("Solo hay 8 unidades disponibles."); });
-    render(
+    const { container } = render(
       <MemoryRouter>
         <TarjetaProducto producto={productos[1]} onAgregar={onAgregar} />
       </MemoryRouter>,
     );
     await userEvent.click(screen.getByRole("button", { name: /Agregar Base para gelato/i }));
-    expect(screen.getByRole("alert")).toHaveTextContent("Solo hay 8 unidades disponibles.");
-    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    expect(onAgregar).toHaveBeenCalledOnce();
+    expect(container.querySelector(".product-feedback")).toBeNull();
+  });
+  it("6. Muestra error justo bajo el botón en la ficha cuando no hay stock", async () => {
+    const agotado = { ...productos[1], stock: 0 };
+    const agregar = vi.fn();
+    render(
+      <MemoryRouter initialEntries={["/producto/2"]}>
+        <ShopContext.Provider value={{ productos: [agotado], loading: false, error: "", agregar }}>
+          <Routes><Route path="/producto/:id" element={<DetalleProducto />} /></Routes>
+        </ShopContext.Provider>
+      </MemoryRouter>,
+    );
+    await userEvent.click(screen.getByRole("button", { name: /Agregar al carrito/i }));
+    expect(screen.getByRole("alert")).toHaveTextContent("No hay unidades disponibles para añadir.");
+    expect(agregar).not.toHaveBeenCalled();
+  });
+  it("7. En la ficha avisa si la cantidad supera el stock", async () => {
+    const agregar = vi.fn();
+    render(
+      <MemoryRouter initialEntries={["/producto/2"]}>
+        <ShopContext.Provider value={{ productos, loading: false, error: "", agregar }}>
+          <Routes><Route path="/producto/:id" element={<DetalleProducto />} /></Routes>
+        </ShopContext.Provider>
+      </MemoryRouter>,
+    );
+    const campo = screen.getByRole("spinbutton", { name: "Cantidad de Base para gelato" });
+    await userEvent.clear(campo);
+    await userEvent.type(campo, "99");
+    await userEvent.click(screen.getByRole("button", { name: /Agregar al carrito/i }));
+    expect(screen.getByRole("alert")).toHaveTextContent("Máximo disponible: 8 unidades.");
+    expect(agregar).not.toHaveBeenCalled();
   });
   it("4. Filtra el catálogo al cambiar la categoría", async () => {
     catalogo();

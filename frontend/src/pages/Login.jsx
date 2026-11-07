@@ -14,10 +14,10 @@ export default function Login() {
     setBusy(true);
     setError("");
     try {
-      await login(data);
+      const profile = await login(data);
       const from = location.state?.from;
       navigate(
-        typeof from === "string" &&
+        profile.rol === "ADMINISTRADOR" ? "/admin" : typeof from === "string" &&
           from.startsWith("/") &&
           !from.startsWith("//")
           ? from
@@ -51,6 +51,7 @@ export default function Login() {
           <em>verte de nuevo.</em>
         </h1>
         <p>Accede a tus pedidos e inscripciones.</p>
+        {new URLSearchParams(location.search).get("clave") === "actualizada" && <p role="status" className="alert alert-success">Contraseña actualizada. Inicia sesión con tu nueva contraseña.</p>}
         {location.state?.from === "/clases" && (
           <p role="status" className="alert alert-info">
             Inicia sesión para inscribirte en una clase.

@@ -16,7 +16,19 @@ export default function Registro() {
     [busy, setBusy] = useState(false);
   const { login } = useAuth(),
     navigate = useNavigate();
-  const change = (e) => setData({ ...data, [e.target.name]: e.target.value });
+  const change = (e) => {
+    const { name, value } = e.target;
+    setData((actual) => ({
+      ...actual,
+      [name]: value,
+      ...(name === "region" ? { comuna: "" } : {}),
+    }));
+    setErrors((actual) => ({
+      ...actual,
+      [name]: undefined,
+      ...(name === "region" ? { comuna: undefined } : {}),
+    }));
+  };
   async function submit(e) {
     e.preventDefault();
     const validation = validarRegistro(data);

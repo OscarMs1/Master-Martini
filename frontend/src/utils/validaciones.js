@@ -1,3 +1,5 @@
+import { comunasDeRegion, esUbicacionValida } from "../data/regionesComunasChile";
+
 export const correoValido = (value) =>
   /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value || "");
 export function runValido(value = "") {
@@ -31,8 +33,11 @@ export function validarEntrega(data) {
     errors.run = "Revisa el RUN y su dígito verificador.";
   if (!/^\+?[\d\s-]{8,16}$/.test(data.telefono || ""))
     errors.telefono = "Ingresa un teléfono válido.";
-  if (!data.region?.trim()) errors.region = "Ingresa tu región.";
-  if (!data.comuna?.trim()) errors.comuna = "Ingresa tu comuna.";
+  const comunas = comunasDeRegion(data.region);
+  if (!comunas.length) errors.region = "Selecciona una región válida.";
+  if (!data.comuna?.trim()) errors.comuna = "Selecciona una comuna.";
+  else if (!esUbicacionValida(data.region, data.comuna))
+    errors.comuna = "Selecciona una comuna de la región indicada.";
   if ((data.direccion || "").trim().length < 5)
     errors.direccion = "Ingresa una dirección completa.";
   return errors;

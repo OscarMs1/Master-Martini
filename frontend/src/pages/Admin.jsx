@@ -85,7 +85,7 @@ export default function Admin() {
   function editar(p) {
     setEditing(p);
     requestAnimationFrame(() =>
-      formArea.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
+      formArea.current?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "start" }),
     );
   }
   return (
@@ -160,7 +160,7 @@ export default function Admin() {
               + Nuevo producto
             </button>
           </div>
-          <div ref={formArea}>
+          <div ref={formArea} className="admin-form-area">
             {editing !== undefined && (
               <FormularioProducto
                 key={editing?.id || "nuevo"}

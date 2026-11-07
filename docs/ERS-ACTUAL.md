@@ -1,17 +1,26 @@
-# ERS vigente — Master Martini 2.0
+# Especificación de requisitos — Master Martini
 
-Sistema académico para clientes y administradores. React consume REST Spring Boot con persistencia MySQL.
+Proyecto académico de comercio electrónico simulado. La interfaz React consume una API REST con aplicaciones Spring Boot en Java 25 y persistencia MySQL 8.4.
 
 ## Requisitos funcionales
-RF1: catálogo público, filtros, ofertas y detalle con fotografías locales.
-RF2: registro validado por correo y RUN; login y logout mediante sesión.
-RF3: cliente agrega y retira productos, compra con pago simulado y consulta pedidos propios. Servidor recalcula precios y controla stock transaccionalmente.
-RF4: inscripción autenticada a clases, control de cupos y rechazo de duplicados.
-RF5: administrador crea, edita y elimina productos, sube imágenes y consulta pedidos, usuarios e inscripciones.
-RF6: contacto persistente y novedades editoriales.
+
+- **RF1. Catálogo:** productos por categoría, filtros, ofertas, fichas y fotografías con información de disponibilidad.
+- **RF2. Cuenta:** registro validado, login, cierre de sesión, perfil, direcciones, favoritos, reseñas y actualización de contraseña.
+- **RF3. Compras:** carrito y checkout de demostración, cálculo de precios en servidor, control de inventario y consulta de pedidos propios.
+- **RF4. Clases:** consulta de talleres, inscripción autenticada, prevención de duplicados y control de cupos.
+- **RF5. Administración:** mantenimiento de productos, imágenes y novedades; consulta de pedidos, inscripciones y mensajes mediante roles.
+- **RF6. Contacto:** registro de consultas y acceso administrativo a los mensajes.
 
 ## Requisitos no funcionales
-BCrypt, cookies HttpOnly, CSRF y autorización por roles. No aceptar precios ni cantidades negativas. Imágenes validadas por contenido y tamaño; archivos persistentes fuera del JAR. Responsive y reducción de movimiento. Navbar fija única y tarjetas 4:3.
 
-## Trazabilidad
-IL3.1: JPA/MySQL y evidencia de reinicio. IL3.2: controladores REST y pruebas funcionales. IL3.3: Spring Security y pruebas de autorización/CSRF. Consultar GUIA-EV3.md para endpoints, VERIFICACION.md para comandos de prueba y README para la instalación.
+- Autenticación con BCrypt, autorización por roles, sesiones con cookies HttpOnly y protección CSRF.
+- Control de existencia mediante reserva idempotente y recuperación de pedidos pendientes entre servicios.
+- Persistencia de datos en MySQL y archivos subidos en volumen independiente.
+- Diseño responsive, navegación accesible y carga de recursos optimizada.
+- Gestión privada de contraseñas y claves de comunicación, sin publicarlas en GitHub.
+
+## Componentes
+
+La solución mantiene cuatro aplicaciones Spring Boot: `auth-usuarios`, `catalogo`, `pedidos` y `clases-contacto`, además de un módulo `common` que no se ejecuta como servicio. React y Nginx proporcionan la entrada web. Docker Compose organiza la ejecución local.
+
+La comprobación de los requisitos puede realizarse con `docs/GUIA-EV3.md` y `docs/VERIFICACION.md`.

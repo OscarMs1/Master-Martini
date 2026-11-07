@@ -1,0 +1,122 @@
+name: master-martini
+
+services:
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: master_martini
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_USER: master_martini
+      MYSQL_PASSWORD: ${DB_PASSWORD:?Configura DB_PASSWORD en .env}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?Configura DB_ROOT_PASSWORD en .env}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", 'MYSQL_PWD="$$MYSQL_ROOT_PASSWORD" mysqladmin ping -h 127.0.0.1 -u root --silent']
+      interval: 5s
+      timeout: 5s
+      retries: 40
+      start_period: 20s
+    restart: unless-stopped
+
+  db-init:
+    image: mysql:8.4
+    entrypoint: ["/bin/sh", "/init-databases.sh"]
+    environment:
+      DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?Configura DB_ROOT_PASSWORD en .env}
+      AUTH_DB_PASSWORD: ${AUTH_DB_PASSWORD:?Configura AUTH_DB_PASSWORD en .env}
+      CATALOG_DB_PASSWORD: ${CATALOG_DB_PASSWORD:?Configura CATALOG_DB_PASSWORD en .env}
+      ORDERS_DB_PASSWORD: ${ORDERS_DB_PASSWORD:?Configura ORDERS_DB_PASSWORD en .env}
+      CLASSES_DB_PASSWORD: ${CLASSES_DB_PASSWORD:?Configura CLASSES_DB_PASSWORD en .env}
+    volumes:
+      - ./infra/init-databases.sh:/init-databases.sh:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: "no"
+
+  auth-usuarios:
+    build:
+      context: ./backend/services
+      args: {SERVICE: auth-usuarios}
+    image: master-martini/auth-usuarios:java25
+    environment:
+      DB_URL: jdbc:mysql://db:3306/mm_auth?connectionTimeZone=UTC
+      DB_USER: auth_app
+      DB_PASSWORD: ${AUTH_DB_PASSWORD:?Configura AUTH_DB_PASSWORD en .env}
+      SERVICE_KEY: ${SERVICE_KEY:?Configura SERVICE_KEY en .env}
+      CATALOG_URL: http://catalogo:8080
+      ORDERS_URL: http://pedidos:8080
+      CLASSES_URL: http://clases-contacto:8080
+      FRONTEND_ORIGIN: http://localhost:8095,http://127.0.0.1:8095,http://localhost:5173,http://127.0.0.1:5173
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@gmail.com}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Configura ADMIN_PASSWORD en .env}
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  catalogo:
+    build:
+      context: ./backend/services
+      args: {SERVICE: catalogo}
+    image: master-martini/catalogo:java25
+    environment:
+      DB_URL: jdbc:mysql://db:3306/mm_catalog?connectionTimeZone=UTC
+      DB_USER: catalog_app
+      DB_PASSWORD: ${CATALOG_DB_PASSWORD:?Configura CATALOG_DB_PASSWORD en .env}
+      SERVICE_KEY: ${SERVICE_KEY:?Configura SERVICE_KEY en .env}
+    volumes:
+      - uploads:/app/uploads
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  pedidos:
+    build:
+      context: ./backend/services
+      args: {SERVICE: pedidos}
+    image: master-martini/pedidos:java25
+    environment:
+      DB_URL: jdbc:mysql://db:3306/mm_orders?connectionTimeZone=UTC
+      DB_USER: orders_app
+      DB_PASSWORD: ${ORDERS_DB_PASSWORD:?Configura ORDERS_DB_PASSWORD en .env}
+      SERVICE_KEY: ${SERVICE_KEY:?Configura SERVICE_KEY en .env}
+      CATALOG_URL: http://catalogo:8080
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  clases-contacto:
+    build:
+      context: ./backend/services
+      args: {SERVICE: clases-contacto}
+    image: master-martini/clases-contacto:java25
+    environment:
+      DB_URL: jdbc:mysql://db:3306/mm_classes?connectionTimeZone=UTC
+      DB_USER: classes_app
+      DB_PASSWORD: ${CLASSES_DB_PASSWORD:?Configura CLASSES_DB_PASSWORD en .env}
+      SERVICE_KEY: ${SERVICE_KEY:?Configura SERVICE_KEY en .env}
+      CATALOG_URL: http://catalogo:8080
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    image: master-martini/frontend:java25
+    environment:
+      API_UPSTREAM: auth-usuarios:8080
+      DNS_RESOLVER: 127.0.0.11
+    ports:
+      - "127.0.0.1:8095:8080"
+    depends_on:
+      - auth-usuarios
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+  uploads:
