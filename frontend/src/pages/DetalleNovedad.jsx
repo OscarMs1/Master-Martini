@@ -2,9 +2,10 @@ import { Link, useParams } from "react-router-dom";
 import useNovedades from "../services/useNovedades";
 import Estado from "../components/Estado";
 import NoEncontrado from "./NoEncontrado";
-import { imagenParaNovedad, altParaNovedad } from "../data/imagenesNovedades";
+import { imagenParaNovedad } from "../data/imagenesNovedades";
+import { collageParaNovedad } from "../data/collagesNovedades";
+import "../styles/novedades-collage.css";
 
-// La forma orgánica se dibuja con CSS. Las tres fotos se eligen en imagenesNovedades.js.
 const editoriales = {
   "el-arte-del-laminado": {
     categoria: "Panadería y pastelería",
@@ -46,6 +47,12 @@ const formatearFecha = (fecha) => {
     : new Intl.DateTimeFormat("es-CL", { dateStyle: "long" }).format(parsed);
 };
 
+const SIZES_COLLAGE = [
+  "(max-width: 767px) 72vw, (max-width: 1100px) 36vw, 31vw",
+  "(max-width: 767px) 50vw, (max-width: 1100px) 27vw, 24vw",
+  "(max-width: 767px) 47vw, (max-width: 1100px) 24vw, 22vw",
+];
+
 export default function DetalleNovedad() {
   const { articulos, loading, error } = useNovedades();
   const { slug } = useParams();
@@ -61,7 +68,7 @@ export default function DetalleNovedad() {
     .filter(Boolean);
   const textoPrincipal = parrafos[0] || articulo.bajada;
   const textoSecundario = parrafos.slice(1);
-  const foto = imagenParaNovedad(articulo);
+  const fotos = collageParaNovedad(articulo);
   const fechaLegible = formatearFecha(articulo.fecha);
   const tituloConEnfasis = tema && articulo.titulo === tema.tituloOriginal;
   const otrasNovedades = articulos.filter((item) => item.slug !== slug).slice(0, 2);
@@ -100,13 +107,23 @@ export default function DetalleNovedad() {
             </div>
           </header>
 
-          <figure className="novedad-editorial__figura">
-            <span className="novedad-editorial__forma" aria-hidden="true" />
-            <span className="novedad-editorial__puntos" aria-hidden="true" />
-            <span className="novedad-editorial__trazos" aria-hidden="true" />
-            <div className="novedad-editorial__marco">
-              <img src={foto} alt={altParaNovedad(articulo)} loading="eager" fetchPriority="high" />
-            </div>
+          <figure className="novedad-editorial__collage" aria-label={`Collage fotográfico de ${articulo.titulo}`}>
+            {fotos.map((imagen, index) => (
+              <div
+                key={imagen.src}
+                className={`novedad-editorial__collage-photo novedad-editorial__collage-photo--${["principal", "superior", "inferior"][index] || "inferior"}`}
+              >
+                <img
+                  src={imagen.src}
+                  srcSet={imagen.srcSet}
+                  sizes={imagen.srcSet ? SIZES_COLLAGE[index] || SIZES_COLLAGE[2] : undefined}
+                  alt={imagen.alt}
+                  loading="eager"
+                  decoding="async"
+                  fetchPriority={index === 0 ? "high" : "auto"}
+                />
+              </div>
+            ))}
           </figure>
         </div>
       </div>

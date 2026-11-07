@@ -1,0 +1,83 @@
+/* Collage editorial fotográfico para el detalle de Novedades.
+   No se aplica a las tarjetas ni a otras páginas. */
+.novedad-editorial__hero {
+  grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
+  gap: clamp(28px, 4vw, 66px);
+  padding-block: 14px 58px;
+}
+.novedad-editorial__presentacion { position: relative; z-index: 1; }
+.novedad-editorial__presentacion h1 em { color: #496a5b; }
+.novedad-editorial__eyebrow { color: #355a4b; }
+.novedad-editorial__collage {
+  position: relative;
+  width: 100%;
+  height: clamp(470px, 44vw, 630px);
+  margin: 0;
+  isolation: isolate;
+}
+.novedad-editorial__collage-photo {
+  position: absolute;
+  overflow: hidden;
+  border-radius: 9px;
+  background: #e9e3d8;
+  box-shadow: 0 18px 45px rgba(35, 35, 28, .13);
+  transition: transform .5s ease, box-shadow .5s ease;
+}
+.novedad-editorial__collage-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center;
+}
+.novedad-editorial__collage-photo--principal {
+  width: 70%;
+  height: 73%;
+  top: 15%;
+  left: 14%;
+  z-index: 3;
+}
+.novedad-editorial__collage-photo--superior {
+  width: 51%;
+  height: 52%;
+  top: 0;
+  right: 0;
+  z-index: 2;
+}
+.novedad-editorial__collage-photo--inferior {
+  width: 47%;
+  height: 48%;
+  left: 0;
+  bottom: 2%;
+  z-index: 1;
+}
+.novedad-editorial__collage-photo--principal img { object-position: 50% 48%; }
+.novedad-editorial--chocolate .novedad-editorial__collage-photo--superior img { object-position: 50% 48%; }
+.novedad-editorial--laminado .novedad-editorial__collage-photo--principal img { object-position: 50% 48%; }
+.novedad-editorial--gelato .novedad-editorial__collage-photo--principal img { object-position: 50% 45%; }
+.novedad-editorial__collage:hover .novedad-editorial__collage-photo--principal {
+  transform: translateY(-3px);
+  box-shadow: 0 22px 50px rgba(35, 35, 28, .16);
+}
+@media (max-width: 1100px) {
+  .novedad-editorial__hero { gap: 24px; }
+  .novedad-editorial__collage { height: clamp(380px, 44vw, 540px); }
+}
+@media (max-width: 767px) {
+  .novedad-editorial__hero { grid-template-columns: 1fr; gap: 25px; padding-block: 22px 52px; }
+  .novedad-editorial__collage { width: min(100%, 540px); height: clamp(330px, 85vw, 500px); margin-inline: auto; }
+  .novedad-editorial__collage-photo--principal { left: 16%; width: 66%; }
+}
+@media (max-width: 460px) {
+  .novedad-editorial__hero { padding-bottom: 56px; }
+  .novedad-editorial__collage { height: clamp(290px, 88vw, 390px); }
+  .novedad-editorial__collage-photo { border-radius: 6px; box-shadow: 0 10px 25px rgba(35,35,28,.12); }
+  .novedad-editorial__collage-photo--principal { width: 72%; height: 72%; left: 14%; top: 15%; }
+  .novedad-editorial__collage-photo--superior { width: 50%; height: 49%; }
+  .novedad-editorial__collage-photo--inferior { width: 45%; height: 47%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .novedad-editorial__collage-photo { transition: none; }
+  .novedad-editorial__collage:hover .novedad-editorial__collage-photo--principal { transform: none; }
+}

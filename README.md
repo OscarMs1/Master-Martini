@@ -97,7 +97,7 @@ CLASSES_DB_PASSWORD=DemoClassesDb2026Hh460S
 
 Estos valores permiten configurar una **demostración local nueva**, pero son públicos y deben sustituirse por claves privadas si se comparte o despliega la aplicación. Las contraseñas de MySQL deben utilizar letras y números; la contraseña inicial del administrador debe tener al menos 12 caracteres, incluir letras y números y no superar 72 bytes. `SERVICE_KEY` también debe ser privada.
 
-**Nunca subas `.env` a GitHub.** El proyecto solo incluye `.env.example`, sin credenciales reales. Si ya tienes una instalación funcionando, conserva su `.env`: cambiar contraseñas en una base de datos existente requiere actualizar también las cuentas de MySQL.
+**El archivo `.env` se mantiene privado y excluido de GitHub.** El repositorio incluye únicamente `.env.example`, sin credenciales reales. Si ya tienes una instalación funcionando, conserva su `.env`: cambiar contraseñas en una base de datos existente requiere actualizar también las cuentas de MySQL.
 
 ### 3. Primera ejecución
 
@@ -192,7 +192,7 @@ La comprobación REST adicional se encuentra en `scripts/verificar-api.py`. **Cr
 
 ## Seguridad y publicación
 
-- No subas archivos `.env`, contraseñas reales, registros privados ni copias de la base de datos.
+- Los archivos `.env`, las credenciales reales, los registros privados y los respaldos de la base de datos permanecen fuera del repositorio.
 - Las dependencias y compilaciones (`node_modules/`, `dist/`, `target/`, `coverage/`) no forman parte del repositorio.
 - El panel de administración está protegido por roles. Las contraseñas de usuarios se almacenan como hashes BCrypt.
 - La ejecución local se publica únicamente en `127.0.0.1:8095`. Una publicación en Internet requiere configuración adicional de HTTPS, secretos y seguridad.

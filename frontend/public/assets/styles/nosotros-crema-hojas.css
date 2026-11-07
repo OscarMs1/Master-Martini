@@ -1,0 +1,122 @@
+/* Master Martini / Nosotros — actualización 2 (editorial compacto).
+   Los identificadores mm-* se añaden únicamente en la ruta /nosotros.
+   No modifica las demás páginas, ni imágenes ni navegación. */
+
+/* 1. Introducción: tono crema en toda la banda, no en la siguiente sección. */
+.mm-nosotros-crema-intro {
+  background: #faf4eb !important;
+  background-image: none !important;
+  min-height: 0 !important;
+  height: auto !important;
+  padding-top: clamp(30px, 3.2vw, 48px) !important;
+  padding-bottom: clamp(44px, 4vw, 64px) !important;
+}
+.mm-nosotros-intro-inner {
+  min-height: 0 !important;
+  height: auto !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+.mm-nosotros-title {
+  font-size: clamp(43px, 4.5vw, 67px) !important;
+  line-height: 1.06 !important;
+  margin-top: 0 !important;
+  margin-bottom: clamp(16px, 1.7vw, 23px) !important;
+  letter-spacing: -.035em !important;
+}
+.mm-nosotros-lead {
+  max-width: 780px !important;
+  font-size: clamp(14px, 1.13vw, 17px) !important;
+  line-height: 1.72 !important;
+  margin-bottom: 0 !important;
+}
+
+/* El logo no es un PNG ampliado: SVG vectorial trazado sobre la referencia
+   (incluida la hoja dorada derecha y la curva inferior). */
+.mm-nosotros-hojas-mark {
+  display: block !important;
+  position: relative !important;
+  width: 91px !important;
+  height: 82px !important;
+  min-height: 0 !important;
+  max-width: none !important;
+  padding: 0 !important;
+  margin: 0 auto 22px !important;
+  overflow: visible !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+  isolation: isolate;
+}
+.mm-nosotros-hojas-mark > * { visibility: hidden !important; }
+.mm-nosotros-hojas-mark::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: url('/assets/images/nosotros-hojas-editorial.svg') center / contain no-repeat !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+}
+.mm-nosotros-hojas-mark::after { display: none !important; content: none !important; }
+
+/* 2. Nuestra esencia: alinear el texto al centro VERTICAL de la fotografía.
+   Se conserva su alineación editorial a la izquierda y la estructura en dos columnas. */
+.mm-nosotros-essence-section {
+  background: #fff !important;
+  padding-top: clamp(42px, 4.3vw, 68px) !important;
+  padding-bottom: clamp(48px, 4.7vw, 72px) !important;
+}
+.mm-nosotros-essence-grid {
+  align-items: center !important;
+}
+.mm-nosotros-essence-copy {
+  align-self: center !important;
+  margin-block: auto !important;
+  min-width: 0;
+  max-width: 570px;
+}
+.mm-nosotros-essence-title {
+  font-size: clamp(34px, 3.25vw, 51px) !important;
+  line-height: 1.11 !important;
+  margin-bottom: clamp(12px, 1.4vw, 20px) !important;
+}
+.mm-nosotros-essence-copy p {
+  line-height: 1.75 !important;
+}
+
+/* 3. Descubre nuestras líneas: encabezado y grilla agrupados y centrados. */
+.mm-nosotros-lines-section {
+  background: #fff !important;
+  padding-block: clamp(46px, 5vw, 72px) !important;
+}
+.mm-nosotros-lines-heading {
+  text-align: center !important;
+  max-width: 800px;
+  margin-inline: auto !important;
+}
+.mm-nosotros-lines-title {
+  font-size: clamp(36px, 3.6vw, 54px) !important;
+  line-height: 1.12 !important;
+}
+.mm-nosotros-lines-grid {
+  max-width: 1130px;
+  margin-inline: auto !important;
+}
+
+@media (max-width: 767px) {
+  .mm-nosotros-crema-intro { padding-block: 36px 47px !important; }
+  .mm-nosotros-title { font-size: clamp(38px, 8.5vw, 54px) !important; }
+  .mm-nosotros-lead { font-size: 14px !important; line-height: 1.7 !important; }
+  .mm-nosotros-hojas-mark { width: 75px !important; height: 70px !important; margin-bottom: 17px !important; }
+  .mm-nosotros-essence-section { padding-block: 40px 48px !important; }
+  .mm-nosotros-essence-copy { max-width: none; margin: 0 !important; }
+  .mm-nosotros-essence-title { font-size: clamp(33px, 7.5vw, 44px) !important; }
+  .mm-nosotros-lines-section { padding-block: 44px 55px !important; }
+}

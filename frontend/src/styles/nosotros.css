@@ -1,214 +1,262 @@
-/* Página Nosotros: identidad editorial propia, sin afectar al resto del sitio. */
+/* Diseño editorial de la página Nosotros. Todas las reglas están acotadas a esta vista. */
 .nosotros-page {
+  --nosotros-verde: var(--green-deep, #082f2a);
+  --nosotros-acento: #ad8b42;
+  --nosotros-sutil: #e6e7df;
   background: #fff;
-  color: var(--ink);
+  color: var(--nosotros-verde);
+  /* Compensación de espacio para que el crema empiece antes sin mover el contenido. */
+  --nosotros-adelanto-crema: clamp(50px, 4.7vw, 74px);
 }
 
-.nosotros-mision {
-  position: relative;
-  overflow: hidden;
+/* Introducción centrada, inspirada en una página editorial corporativa. */
+.nosotros-presentacion {
   background: #fff;
+  padding: clamp(32px, 3vw, 48px) 0 clamp(95px, 8vw, 130px);
+  text-align: center;
 }
-
-.nosotros-mision__grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr);
-  gap: clamp(45px, 5vw, 90px);
-  min-height: 0;
+.nosotros-presentacion__inner {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  padding-top: clamp(34px, 3vw, 52px);
-  padding-bottom: clamp(58px, 5vw, 78px);
 }
-
-.nosotros-mision__copy { max-width: 590px; min-width: 0; }
-.nosotros-mision__eyebrow { color: #9c7d32; display: flex; align-items: center; gap: 18px; margin-bottom: 26px; }
-.nosotros-mision__eyebrow span { height: 1px; width: 52px; background: #c5a95a; }
-
-.nosotros-mision h1 {
-  color: var(--green-deep);
-  font-size: clamp(54px, 5vw, 76px);
-  font-weight: 500;
-  line-height: 1.035;
-  letter-spacing: -.039em;
-  margin: 0 0 30px;
-}
-.nosotros-mision h1 em {
-  display: block;
-  font-weight: 400;
-  color: #a08437;
-  line-height: 1.07;
-}
-.nosotros-mision__lead {
-  font-size: clamp(17px, 1.6vw, 21px);
-  line-height: 1.52;
-  color: var(--green-deep);
-  margin: 0 0 18px;
-  max-width: 550px;
-}
-.nosotros-mision__description {
-  font-size: 14px;
-  line-height: 1.85;
-  max-width: 515px;
-  margin: 0 0 31px;
-  color: var(--muted);
-}
-.nosotros-mision__cta { gap: 20px; min-height: 49px; padding-inline: 24px; }
-.nosotros-mision__visual { min-width: 0; display: flex; flex-direction: column; align-items: flex-end; }
-.nosotros-mision__figure {
+.nosotros-presentacion__simbolo {
+  width: 126px;
+  height: 112px;
   position: relative;
+  display: grid;
+  place-items: center;
+  margin-bottom: 28px;
+}
+/* Estrella con trazado redondeado y círculo durazno desplazado, como en la referencia. */
+.nosotros-presentacion__estrella {
+  display: block;
+  width: 126px;
+  height: 112px;
+  overflow: visible;
+  flex-shrink: 0;
+}
+.nosotros-presentacion h1 {
+  font-size: clamp(58px, 6.3vw, 94px);
+  color: var(--nosotros-verde);
+  line-height: 1.02;
+  letter-spacing: -.04em;
+  margin: 0 0 30px;
+  font-weight: 600;
+}
+.nosotros-presentacion p {
+  max-width: 790px;
+  margin: 0 auto;
+  color: #68736e;
+  font-size: clamp(16px, 1.35vw, 19px);
+  line-height: 1.83;
+  font-weight: 400;
+  letter-spacing: .002em;
+}
+
+/* Fotografía rectangular con una franja desplazada, seguida de texto. */
+.nosotros-relato {
+  background: #fff;
+  padding-bottom: clamp(108px, 10vw, 158px);
+}
+/* La sección "Nuestra historia" hereda parte del espacio vertical precedente.
+   Así el fondo crema cubre la franja superior sin mover textos, fotos ni enlaces. */
+.nosotros-relato:not(.nosotros-relato--inverso) {
+  padding-bottom: calc(clamp(108px, 10vw, 158px) - var(--nosotros-adelanto-crema));
+}
+.nosotros-relato--inverso {
+  padding-top: var(--nosotros-adelanto-crema);
+  padding-bottom: var(--nosotros-adelanto-crema);
+}
+.nosotros-relato__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  column-gap: clamp(64px, 7.6vw, 132px);
+}
+.nosotros-relato__foto {
+  position: relative;
+  margin: 0;
+  min-width: 0;
   isolation: isolate;
-  width: min(100%, 545px);
-  aspect-ratio: 1 / 1.02;
+  padding: 0 0 18px 14px;
 }
-.nosotros-mision__shape {
+.nosotros-relato__foto::before {
   position: absolute;
-  z-index: 0;
-  inset: 19% 20% -2% -5%;
-  background: #075347;
-  border-radius: 60% 40% 48% 52% / 46% 54% 46% 54%;
-  transform: rotate(-18deg);
+  z-index: -1;
+  content: "";
+  left: 0;
+  bottom: 34px;
+  top: 13px;
+  width: 30%;
+  background: #a5d2be;
 }
-.nosotros-mision__figure > img {
-  position: absolute;
-  z-index: 1;
-  inset: 2% 0 5% 12%;
-  width: 88%;
-  height: 93%;
+.nosotros-relato__foto--oro::before { background: #e6d7aa; }
+.nosotros-relato__foto img {
+  display: block;
+  width: 100%;
+  height: clamp(310px, 30vw, 430px);
   object-fit: cover;
-  object-position: 51% center;
-  border-radius: 55% 45% 52% 48% / 43% 52% 48% 57%;
-  box-shadow: 0 22px 42px rgba(31, 59, 44, .10);
+  object-position: center 43%;
+  border-radius: 0;
 }
-.nosotros-mision__dots {
-  position: absolute;
-  z-index: 2;
-  left: -7%;
-  bottom: 10%;
-  width: 45%;
-  height: 30%;
-  background-image: radial-gradient(circle, rgba(195, 161, 78, .85) 1.35px, transparent 1.8px);
-  background-size: 14px 14px;
-  mask-image: linear-gradient(45deg, #000 30%, transparent 90%);
-  pointer-events: none;
-}
-.nosotros-mision__accent {
-  position: absolute;
-  z-index: 2;
-  right: -4%;
-  top: 35%;
-  width: 56px;
-  height: 28px;
-  border-top: 2px solid #c5a04c;
-  border-bottom: 2px solid #c5a04c;
-  transform: rotate(-43deg);
-  pointer-events: none;
-}
-.nosotros-mision__caption {
-  margin: 4px 2% 0 0;
+.nosotros-relato__foto figcaption {
+  text-align: left;
   font-size: 10px;
-  line-height: 1.6;
+  line-height: 1.4;
+  letter-spacing: .16em;
+  color: #909891;
+  margin-top: 15px;
+  font-weight: 700;
+}
+.nosotros-relato__contenido { min-width: 0; max-width: 520px; padding-bottom: 14px; }
+.nosotros-relato__sobrelinea {
+  color: var(--nosotros-acento);
+  text-transform: uppercase;
+  font-size: 11px;
   letter-spacing: 2px;
   font-weight: 700;
-  color: #7b8177;
-  text-align: right;
+  margin: 0 0 12px;
 }
-
-.nosotros-historia {
-  padding: clamp(72px, 6.7vw, 102px) 0 clamp(78px, 7vw, 108px);
-  background: #faf8f4;
-  border-block: 1px solid #eeeae0;
+.nosotros-relato h2 {
+  font-size: clamp(43px, 3.5vw, 58px);
+  line-height: 1.07;
+  letter-spacing: -.027em;
+  font-weight: 600;
+  color: var(--nosotros-verde);
+  margin: 0 0 13px;
 }
-.nosotros-historia__heading { margin-bottom: 56px; }
-.nosotros-historia__heading .eyebrow { color: #937b44; margin-bottom: 14px; }
-.nosotros-historia__heading h2 {
-  margin: 0;
-  font-size: clamp(43px, 4.2vw, 62px);
-  line-height: 1.1;
-  color: var(--green-deep);
+.nosotros-relato__subtitulo {
+  color: var(--nosotros-acento) !important;
+  font-size: clamp(16px, 1.4vw, 19px) !important;
+  font-weight: 700;
+  line-height: 1.45 !important;
+  margin-bottom: 28px !important;
 }
-.nosotros-historia__heading h2 em { display: block; color: #a08437; }
-.nosotros-historia__grid {
-  display: grid;
-  grid-template-columns: minmax(0, .75fr) minmax(0, 1.25fr);
-  gap: clamp(32px, 7vw, 112px);
-  align-items: start;
+.nosotros-relato__contenido > p:not(.nosotros-relato__sobrelinea, .nosotros-relato__subtitulo) {
+  font-size: 14px;
+  line-height: 1.95;
+  color: #65716b;
+  margin: 0 0 15px;
 }
-.nosotros-historia__origen { display: flex; flex-direction: column; padding-top: 6px; }
-.nosotros-historia__year {
-  color: #135448;
-  font-family: var(--font-heading);
-  font-size: clamp(104px, 11.7vw, 164px);
-  font-weight: 400;
-  line-height: 1.08;
-  letter-spacing: -.065em;
-}
-.nosotros-historia__year-caption { display: block; font-size: 12px; line-height: 1.5; letter-spacing: 1.6px; text-transform: uppercase; color: #7e796d; margin-top: 28px; }
-.nosotros-historia__rule { display: block; width: 64px; height: 2px; background: var(--gold); margin-top: 27px; }
-.nosotros-historia__copy h3 { font-size: clamp(34px, 3.5vw, 48px); max-width: 610px; margin: 0 0 24px; color: var(--green-deep); }
-.nosotros-historia__copy h3 em { font-weight: 400; color: #a08437; }
-.nosotros-historia__copy p { font-size: 14px; line-height: 1.95; max-width: 650px; margin-bottom: 19px; }
-.nosotros-historia__link { margin-top: 9px; font-size: 13px; }
-
-.nosotros-lineas { padding: clamp(72px, 6.7vw, 100px) 0 50px; background: #fff; }
-.nosotros-lineas__heading { display: flex; justify-content: space-between; align-items: end; gap: 30px; margin-bottom: 38px; }
-.nosotros-lineas__heading .eyebrow { margin-bottom: 11px; color: #937b44; }
-.nosotros-lineas__heading h2 { margin: 0; font-size: clamp(38px, 3.8vw, 55px); color: var(--green-deep); }
-.nosotros-lineas__heading h2 em { color: #a08437; }
-.nosotros-lineas__heading > p { max-width: 320px; margin: 0 0 4px; line-height: 1.75; font-size: 13px; }
-.nosotros-lineas__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 48px; }
-.nosotros-lineas__item {
-  display: flex;
+.nosotros-relato__enlace {
+  display: inline-flex;
   align-items: center;
-  gap: 20px;
-  padding: 23px 0;
-  border-top: 1px solid #e5e5dc;
+  gap: 11px;
+  margin-top: 21px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid #c9ae68;
+  color: var(--green, #075347);
   text-decoration: none;
-  color: var(--green-deep);
+  font-size: 13px;
+  font-weight: 700;
+  transition: color .2s ease, gap .2s ease;
+}
+.nosotros-relato__enlace:hover { color: #9b7c31; gap: 15px; }
+.nosotros-relato--inverso { background: #faf9f6; }
+.nosotros-relato--inverso .nosotros-relato__foto { order: 2; }
+.nosotros-relato--inverso .nosotros-relato__contenido { order: 1; padding-left: min(4vw, 52px); }
+.nosotros-relato--inverso .nosotros-relato__foto img { object-position: center 58%; }
+
+/* Líneas de producto sobrias, sin tarjetas que compitan con las fotografías. */
+.nosotros-especialidades {
+  padding: clamp(78px, 8vw, 118px) 0 clamp(76px, 7vw, 108px);
+  border-top: 1px solid #f0f0ed;
+  background: #fff;
+}
+.nosotros-especialidades__cabecera { text-align: center; max-width: 760px; margin: 0 auto 68px; }
+.nosotros-especialidades__icono {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #eee8d8;
+  color: var(--green, #075347);
+  margin: 0 auto 20px;
+}
+.nosotros-especialidades__sobrelinea {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2.1px;
+  color: var(--nosotros-acento);
+  text-transform: uppercase;
+  margin: 0 0 13px;
+}
+.nosotros-especialidades h2 {
+  font-size: clamp(47px, 4.7vw, 67px);
+  line-height: 1.08;
+  font-weight: 600;
+  color: var(--nosotros-verde);
+  margin: 0 0 21px;
+}
+.nosotros-especialidades__cabecera > p:last-child {
+  color: #65716b;
+  font-size: 15px;
+  line-height: 1.75;
+  margin: 0;
+}
+.nosotros-especialidades__lista {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(40px, 6vw, 88px);
+}
+.nosotros-especialidades__item {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) 24px;
+  gap: 8px 15px;
+  align-items: center;
+  padding: 24px 0;
+  border-top: 1px solid #dedfd6;
+  color: var(--nosotros-verde);
+  text-decoration: none;
   transition: color .2s ease;
 }
-.nosotros-lineas__item:nth-last-child(-n + 2) { border-bottom: 1px solid #e5e5dc; }
-.nosotros-lineas__item:hover { color: #9b7c31; }
-.nosotros-lineas__number { color: #9c7d32; font-size: 11px; letter-spacing: .07em; }
-.nosotros-lineas__name { flex: 1; font-size: clamp(20px, 2vw, 25px); font-family: var(--font-heading); }
-.nosotros-lineas__item svg { flex-shrink: 0; transition: transform .2s ease; }
-.nosotros-lineas__item:hover svg { transform: translate(2px, -2px); }
-.nosotros-fuentes { margin-top: 53px; padding-top: 19px; border-top: 1px solid #e5e5dc; font-size: 11px; color: #737a75; }
+.nosotros-especialidades__item:nth-last-child(-n+2) { border-bottom: 1px solid #dedfd6; }
+.nosotros-especialidades__numero { grid-row: 1 / 3; color: var(--nosotros-acento); font-size: 11px; font-weight: 700; align-self: center; }
+.nosotros-especialidades__nombre { font-family: var(--font-heading); font-size: clamp(25px, 2.1vw, 32px); line-height: 1.1; font-weight: 600; }
+.nosotros-especialidades__detalle { grid-column: 2; color: #7a837c; font-size: 11px; }
+.nosotros-especialidades__item svg { grid-column: 3; grid-row: 1 / 3; transition: transform .2s ease; }
+.nosotros-especialidades__item:hover { color: #9b7c31; }
+.nosotros-especialidades__item:hover svg { transform: translateX(4px); }
 
 @media (max-width: 991px) {
-  .nosotros-mision__grid { min-height: 0; gap: 36px; padding-top: 42px; padding-bottom: 62px; }
-  .nosotros-mision h1 { font-size: clamp(43px, 5.2vw, 62px); }
-  .nosotros-mision__lead { font-size: 17px; }
-  .nosotros-historia__grid { gap: 35px; }
-  .nosotros-historia__year { font-size: clamp(100px, 11.7vw, 150px); }
+  .nosotros-presentacion { padding-top: 50px; padding-bottom: 88px; }
+  .nosotros-relato__grid { column-gap: 45px; }
+  .nosotros-relato h2 { font-size: clamp(37px, 4.4vw, 48px); }
+  .nosotros-relato__foto img { height: 370px; }
+  .nosotros-relato--inverso .nosotros-relato__contenido { padding-left: 0; }
 }
 @media (max-width: 767px) {
-  .nosotros-mision__grid { display: flex; flex-direction: column; align-items: stretch; gap: 42px; padding-top: 32px; padding-bottom: 54px; }
-  .nosotros-mision__copy { max-width: none; }
-  .nosotros-mision h1 { font-size: clamp(42px, 9.2vw, 66px); margin-bottom: 21px; }
-  .nosotros-mision__eyebrow { margin-bottom: 19px; }
-  .nosotros-mision__lead { font-size: 17px; }
-  .nosotros-mision__description { font-size: 13px; }
-  .nosotros-mision__visual { align-items: center; }
-  .nosotros-mision__figure { width: min(100% - 8px, 480px); }
-  .nosotros-mision__accent { right: -1%; }
-  .nosotros-historia__heading { margin-bottom: 35px; }
-  .nosotros-historia__grid { grid-template-columns: 1fr; gap: 38px; }
-  .nosotros-historia__year { font-size: clamp(110px, 24vw, 160px); }
-  .nosotros-historia__year-caption { margin-top: 22px; }
-  .nosotros-historia__rule { margin-top: 18px; }
-  .nosotros-historia__copy h3 { font-size: clamp(32px, 8vw, 45px); }
-  .nosotros-lineas__heading { flex-direction: column; align-items: flex-start; gap: 15px; margin-bottom: 27px; }
-  .nosotros-lineas__heading > p { max-width: 430px; }
-  .nosotros-lineas__grid { grid-template-columns: 1fr; }
-  .nosotros-lineas__item:nth-last-child(-n + 2) { border-bottom: 0; }
-  .nosotros-lineas__item:last-child { border-bottom: 1px solid #e5e5dc; }
+  .nosotros-presentacion { padding: 39px 0 77px; }
+  .nosotros-presentacion__simbolo { transform: scale(.84); margin-bottom: 12px; }
+  .nosotros-presentacion h1 { font-size: clamp(51px, 11vw, 72px); margin-bottom: 20px; }
+  .nosotros-presentacion p { font-size: 15px; line-height: 1.75; }
+  .nosotros-page { --nosotros-adelanto-crema: clamp(34px, 5vw, 48px); }
+  .nosotros-relato { padding-bottom: 88px; }
+  .nosotros-relato:not(.nosotros-relato--inverso) {
+    padding-bottom: calc(88px - var(--nosotros-adelanto-crema));
+  }
+
+  .nosotros-relato__grid { grid-template-columns: 1fr; gap: 35px; }
+  .nosotros-relato__foto, .nosotros-relato--inverso .nosotros-relato__foto { order: 0; }
+  .nosotros-relato__contenido, .nosotros-relato--inverso .nosotros-relato__contenido { order: 1; max-width: none; padding: 0; }
+  .nosotros-relato__foto img { height: clamp(290px, 70vw, 440px); }
+  .nosotros-relato h2 { font-size: clamp(39px, 8.4vw, 54px); }
+  .nosotros-relato__subtitulo { margin-bottom: 17px !important; }
+  .nosotros-especialidades { padding-top: 75px; }
+  .nosotros-especialidades__cabecera { margin-bottom: 43px; }
+  .nosotros-especialidades__lista { grid-template-columns: 1fr; }
+  .nosotros-especialidades__item:nth-last-child(-n+2) { border-bottom: 0; }
+  .nosotros-especialidades__item:last-child { border-bottom: 1px solid #dedfd6; }
 }
 @media (max-width: 420px) {
-  .nosotros-page .container-xl { padding-left: 23px; padding-right: 23px; }
-  .nosotros-mision__figure { width: min(100% - 4px, 400px); }
-  .nosotros-mision__dots { left: -2%; }
-  .nosotros-lineas__item { gap: 12px; }
+  .nosotros-page .container-xl { padding-left: 22px; padding-right: 22px; }
+  .nosotros-relato__foto { padding-left: 10px; }
+  .nosotros-relato__foto img { height: 280px; }
+  .nosotros-especialidades__item { grid-template-columns: 25px minmax(0, 1fr) 20px; column-gap: 9px; }
+  .nosotros-especialidades__nombre { font-size: 27px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .nosotros-lineas__item, .nosotros-lineas__item svg { transition: none; }
+  .nosotros-relato__enlace, .nosotros-especialidades__item, .nosotros-especialidades__item svg { transition: none; }
 }

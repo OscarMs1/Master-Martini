@@ -6,8 +6,8 @@ export const imagenesNovedades = {
     alt: "Manos de una persona trabajando y extendiendo masa sobre una mesa enharinada",
   },
   "texturas-de-chocolate": {
-    src: "/assets/images/novedad-chocolate.jpg",
-    alt: "Trufas de chocolate cubiertas con cacao en polvo",
+    src: "/assets/images/inicio-cacao.jpg",
+    alt: "Bowl con chocolate cremoso y una cuchara de madera",
   },
   "un-gelato-con-identidad": {
     src: "/assets/images/novedad-gelato.jpg",

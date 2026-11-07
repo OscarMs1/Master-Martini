@@ -4,6 +4,7 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import DetalleNovedad from "../pages/DetalleNovedad";
 import Novedades from "../pages/Novedades";
 import { imagenParaNovedad, imagenesNovedades } from "../data/imagenesNovedades";
+import { collageParaNovedad } from "../data/collagesNovedades";
 
 const articulos = [
   { slug: "el-arte-del-laminado", titulo: "El arte de las mil capas.", bajada: "Temperatura y precisión.", contenido: "Masa y mantequilla.\n\nDescanso entre vueltas.\n\nHorneado.", fecha: "2026-10-30", imagen: "/assets/images/vieja-laminado.jpg" },
@@ -21,8 +22,8 @@ const esperadas = [
   ["un-gelato-con-identidad", "novedad-gelato.jpg"],
 ];
 
-describe("Imágenes consistentes en Novedades", () => {
-  it.each(esperadas)("%s muestra la misma foto en detalle y otras novedades", (slug, archivo) => {
+describe("Novedades con collage editorial optimizado", () => {
+  it.each(esperadas)("%s muestra tres fotos reales sin créditos visibles", (slug) => {
     const { container } = render(
       <MemoryRouter initialEntries={[`/novedades/${slug}`]}>
         <Routes><Route path="/novedades/:slug" element={<DetalleNovedad />} /></Routes>
@@ -30,7 +31,19 @@ describe("Imágenes consistentes en Novedades", () => {
     );
     const articulo = articulos.find((item) => item.slug === slug);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(articulo.titulo.replace(/\.$/, ""));
-    expect(container.querySelector(".novedad-editorial__marco img")).toHaveAttribute("src", `/assets/images/${archivo}`);
+    const imgs = container.querySelectorAll(".novedad-editorial__collage-photo img");
+    const collage = collageParaNovedad(articulo);
+    expect(imgs).toHaveLength(3);
+    imgs.forEach((img, i) => {
+      expect(img).toHaveAttribute("src", collage[i].src);
+      expect(img.getAttribute("srcset")).toContain("360w");
+      expect(img).toHaveAttribute("loading", "eager");
+      expect(img.getAttribute("src")).toMatch(/^https:\/\/images\.unsplash\.com\//);
+    });
+    expect(imgs[0]).toHaveAttribute("fetchpriority", "high");
+    expect(container.querySelector(".novedad-editorial__collage-credits")).toBeNull();
+    expect(container.textContent).not.toMatch(/Fotografías:|Unsplash/);
+    expect(container.querySelector(".novedad-editorial__forma")).toBeNull();
     expect(screen.getByRole("link", { name: /Volver a novedades/i })).toHaveAttribute("href", "/novedades");
     expect(screen.getByRole("link", { name: /Seguir aprendiendo/i })).toHaveAttribute("href", "/clases");
     const otras = container.querySelectorAll(".novedad-editorial__otra");
@@ -39,14 +52,10 @@ describe("Imágenes consistentes en Novedades", () => {
       const slugRelacionada = tarjeta.getAttribute("href").split("/").pop();
       expect(tarjeta.querySelector("img")).toHaveAttribute("src", imagenesNovedades[slugRelacionada].src);
     }
-    expect(container.querySelector(".novedad-editorial__credito")).toBeNull();
-    expect(container.textContent).not.toMatch(/Fotografía de|Unsplash/);
   });
 
-  it("usa las imágenes nuevas en las tres tarjetas del listado", () => {
-    const { container } = render(
-      <MemoryRouter><Novedades /></MemoryRouter>,
-    );
+  it("mantiene las imágenes originales en las tarjetas del listado", () => {
+    const { container } = render(<MemoryRouter><Novedades /></MemoryRouter>);
     const tarjetas = container.querySelectorAll(".novedad-card");
     expect(tarjetas).toHaveLength(3);
     for (const tarjeta of tarjetas) {
@@ -55,9 +64,10 @@ describe("Imágenes consistentes en Novedades", () => {
     }
   });
 
-  it("mantiene la imagen de la API para artículos nuevos sin mapeo", () => {
-    expect(imagenParaNovedad({slug:"otra-novedad",imagen:"/assets/images/otra.jpg"})).toBe("/assets/images/otra.jpg");
+  it("no modifica la imagen de API para artículos nuevos", () => {
+    expect(imagenParaNovedad({ slug: "otra-novedad", imagen: "/assets/images/otra.jpg" })).toBe("/assets/images/otra.jpg");
     const subida = "/api/imagenes/12345678-1234-1234-1234-123456789012.png";
-    expect(imagenParaNovedad({slug:"el-arte-del-laminado",imagen:subida})).toBe(subida);
+    expect(imagenParaNovedad({ slug: "el-arte-del-laminado", imagen: subida })).toBe(subida);
+    expect(collageParaNovedad({ slug: "otra-novedad", imagen: subida })).toHaveLength(1);
   });
 });
