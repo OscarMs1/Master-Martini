@@ -48,7 +48,8 @@ services:
       CATALOG_URL: http://catalogo:8080
       ORDERS_URL: http://pedidos:8080
       CLASSES_URL: http://clases-contacto:8080
-      FRONTEND_ORIGIN: http://localhost:8095,http://127.0.0.1:8095,http://localhost:5173,http://127.0.0.1:5173
+      # En AWS define FRONTEND_ORIGIN en .env con tu dominio de CloudFront (https://xxxx.cloudfront.net).
+      FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-http://localhost:8095,http://127.0.0.1:8095,http://localhost:5173,http://127.0.0.1:5173}
       ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@gmail.com}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Configura ADMIN_PASSWORD en .env}
     depends_on:
@@ -66,6 +67,10 @@ services:
       DB_USER: catalog_app
       DB_PASSWORD: ${CATALOG_DB_PASSWORD:?Configura CATALOG_DB_PASSWORD en .env}
       SERVICE_KEY: ${SERVICE_KEY:?Configura SERVICE_KEY en .env}
+      # Medios en S3. Vacío = las imágenes quedan en el volumen "uploads" (desarrollo local).
+      S3_BUCKET: ${S3_BUCKET:-}
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      MEDIA_BASE_URL: ${MEDIA_BASE_URL:-}
     volumes:
       - uploads:/app/uploads
     depends_on:

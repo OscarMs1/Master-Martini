@@ -1,0 +1,6 @@
+# Ajustes para la EC2 de AWS. Se usa junto al compose.yaml:
+#   docker compose -f compose.yaml -f compose.aws.yaml up -d --build
+services:
+  frontend:
+    ports:
+      - "80:8080"

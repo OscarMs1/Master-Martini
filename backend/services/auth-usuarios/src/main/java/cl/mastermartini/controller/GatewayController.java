@@ -10,9 +10,10 @@ import org.springframework.web.client.RestClient;
  private final UsuarioService users;private final String catalog,orders,classes,key;private final RestClient client;
  public GatewayController(UsuarioService users,@Value("${app.catalog-url}")String catalog,@Value("${app.orders-url}")String orders,@Value("${app.classes-url}")String classes,@Value("${app.service-key}")String key){
   this.users=users;this.catalog=catalog;this.orders=orders;this.classes=classes;this.key=key;
-  var f=new org.springframework.http.client.SimpleClientHttpRequestFactory();f.setConnectTimeout(2000);f.setReadTimeout(15000);client=RestClient.builder().requestFactory(f).build();
+  // Las redirecciones (imágenes y videos en S3) se devuelven al cliente; el gateway no las sigue.
+  var f=new org.springframework.http.client.SimpleClientHttpRequestFactory(){@Override protected void prepareConnection(java.net.HttpURLConnection c,String m)throws java.io.IOException{super.prepareConnection(c,m);c.setInstanceFollowRedirects(false);}};f.setConnectTimeout(2000);f.setReadTimeout(15000);client=RestClient.builder().requestFactory(f).build();
  }
- @RequestMapping({"/api/productos","/api/productos/**","/api/imagenes/**","/api/novedades","/api/novedades/**","/api/pedidos","/api/pedidos/**","/api/clases","/api/inscripciones/**","/api/inscripciones","/api/contactos","/api/asistente","/api/admin/pedidos","/api/admin/inscripciones","/api/admin/contactos","/api/admin/novedades","/api/admin/novedades/**","/api/admin/imagenes","/api/favoritos/**","/api/favoritos","/api/resenas/**"})
+ @RequestMapping({"/api/productos","/api/productos/**","/api/imagenes/**","/api/novedades","/api/novedades/**","/api/pedidos","/api/pedidos/**","/api/clases","/api/inscripciones/**","/api/inscripciones","/api/contactos","/api/asistente","/api/admin/pedidos","/api/admin/inscripciones","/api/admin/contactos","/api/admin/novedades","/api/admin/novedades/**","/api/admin/imagenes","/api/admin/videos","/api/videos/**","/api/favoritos/**","/api/favoritos","/api/resenas/**"})
  public ResponseEntity<byte[]> proxy(HttpServletRequest r)throws java.io.IOException {
   String path=r.getRequestURI();String target=path.startsWith("/api/pedidos")||path.equals("/api/admin/pedidos")?orders:
    path.startsWith("/api/clases")||path.startsWith("/api/inscripciones")||path.equals("/api/contactos")||path.equals("/api/asistente")||path.equals("/api/admin/inscripciones")||path.equals("/api/admin/contactos")?classes:catalog;
