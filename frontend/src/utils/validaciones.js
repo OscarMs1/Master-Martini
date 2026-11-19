@@ -20,8 +20,11 @@ export function validarContacto(data) {
     errors.nombre = "Ingresa tu nombre.";
   if (!correoValido(data.email)) errors.email = "Ingresa un correo válido.";
   if (!(data.asunto || "").trim()) errors.asunto = "Indica el asunto.";
-  if ((data.mensaje || "").trim().length < 10)
+  const textoMensaje = (data.mensaje || "").replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " ").trim();
+  if (textoMensaje.length < 10)
     errors.mensaje = "Escribe al menos 10 caracteres.";
+  else if ((data.mensaje || "").length > 2000)
+    errors.mensaje = "El mensaje es demasiado largo (máximo 2.000 caracteres, contando el formato).";
   return errors;
 }
 export function validarEntrega(data) {

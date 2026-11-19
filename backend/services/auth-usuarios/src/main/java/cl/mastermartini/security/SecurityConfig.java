@@ -65,11 +65,11 @@ public class SecurityConfig {
                         "/api/estado", "/api/auth/csrf", "/api/auth/registro", "/api/auth/login", "/error")
                     .permitAll()
                     .requestMatchers(
-                        HttpMethod.GET, "/api/productos", "/api/productos/*", "/api/clases", "/api/imagenes/*", "/api/novedades", "/api/novedades/*")
+                        HttpMethod.GET, "/api/productos", "/api/productos/*", "/api/clases", "/api/imagenes/*", "/api/videos/*", "/api/novedades", "/api/novedades/*")
                     .permitAll()
                     // Las reseñas se pueden leer sin cuenta; escribir exige sesión y CSRF.
                     .requestMatchers(HttpMethod.GET, "/api/resenas/producto/*").permitAll()
-                    .requestMatchers(HttpMethod.POST, "/api/pedidos", "/api/contactos")
+                    .requestMatchers(HttpMethod.POST, "/api/pedidos", "/api/contactos", "/api/asistente")
                     .permitAll()
                     .requestMatchers("/api/admin/**")
                     .hasRole("ADMINISTRADOR")

@@ -2,6 +2,7 @@ import { useState } from "react";
 import Campo from "../components/Campo";
 import { validarContacto } from "../utils/validaciones";
 import { api } from "../services/api";
+import EditorEnriquecido from "../components/admin/EditorEnriquecido";
 export default function Contacto() {
   const [data, setData] = useState({
       nombre: "",
@@ -12,7 +13,8 @@ export default function Contacto() {
     [errors, setErrors] = useState({}),
     [error, setError] = useState(""),
     [success, setSuccess] = useState(""),
-    [busy, setBusy] = useState(false);
+    [busy, setBusy] = useState(false),
+    [envios, setEnvios] = useState(0);
   async function submit(e) {
     e.preventDefault();
     setSuccess("");
@@ -27,6 +29,7 @@ export default function Contacto() {
         "Tu mensaje se registró correctamente en esta plataforma.",
       );
       setData({ nombre: "", email: "", asunto: "", mensaje: "" });
+      setEnvios((n) => n + 1); // vacía el editor
     } catch (e) {
       setError(e.message);
     } finally {
@@ -81,22 +84,30 @@ export default function Contacto() {
                   ["nombre", "Tu nombre"],
                   ["email", "Correo electrónico"],
                   ["asunto", "Asunto"],
-                  ["mensaje", "Mensaje"],
                 ].map(([name, label]) => (
                   <Campo
                     key={name}
                     name={name}
                     label={label}
                     type={name === "email" ? "email" : "text"}
-                    as={name === "mensaje" ? "textarea" : "input"}
-                    rows={name === "mensaje" ? 5 : undefined}
-                    maxLength={name === "mensaje" ? 2000 : 120}
+                    maxLength={120}
                     value={data[name]}
                     error={errors[name]}
                     onChange={(e) => setData({ ...data, [name]: e.target.value })}
                     required
                   />
                 ))}
+                <EditorEnriquecido
+                  id="campo-mensaje"
+                  label="Mensaje"
+                  compacto
+                  minAlto="140px"
+                  maxLength={2000}
+                  clave={envios}
+                  value={data.mensaje}
+                  error={errors.mensaje}
+                  onChange={(mensaje) => setData((previo) => ({ ...previo, mensaje }))}
+                />
                 {error && (
                   <p role="alert" className="alert alert-danger">
                     {error}

@@ -17,12 +17,11 @@ export default function Hero() {
       <div className="container-xl hero-inner">
         <div className="hero-copy">
           <p className="eyebrow">INGREDIENTES PARA GRANDES CREACIONES</p>
+          {/* Cada línea va en su propia "máscara" para la animación de entrada */}
           <h1>
-            Tu pasión.
-            <br />
-            Nuestra esencia.
-            <br />
-            <em>Mil posibilidades.</em>
+            <span className="linea"><span>Tu pasión.</span></span>{" "}
+            <span className="linea"><span>Nuestra esencia.</span></span>{" "}
+            <span className="linea"><span><em>Mil posibilidades.</em></span></span>
           </h1>
           <p className="hero-description">
             Ingredientes de la más alta calidad, asesoría especializada

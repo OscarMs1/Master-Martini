@@ -1,4 +1,6 @@
 import { dinero } from "../../utils/comercio";
+import { aHtml, limpiarHtml } from "../../utils/contenidoEnriquecido";
+import "../../styles/editor-enriquecido.css";
 export default function ConsultasAdmin({ tab, registros }) {
   return (
     <>
@@ -74,7 +76,7 @@ export default function ConsultasAdmin({ tab, registros }) {
                           <td>{row.email}</td>
                           <td>
                             <strong>{row.asunto}</strong>
-                            <p>{row.mensaje}</p>
+                            <div className="prose" dangerouslySetInnerHTML={{ __html: limpiarHtml(aHtml(row.mensaje)) }} />
                           </td>
                         </>
                       )}
