@@ -1,0 +1,287 @@
+/* ===== Animaciones "cocineros italianos" (GSAP) ===== */
+
+/* --- Intro --- */
+.intro-cocina {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-body);
+}
+.intro-puerta {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,.05) 50%, transparent 50%) 0 0 / 56px 56px,
+    linear-gradient(rgba(255,255,255,.05) 50%, transparent 50%) 0 0 / 56px 56px,
+    var(--green-deep);
+}
+.intro-puerta--izq { left: 0; border-right: 3px solid var(--gold); }
+.intro-puerta--der { right: 0; border-left: 3px solid var(--gold); }
+.intro-escena {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: min(760px, 94vw);
+  color: var(--cream);
+  text-align: center;
+}
+.intro-marca {
+  margin: 0 0 6px;
+  font: 600 clamp(34px, 6vw, 56px)/1 var(--font-heading);
+  letter-spacing: .04em;
+  color: var(--gold-light);
+}
+.intro-chefs {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: clamp(0px, 3vw, 30px);
+}
+.intro-chef { position: relative; width: clamp(86px, 22vw, 140px); }
+.intro-chef .chef { width: 100%; height: auto; overflow: visible; display: block; }
+.intro-masa {
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  width: 46%;
+  height: 22px;
+  margin-left: -23%;
+  border-radius: 50% 50% 40% 40%;
+  background: #f1d9a6;
+  box-shadow: inset 0 -4px 0 rgba(0,0,0,.08);
+  transform-origin: 50% 100%;
+}
+.intro-harina { position: absolute; right: 8%; top: 38%; pointer-events: none; }
+.intro-harina i {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0;
+}
+.intro-mesa {
+  width: 100%;
+  height: 14px;
+  margin-top: -8px;
+  border-radius: 7px;
+  background: linear-gradient(#d2a86b, #a37c42);
+  box-shadow: 0 10px 22px rgba(0,0,0,.35);
+}
+.intro-texto { margin: 18px 0 0; color: var(--gold-light); text-shadow: 0 1px 6px rgba(0,0,0,.6); font-size: 15px; letter-spacing: .14em; text-transform: uppercase; min-height: 1.5em; }
+.intro-barra { width: min(320px, 70vw); height: 4px; border-radius: 4px; background: rgba(255,255,255,.18); overflow: hidden; }
+.intro-barra span { display: block; height: 100%; background: var(--gold); transform: scaleX(0); transform-origin: 0 50%; }
+.intro-saltar {
+  position: absolute;
+  right: 22px;
+  bottom: 22px;
+  z-index: 3;
+  padding: 8px 16px;
+  border: 1px solid rgba(255,255,255,.4);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--cream);
+  font-size: 13px;
+}
+.intro-saltar:hover, .intro-saltar:focus-visible { background: var(--gold); color: var(--green-deep); border-color: var(--gold); }
+
+/* --- Cocinero corredor --- */
+.chef-pista {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 0;
+  z-index: 40;
+  pointer-events: none;
+  visibility: hidden;
+}
+.chef-corredor { position: absolute; left: 0; bottom: 0; will-change: transform; }
+.chef-giro .chef { width: 120px; height: auto; display: block; overflow: visible; }
+.chef-burbuja {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  margin-bottom: 4px;
+  padding: 8px 14px;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  border: 2px solid var(--gold);
+  border-radius: 14px;
+  background: var(--cream);
+  color: var(--green-deep);
+  font: 700 18px/1 var(--font-heading);
+  box-shadow: 0 8px 20px rgba(0,0,0,.18);
+}
+.chef-burbuja::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  margin-left: -7px;
+  border: 7px solid transparent;
+  border-top-color: var(--gold);
+}
+.chef-chispas { position: absolute; left: 0; bottom: 0; }
+.chef-chispas i { position: absolute; width: 7px; height: 7px; border-radius: 50%; background: #fff; box-shadow: 0 0 6px rgba(255,255,255,.9); }
+.chef-chispas i.oro { background: var(--gold-light); box-shadow: 0 0 8px var(--gold); }
+
+/* --- Barra de progreso --- */
+.progreso-cocina { position: fixed; top: 0; left: 0; width: 100%; height: 4px; z-index: 1100; pointer-events: none; }
+.progreso-relleno {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #0b7a3b 0 33%, #fff 33% 66%, #c8102e 66%);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+.progreso-toque { position: absolute; top: 3px; left: 0; font-size: 18px; transform: translateX(-50%); line-height: 1; }
+
+@media (max-width: 575px) {
+  .chef-pista { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro-cocina, .chef-pista, .progreso-cocina { display: none; }
+}
+
+/* ===== Mejoras de animación ===== */
+
+/* Estados iniciales solo cuando hay animación (html.mm-anim) */
+.hero h1 .linea { display: block; }
+html.mm-anim .hero h1 .linea { overflow: hidden; padding-bottom: .12em; margin-bottom: -.12em; }
+html.mm-anim .hero h1 .linea > span { display: inline-block; will-change: transform; }
+
+/* Subrayado tipo marcador dorado en las palabras destacadas */
+html.mm-anim main :is(h1, h2) em {
+  background-image: linear-gradient(rgba(236, 215, 120, .55), rgba(236, 215, 120, .55));
+  background-repeat: no-repeat;
+  background-position: 0 88%;
+  background-size: 0% .32em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* Las animaciones CSS por scroll del sitio se reemplazan por las de GSAP */
+html.mm-anim .story-copy,
+html.mm-anim .section-heading,
+html.mm-anim .benefit { animation: none !important; }
+
+/* Tarjetas con inclinación 3D */
+html.mm-anim .category-card,
+html.mm-anim .editorial-card { transform-style: preserve-3d; will-change: transform; }
+
+/* Polvo de harina al aterrizar */
+.polvo-capa { position: fixed; inset: 0; z-index: 45; pointer-events: none; overflow: hidden; }
+.polvo-capa i {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 9px;
+  height: 9px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(222, 208, 178, .95) 0%, rgba(222, 208, 178, 0) 70%);
+}
+
+/* Puertas de cocina entre páginas */
+.puertas-ruta { position: fixed; inset: 0; z-index: 2500; pointer-events: none; visibility: hidden; }
+.pr-hoja {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50.5%;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,.05) 50%, transparent 50%) 0 0 / 56px 56px,
+    linear-gradient(rgba(255,255,255,.05) 50%, transparent 50%) 0 0 / 56px 56px,
+    var(--green-deep);
+}
+.pr-izq { left: 0; border-right: 3px solid var(--gold); }
+.pr-der { right: 0; border-left: 3px solid var(--gold); }
+.pr-hoja::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 64px;
+  margin-top: -32px;
+  border-radius: 6px;
+  background: var(--gold);
+}
+.pr-izq::after { right: 18px; }
+.pr-der::after { left: 18px; }
+.pr-centro {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transform: translate(-50%, -50%);
+}
+.pr-centro .chef { width: 110px; height: auto; overflow: visible; }
+.pr-texto {
+  padding: 6px 18px;
+  border: 2px solid var(--gold);
+  border-radius: 999px;
+  background: var(--cream);
+  color: var(--green-deep);
+  font: 600 22px/1.1 var(--font-heading);
+  white-space: nowrap;
+}
+
+/* Variantes del cocinero corredor */
+.runner-v { display: none; align-items: flex-end; }
+.runner-v.activo { display: flex; }
+.chef-corredor { width: auto; }
+.runner-pareja { position: relative; gap: 34px; }
+.runner-pareja .chef { width: 110px !important; }
+.baguette {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 48px;
+  height: 18px;
+  border-radius: 12px;
+  background:
+    repeating-linear-gradient(110deg, transparent 0 26px, rgba(120, 70, 20, .35) 26px 30px),
+    linear-gradient(#e8b45f, #b87a2c);
+  box-shadow: inset 0 -3px 0 rgba(0,0,0,.12), 0 3px 6px rgba(0,0,0,.18);
+  z-index: 2;
+}
+
+/* Despedida en el footer */
+.despedida {
+  position: fixed;
+  right: 92px; /* deja libre el botón del asistente */
+  bottom: 0;
+  z-index: 40;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  pointer-events: none;
+  visibility: hidden;
+}
+.despedida-chef { width: 74px; }
+.despedida-chef .chef { width: 100%; height: auto; display: block; overflow: visible; }
+.despedida .chef-burbuja { left: 50%; bottom: 100%; }
+
+/* Espacio libre al pie para que los cocineros no tapen los enlaces del footer */
+@media (min-width: 576px) {
+  html.mm-anim .site-footer { padding-bottom: 140px; }
+}
+@media (max-width: 575px) {
+  .despedida { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .puertas-ruta, .polvo-capa, .despedida { display: none; }
+}

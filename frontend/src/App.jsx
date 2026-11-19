@@ -21,6 +21,10 @@ import ResultadoCompra from "./pages/ResultadoCompra";
 import Admin from "./pages/Admin";
 import Creditos from "./pages/Creditos";
 import NoEncontrado from "./pages/NoEncontrado";
+import IntroCocina from "./animaciones/IntroCocina";
+import CocinerosPagina from "./animaciones/CocinerosPagina";
+import ChatAyuda from "./components/ChatAyuda";
+import "./animaciones/animaciones.css";
 export default function App() {
   const { pathname } = useLocation();
   useEffect(() => {
@@ -30,6 +34,8 @@ export default function App() {
   }, [pathname]);
   return (
     <>
+      <IntroCocina />
+      <CocinerosPagina />
       <Header />
       <main id="contenido" tabIndex="-1">
         <Routes>
@@ -68,6 +74,7 @@ export default function App() {
         </Routes>
       </main>
       <Footer />
+      {!pathname.startsWith("/admin") && <ChatAyuda />}
     </>
   );
 }

@@ -100,6 +100,9 @@ services:
       DB_PASSWORD: ${CLASSES_DB_PASSWORD:?Configura CLASSES_DB_PASSWORD en .env}
       SERVICE_KEY: ${SERVICE_KEY:?Configura SERVICE_KEY en .env}
       CATALOG_URL: http://catalogo:8080
+      # Asistente de ayuda: la clave queda solo en el backend. Vacía = asistente desactivado.
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      ASISTENTE_MODELO: ${ASISTENTE_MODELO:-claude-haiku-5-5}
     depends_on:
       db-init:
         condition: service_completed_successfully

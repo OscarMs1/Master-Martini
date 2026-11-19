@@ -5,6 +5,8 @@ import NoEncontrado from "./NoEncontrado";
 import { imagenParaNovedad } from "../data/imagenesNovedades";
 import { collageParaNovedad } from "../data/collagesNovedades";
 import "../styles/novedades-collage.css";
+import "../styles/editor-enriquecido.css";
+import { dividirContenido } from "../utils/contenidoEnriquecido";
 
 const editoriales = {
   "el-arte-del-laminado": {
@@ -62,12 +64,7 @@ export default function DetalleNovedad() {
   if (!articulo) return <NoEncontrado />;
 
   const tema = editoriales[slug];
-  const parrafos = (articulo.contenido || "")
-    .split(/\n\s*\n/)
-    .map((texto) => texto.trim())
-    .filter(Boolean);
-  const textoPrincipal = parrafos[0] || articulo.bajada;
-  const textoSecundario = parrafos.slice(1);
+  const { intro: textoPrincipal, cuerpoHtml } = dividirContenido(articulo.contenido, articulo.bajada);
   const fotos = collageParaNovedad(articulo);
   const fechaLegible = formatearFecha(articulo.fecha);
   const tituloConEnfasis = tema && articulo.titulo === tema.tituloOriginal;
@@ -137,9 +134,7 @@ export default function DetalleNovedad() {
             <p>{tema?.subtitulo || articulo.bajada}</p>
           </div>
           <div className="novedad-editorial__cuerpo prose">
-            {(textoSecundario.length ? textoSecundario : [textoPrincipal]).map((parrafo, index) => (
-              <p key={`${index}-${parrafo.slice(0, 24)}`}>{parrafo}</p>
-            ))}
+            <div dangerouslySetInnerHTML={{ __html: cuerpoHtml }} />
             <Link to="/clases" className="text-link novedad-editorial__aprender">
               Seguir aprendiendo <span aria-hidden="true">↗</span>
             </Link>

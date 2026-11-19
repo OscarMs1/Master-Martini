@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "../../services/api";
 import Campo from "../Campo";
 import SubirImagen from "./SubirImagen";
+import EditorEnriquecido from "./EditorEnriquecido";
 export default function AdminNovedades() {
   const [items, setItems] = useState([]), [data, setData] = useState(null);
   const [error, setError] = useState(""), [message, setMessage] = useState("");
@@ -10,7 +11,10 @@ export default function AdminNovedades() {
   useEffect(() => { cargar(); }, []);
   function nuevo() { setData({titulo:"",slug:"",bajada:"",contenido:"",fecha:new Date().toISOString().slice(0,10),imagen:"",publicado:false}); }
   async function guardar(e) {
-    e.preventDefault(); setBusy(true); setError("");
+    e.preventDefault(); setError("");
+    if (!data.contenido) { setError("Escribe el contenido del artículo."); return; }
+    if (data.contenido.length > 15000) { setError("El contenido es demasiado largo (máximo 15.000 caracteres, contando el formato)."); return; }
+    setBusy(true);
     try {
       const { id, ...body } = data;
       await api(`/admin/novedades${id ? `/${id}` : ""}`, {method:id?"PUT":"POST",body});
@@ -23,8 +27,9 @@ export default function AdminNovedades() {
     {message && <p role="status">{message}</p>}
     {data && <form className="form-panel mb-4" onSubmit={guardar}>
       <h2>{data.id ? "Editar novedad" : "Nueva novedad"}</h2>
-      {[["titulo","Título",160],["slug","Dirección del artículo (ejemplo: nuevas-tecnicas)",160],["bajada","Descripción",500],["contenido","Contenido",15000],["fecha","Fecha",undefined]].map(([name,label,max]) =>
-        <Campo key={name} name={name} label={label} required maxLength={max} type={name==="fecha"?"date":"text"} as={name==="contenido"||name==="bajada"?"textarea":"input"} rows={name==="contenido"?8:3} value={data[name]} onChange={e=>setData({...data,[name]:e.target.value})} />)}
+      {[["titulo","Título",160],["slug","Dirección del artículo (ejemplo: nuevas-tecnicas)",160],["bajada","Descripción",500],["fecha","Fecha",undefined]].map(([name,label,max]) =>
+        <Campo key={name} name={name} label={label} required maxLength={max} type={name==="fecha"?"date":"text"} as={name==="bajada"?"textarea":"input"} rows={3} value={data[name]} onChange={e=>setData({...data,[name]:e.target.value})} />)}
+      <EditorEnriquecido clave={data.id ?? "nueva"} label="Contenido" value={data.contenido} onChange={contenido=>setData(previous=>({...previous,contenido}))} maxLength={15000} />
       <SubirImagen value={data.imagen} onChange={imagen=>setData(previous=>({...previous,imagen}))} onBusy={setUploading} />
       <label className="choice"><input type="checkbox" checked={data.publicado} onChange={e=>setData({...data,publicado:e.target.checked})}/> Publicar artículo</label>
       <div className="d-flex gap-3 mt-4"><button className="btn btn-primary" disabled={busy||uploading||!data.imagen}>Guardar novedad</button><button type="button" className="btn btn-outline-primary" onClick={()=>setData(null)}>Cancelar</button></div>
