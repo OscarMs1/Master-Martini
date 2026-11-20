@@ -50,6 +50,15 @@ services:
       CLASSES_URL: http://clases-contacto:8080
       # En AWS define FRONTEND_ORIGIN en .env con tu dominio de CloudFront (https://xxxx.cloudfront.net).
       FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-http://localhost:8095,http://127.0.0.1:8095,http://localhost:5173,http://127.0.0.1:5173}
+      # JWT para la app móvil (POST /api/auth/token). Mínimo 32 caracteres.
+      JWT_SECRET: ${JWT_SECRET:?Configura JWT_SECRET en .env}
+      JWT_MINUTOS: ${JWT_MINUTOS:-15}
+      REFRESH_DIAS: ${REFRESH_DIAS:-7}
+      # true en AWS (HTTPS). Con false la cookie de renovación también viaja por http (solo para local).
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      # 1 cuando CloudFront está delante (para conocer la IP real en el límite de intentos).
+      PROXIES_CONFIABLES: ${PROXIES_CONFIABLES:-0}
+      SWAGGER_ENABLED: ${SWAGGER_ENABLED:-true}
       ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@gmail.com}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Configura ADMIN_PASSWORD en .env}
     depends_on:
@@ -71,6 +80,7 @@ services:
       S3_BUCKET: ${S3_BUCKET:-}
       AWS_REGION: ${AWS_REGION:-us-east-1}
       MEDIA_BASE_URL: ${MEDIA_BASE_URL:-}
+      SWAGGER_ENABLED: ${SWAGGER_ENABLED:-true}
     volumes:
       - uploads:/app/uploads
     depends_on:
@@ -89,6 +99,7 @@ services:
       DB_PASSWORD: ${ORDERS_DB_PASSWORD:?Configura ORDERS_DB_PASSWORD en .env}
       SERVICE_KEY: ${SERVICE_KEY:?Configura SERVICE_KEY en .env}
       CATALOG_URL: http://catalogo:8080
+      SWAGGER_ENABLED: ${SWAGGER_ENABLED:-true}
     depends_on:
       db-init:
         condition: service_completed_successfully
@@ -108,6 +119,7 @@ services:
       # Asistente de ayuda: la clave queda solo en el backend. Vacía = asistente desactivado.
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
       ASISTENTE_MODELO: ${ASISTENTE_MODELO:-claude-haiku-5-5}
+      SWAGGER_ENABLED: ${SWAGGER_ENABLED:-true}
     depends_on:
       db-init:
         condition: service_completed_successfully

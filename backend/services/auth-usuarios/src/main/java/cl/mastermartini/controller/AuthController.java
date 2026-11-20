@@ -1,39 +1,63 @@
 package cl.mastermartini.controller;
 
 import cl.mastermartini.dto.*;
+import cl.mastermartini.model.Usuario;
+import cl.mastermartini.security.*;
 import cl.mastermartini.service.UsuarioService;
 import jakarta.servlet.http.*;
 import jakarta.validation.Valid;
-import java.util.Map;
-import org.springframework.http.HttpStatus;
+import java.util.*;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.security.authentication.*;
-import org.springframework.security.core.*;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.context.SecurityContextRepository;
-import org.springframework.security.web.csrf.CsrfToken;
-import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+/**
+ * Autenticación con JWT.
+ *
+ * <ul>
+ *   <li>Web: el access token (corto) se entrega en el cuerpo y la página lo guarda solo en memoria.
+ *       El token de renovación va en una cookie HttpOnly + SameSite=Strict limitada a /api/auth, que
+ *       JavaScript no puede leer. Las rutas que usan esa cookie exigen un Origin permitido.
+ *   <li>App móvil: /api/auth/token entrega ambos tokens en el cuerpo y no usa cookies.
+ * </ul>
+ */
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/v1/auth")
 public class AuthController {
+  public static final String COOKIE = "mm_refresh";
+  private static final String RUTA_COOKIE = "/api/v1/auth";
   private final UsuarioService usuarios;
   private final AuthenticationManager manager;
-  private final SecurityContextRepository repository;
+  private final TokenService tokens;
+  private final RefreshTokenService refresh;
+  private final LimiteSolicitudes limite;
+  /** Contraseñas incorrectas permitidas por cuenta antes de bloquearla 15 minutos (aunque cambie la IP). */
+  static final int FALLOS_POR_CUENTA = 10;
+  static final java.time.Duration BLOQUEO = java.time.Duration.ofMinutes(15);
+  private final Set<String> origenes;
+  private final boolean cookieSegura;
 
   public AuthController(
       UsuarioService usuarios,
       AuthenticationManager manager,
-      SecurityContextRepository repository) {
+      TokenService tokens,
+      RefreshTokenService refresh,
+      LimiteSolicitudes limite,
+      @Value("${app.frontend-origin}") String origenes,
+      @Value("${app.cookie-secure:false}") boolean cookieSegura) {
     this.usuarios = usuarios;
     this.manager = manager;
-    this.repository = repository;
+    this.tokens = tokens;
+    this.refresh = refresh;
+    this.limite = limite;
+    this.origenes = Set.copyOf(Arrays.stream(origenes.split(",")).map(String::trim).filter(s -> !s.isEmpty()).toList());
+    this.cookieSegura = cookieSegura;
   }
 
-  @GetMapping("/csrf")
-  public Map<String, String> csrf(CsrfToken token) {
-    return Map.of("token", token.getToken(), "headerName", token.getHeaderName());
-  }
+  public record RefreshRequest(String refreshToken) {}
 
   @PostMapping("/registro")
   @ResponseStatus(HttpStatus.CREATED)
@@ -41,24 +65,47 @@ public class AuthController {
     return usuarios.registrar(r);
   }
 
+  /** Login de la página web: token en el cuerpo y renovación en cookie HttpOnly. */
   @PostMapping("/login")
-  public UsuarioResponse login(
-      @Valid @RequestBody LoginRequest r,
+  public TokenResponse login(
+      @Valid @RequestBody LoginRequest r, HttpServletRequest request, HttpServletResponse response) {
+    exigirOrigen(request);
+    Usuario u = autenticar(r);
+    ponerCookie(response, refresh.emitir(u.getEmail()));
+    return respuesta(u, null);
+  }
+
+  /** Login de la app móvil: ambos tokens en el cuerpo, sin cookies. */
+  @PostMapping("/token")
+  public TokenResponse token(@Valid @RequestBody LoginRequest r) {
+    Usuario u = autenticar(r);
+    return respuesta(u, refresh.emitir(u.getEmail()));
+  }
+
+  /**
+   * Entrega un access token nuevo. La web envía la cookie; la app envía {"refreshToken": "..."}.
+   * El token de renovación usado queda gastado y se entrega uno nuevo.
+   */
+  @PostMapping("/refresh")
+  public TokenResponse renovar(
+      @RequestBody(required = false) RefreshRequest body,
       HttpServletRequest request,
       HttpServletResponse response) {
-    Authentication auth =
-        manager.authenticate(
-            UsernamePasswordAuthenticationToken.unauthenticated(
-                r.email().trim().toLowerCase(java.util.Locale.ROOT), r.password()));
-    // Rotar la sesión impide fijación de sesión; invalidar CSRF exige obtener un token nuevo.
-    request.getSession();
-    request.changeSessionId();
-    new HttpSessionCsrfTokenRepository().saveToken(null, request, response);
-    var context = SecurityContextHolder.createEmptyContext();
-    context.setAuthentication(auth);
-    SecurityContextHolder.setContext(context);
-    repository.saveContext(context, request, response);
-    return UsuarioResponse.from(usuarios.obtener(auth.getName()));
+    String cookie = leerCookie(request);
+    boolean web = cookie != null;
+    if (web) exigirOrigen(request);
+    String valor = web ? cookie : body == null ? null : body.refreshToken();
+    var rotado = refresh.rotar(valor);
+    if (rotado.isEmpty()) {
+      if (web) borrarCookie(response);
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Inicia sesión para continuar.");
+    }
+    Usuario u = usuarios.obtener(rotado.get().email());
+    if (web) {
+      ponerCookie(response, rotado.get().valor());
+      return respuesta(u, null);
+    }
+    return respuesta(u, rotado.get().valor());
   }
 
   @GetMapping("/me")
@@ -66,25 +113,88 @@ public class AuthController {
     return UsuarioResponse.from(usuarios.obtener(auth.getName()));
   }
 
+  /** Cambia la contraseña y cierra todas las sesiones del usuario (también los JWT ya emitidos). */
   @PostMapping("/password")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void cambiarPassword(@Valid @RequestBody CambioPasswordRequest datos,
-      Authentication auth, HttpServletRequest request, HttpServletResponse response) {
+  public void cambiarPassword(
+      @Valid @RequestBody CambioPasswordRequest datos, Authentication auth, HttpServletResponse response) {
     usuarios.cambiarPassword(auth.getName(), datos);
-    logout(request, response);
+    refresh.revocarUsuario(auth.getName());
+    borrarCookie(response);
   }
 
   @PostMapping("/logout")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void logout(HttpServletRequest request, HttpServletResponse response) {
-    var session = request.getSession(false);
-    if (session != null) session.invalidate();
-    SecurityContextHolder.clearContext();
-    Cookie cookie = new Cookie("JSESSIONID", "");
-    cookie.setPath("/");
-    cookie.setHttpOnly(true);
-    cookie.setMaxAge(0);
-    cookie.setSecure(request.isSecure());
-    response.addCookie(cookie);
+  public void logout(
+      @RequestBody(required = false) RefreshRequest body,
+      HttpServletRequest request,
+      HttpServletResponse response) {
+    String cookie = leerCookie(request);
+    if (cookie != null) {
+      exigirOrigen(request);
+      refresh.revocar(cookie);
+    } else if (body != null) {
+      refresh.revocar(body.refreshToken());
+    }
+    borrarCookie(response);
+  }
+
+  private Usuario autenticar(LoginRequest r) {
+    String email = r.email().trim().toLowerCase(Locale.ROOT);
+    String clave = "fallos|" + email;
+    // Defensa contra fuerza bruta distribuida (muchas IP contra una cuenta).
+    if (limite.bloqueada(clave, FALLOS_POR_CUENTA, BLOQUEO))
+      throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS, "Demasiados intentos. Espera unos minutos y vuelve a intentarlo.");
+    Authentication auth;
+    try {
+      auth = manager.authenticate(UsernamePasswordAuthenticationToken.unauthenticated(email, r.password()));
+    } catch (org.springframework.security.core.AuthenticationException e) {
+      limite.registrar(clave, BLOQUEO);
+      throw e;
+    }
+    return usuarios.obtener(auth.getName());
+  }
+
+  private TokenResponse respuesta(Usuario u, String refreshToken) {
+    return new TokenResponse(
+        tokens.emitir(u.getEmail(), u.getRol(), u.getPasswordHash()),
+        "Bearer",
+        tokens.segundos(),
+        refreshToken,
+        UsuarioResponse.from(u));
+  }
+
+  /**
+   * Protección CSRF de las rutas que usan la cookie: además de SameSite=Strict, el navegador
+   * debe declarar que la petición viene de nuestra propia página.
+   */
+  private void exigirOrigen(HttpServletRequest request) {
+    String origen = request.getHeader("Origin");
+    if (origen == null || !origenes.contains(origen))
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Origen no permitido.");
+  }
+
+  private static String leerCookie(HttpServletRequest request) {
+    if (request.getCookies() == null) return null;
+    for (Cookie c : request.getCookies()) if (COOKIE.equals(c.getName()) && !c.getValue().isBlank()) return c.getValue();
+    return null;
+  }
+
+  private void ponerCookie(HttpServletResponse response, String valor) {
+    response.addHeader(HttpHeaders.SET_COOKIE, cookie(valor, refresh.duracion()).toString());
+  }
+
+  private void borrarCookie(HttpServletResponse response) {
+    response.addHeader(HttpHeaders.SET_COOKIE, cookie("", java.time.Duration.ZERO).toString());
+  }
+
+  private ResponseCookie cookie(String valor, java.time.Duration duracion) {
+    return ResponseCookie.from(COOKIE, valor)
+        .httpOnly(true)
+        .secure(cookieSegura)
+        .sameSite("Strict")
+        .path(RUTA_COOKIE)
+        .maxAge(duracion)
+        .build();
   }
 }

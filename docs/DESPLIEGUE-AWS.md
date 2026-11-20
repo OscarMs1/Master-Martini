@@ -119,6 +119,15 @@ En `.env` completa lo siguiente:
 - `AWS_REGION=us-east-1`
 - `MEDIA_BASE_URL=https://xxxx.cloudfront.net` y `FRONTEND_ORIGIN=https://xxxx.cloudfront.net`.
   Déjalos vacíos hasta el paso 5.
+- `JWT_SECRET`: genera uno nuevo con `openssl rand -hex 32`. Firma los tokens de la web y de la app
+  (ver [API.md](API.md)).
+- `COOKIE_SECURE=true`, porque con CloudFront todo va por HTTPS.
+- `PROXIES_CONFIABLES=1`: CloudFront agrega un salto, y así el límite de intentos usa la IP real del visitante.
+- `FRONTEND_ORIGIN`: el login de la web solo funciona desde los dominios de esta lista. Si quieres
+  probar antes del paso 5 entrando por `http://TU-ELASTIC-IP`, pon `FRONTEND_ORIGIN=http://TU-ELASTIC-IP`
+  y `COOKIE_SECURE=false`. Cuando tengas CloudFront, vuelve a los valores de HTTPS.
+- `SWAGGER_ENABLED=true`: deja Swagger visible en `/swagger-ui.html`. Se mantiene activo porque se
+  muestra en la presentación.
 - `ANTHROPIC_API_KEY=` es opcional (para el asistente).
 - **No pongas** `AWS_ACCESS_KEY_ID` ni `AWS_SECRET_ACCESS_KEY`. Los permisos vienen de `LabInstanceProfile`.
 
@@ -141,7 +150,13 @@ En **CloudFront → Create distribution**:
 2. **Origen 2 (S3):** agrega el bucket como origen.
    - Crea dos **behaviors**, `imagenes/*` y `videos/*`, que apunten al origen S3.
      Usa *Redirect HTTP to HTTPS* y la cache policy **CachingOptimized**.
-3. Espera a que el estado diga *Deployed*. Esto tarda unos minutos. Copia el dominio (`https://dxxxx.cloudfront.net`).
+3. **Cabeceras de seguridad:** en el comportamiento por defecto, en *Response headers policy*, crea
+   una política con **Strict-Transport-Security** (`max-age=31536000`, *includeSubDomains*, override activado).
+   Así el navegador nunca vuelve a entrar por `http://`.
+4. **Cierra el acceso directo a la EC2:** en el security group, cambia la regla HTTP (80) de *Anywhere*
+   a la *prefix list* `com.amazonaws.global.cloudfront.origin-facing`. Así nadie salta CloudFront
+   ni falsifica la IP.
+5. Espera a que el estado diga *Deployed*. Esto tarda unos minutos. Copia el dominio (`https://dxxxx.cloudfront.net`).
 
 Luego vuelve a la EC2 y aplica el dominio:
 
@@ -156,13 +171,14 @@ Por último, actualiza el CORS del bucket (paso 1.4) con ese mismo dominio.
 
 | Qué | Cómo |
 |---|---|
-| Subir imagen (admin) | `POST /api/admin/imagenes` con multipart `archivo`. Responde `{"url": "/api/imagenes/<id>.png"}` |
-| Ver imagen | `GET /api/imagenes/<id>.png` responde `302` al archivo en CloudFront o S3 |
-| Subir video (admin) | 1) `POST /api/admin/videos` con `{"tipo": "video/mp4", "tamano": 12345678}`. 2) Haz `PUT` del archivo a la URL de `subida`, con la cabecera `Content-Type` indicada. 3) Guarda la `url` (`/api/videos/<id>.mp4`) |
-| Ver video | `GET /api/videos/<id>.mp4` responde `302` al archivo en CloudFront o S3 |
+| Subir imagen (admin) | `POST /api/v1/admin/imagenes` con multipart `archivo`. Responde `{"url": "/api/v1/imagenes/<id>.png"}` |
+| Ver imagen | `GET /api/v1/imagenes/<id>.png` responde `302` al archivo en CloudFront o S3 |
+| Subir video (admin) | 1) `POST /api/v1/admin/videos` con `{"tipo": "video/mp4", "tamano": 12345678}`. 2) Haz `PUT` del archivo a la URL de `subida`, con la cabecera `Content-Type` indicada. 3) Guarda la `url` (`/api/v1/videos/<id>.mp4`) |
+| Ver video | `GET /api/v1/videos/<id>.mp4` responde `302` al archivo en CloudFront o S3 |
 
 - Los videos pueden ser MP4, WEBM o MOV, de hasta 200 MB. La URL firmada dura 15 minutos.
-- **App del teléfono:** usa `https://dxxxx.cloudfront.net` como base. Las referencias `/api/...` se
+- **App del teléfono:** inicia sesión con `POST /api/v1/auth/token` y envía `Authorization: Bearer <token>`
+  (ver [API.md](API.md)). Usa `https://dxxxx.cloudfront.net` como base. Las referencias `/api/...` se
   anteponen con ese dominio. Las librerías de imágenes y video siguen la redirección `302` solas.
 - En tu PC, con `S3_BUCKET` vacío, todo sigue igual: las imágenes quedan en el volumen `uploads`
   y la subida de videos responde *"requiere S3"*.
@@ -189,5 +205,6 @@ docker compose -f compose.yaml -f compose.aws.yaml up -d --build
 | Al subir una imagen: *Access Denied* | El bucket está en otra región o tiene otro nombre que `S3_BUCKET` |
 | Las imágenes no cargan (403) | Falta la bucket policy o *Block Public Access* sigue activado |
 | La subida de video falla en el navegador por CORS | El CORS del bucket no incluye tu dominio de CloudFront |
-| Login o carrito fallan detrás de CloudFront | `FRONTEND_ORIGIN` no tiene el dominio, o la cache policy no es *CachingDisabled* y *AllViewer* |
+| Login responde *"Origen no permitido"* (403) | `FRONTEND_ORIGIN` no tiene el dominio exacto con el que entras (`https://dxxxx.cloudfront.net`) |
+| La sesión se pierde al recargar la página | `COOKIE_SECURE=true` pero entras por `http://`, o la cache policy no es *CachingDisabled* y *AllViewer* |
 | La compilación se cae por memoria | Falta el swap del paso 3, o la instancia es más chica que `t3.large` |

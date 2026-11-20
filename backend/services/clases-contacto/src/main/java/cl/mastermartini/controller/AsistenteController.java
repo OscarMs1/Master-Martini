@@ -8,7 +8,7 @@ import java.util.Map;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/asistente")
+@RequestMapping("/api/v1/asistente")
 public class AsistenteController {
   private final AsistenteService service;
 

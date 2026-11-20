@@ -1,0 +1,160 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Master Martini en AWS Academy Learner Lab - bucket S3 de medios, EC2 con docker compose y Elastic IP (ver docs/DESPLIEGUE-AWS.md)
+
+Metadata:
+  AWSToolsMetrics:
+    AWSAgentToolkit: aws-cloudformation@3
+
+Parameters:
+  CloudFrontDomain:
+    Type: String
+    Default: ''
+    Description: Dominio de CloudFront (dxxxx.cloudfront.net) sin https. Vacio hasta crear la distribucion.
+  InstanceType:
+    Type: String
+    Default: t3.large
+  LatestAmiId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64
+
+Conditions:
+  HasCloudFront: !Not [!Equals [!Ref CloudFrontDomain, '']]
+
+Resources:
+  MediaBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Metadata:
+      com.aws.cloudformation.Context:
+        why: Imagenes y videos publicos de la web y la app (guia paso 1)
+        must: Lectura publica solo de imagenes/* y videos/*; CORS con PUT para subir videos
+    Properties:
+      BucketName: !Sub master-martini-medios-${AWS::AccountId}
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      CorsConfiguration:
+        CorsRules:
+          - AllowedMethods: [GET, HEAD, PUT]
+            AllowedOrigins: !If
+              - HasCloudFront
+              - [!Sub 'https://${CloudFrontDomain}', 'http://localhost:8095']
+              - ['http://localhost:8095']
+            AllowedHeaders: [Content-Type]
+            MaxAge: 3000
+
+  MediaBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref MediaBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: LecturaPublicaMedios
+            Effect: Allow
+            Principal: '*'
+            Action: s3:GetObject
+            Resource:
+              - !Sub '${MediaBucket.Arn}/imagenes/*'
+              - !Sub '${MediaBucket.Arn}/videos/*'
+          - Sid: SoloHttps
+            Effect: Deny
+            Principal: '*'
+            Action: s3:*
+            Resource:
+              - !GetAtt MediaBucket.Arn
+              - !Sub '${MediaBucket.Arn}/*'
+            Condition:
+              Bool:
+                aws:SecureTransport: 'false'
+
+  WebSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: HTTP publico, sin SSH (acceso por SSM Session Manager)
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+          Description: HTTP (CloudFront y pruebas)
+
+  Server:
+    Type: AWS::EC2::Instance
+    Metadata:
+      com.aws.cloudformation.Context:
+        why: Corre el proyecto con docker compose (guia pasos 2 a 4)
+        must: Hop limit 2 y LabInstanceProfile, o los contenedores no obtienen credenciales de S3
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: !Ref InstanceType
+      KeyName: vockey
+      IamInstanceProfile: LabInstanceProfile
+      SecurityGroupIds: [!GetAtt WebSecurityGroup.GroupId]
+      MetadataOptions:
+        HttpTokens: required
+        HttpPutResponseHopLimit: 2
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeSize: 30
+            VolumeType: gp3
+            Encrypted: true
+      Tags:
+        - Key: Name
+          Value: master-martini
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          exec > /var/log/despliegue.log 2>&1
+          set -ex
+          dnf install -y docker git
+          systemctl enable --now docker
+          mkdir -p /usr/local/lib/docker/cli-plugins
+          curl -SL https://github.com/docker/compose/releases/download/v2.29.7/docker-compose-linux-x86_64 -o /usr/local/lib/docker/cli-plugins/docker-compose
+          curl -SL https://github.com/docker/buildx/releases/download/v0.17.1/buildx-v0.17.1.linux-amd64 -o /usr/local/lib/docker/cli-plugins/docker-buildx
+          chmod +x /usr/local/lib/docker/cli-plugins/*
+          dd if=/dev/zero of=/swapfile bs=1M count=4096
+          chmod 600 /swapfile
+          mkswap /swapfile
+          swapon /swapfile
+          echo '/swapfile none swap sw 0 0' >> /etc/fstab
+          cd /home/ec2-user
+          git clone -b Felipe https://github.com/OscarMs1/Master-Martini.git
+          cd Master-Martini
+          cp .env.example .env
+          setv() { sed -i "s|^$1=.*|$1=$2|" .env; }
+          for k in DB_ROOT_PASSWORD DB_PASSWORD AUTH_DB_PASSWORD CATALOG_DB_PASSWORD ORDERS_DB_PASSWORD CLASSES_DB_PASSWORD ADMIN_PASSWORD; do setv $k $(openssl rand -hex 12); done
+          setv SERVICE_KEY $(openssl rand -hex 32)
+          setv S3_BUCKET ${MediaBucket}
+          setv AWS_REGION ${AWS::Region}
+          chown -R ec2-user:ec2-user /home/ec2-user/Master-Martini
+          chmod 600 .env
+          docker compose -f compose.yaml -f compose.aws.yaml up -d --build
+          echo DESPLIEGUE-OK
+
+  ServerIp:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+
+  ServerIpAssociation:
+    Type: AWS::EC2::EIPAssociation
+    Properties:
+      AllocationId: !GetAtt ServerIp.AllocationId
+      InstanceId: !Ref Server
+
+Outputs:
+  BucketName:
+    Value: !Ref MediaBucket
+  InstanceId:
+    Value: !Ref Server
+  ElasticIp:
+    Value: !Ref ServerIp

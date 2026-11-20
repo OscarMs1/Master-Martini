@@ -2,7 +2,9 @@ package cl.mastermartini.service;
 
 import cl.mastermartini.dto.ProductoRequest;
 import cl.mastermartini.model.Producto;
+import cl.mastermartini.repository.FavoritoRepository;
 import cl.mastermartini.repository.ProductoRepository;
+import cl.mastermartini.repository.ResenaRepository;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,9 +16,15 @@ public class ProductoService {
   private final ProductoRepository repo;
 
   private final ImagenService imagenes;
-  public ProductoService(ProductoRepository repo, ImagenService imagenes) {
+  private final FavoritoRepository favoritos;
+  private final ResenaRepository resenas;
+
+  public ProductoService(
+      ProductoRepository repo, ImagenService imagenes, FavoritoRepository favoritos, ResenaRepository resenas) {
     this.imagenes = imagenes;
     this.repo = repo;
+    this.favoritos = favoritos;
+    this.resenas = resenas;
   }
 
   public List<Producto> listar() {
@@ -58,6 +66,10 @@ public class ProductoService {
         repo.bloquear(id)
             .orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Producto no encontrado."));
+    // Las opiniones y favoritos dependen del producto (llave foránea): se borran en la misma
+    // transacción. Los pedidos no se tocan: guardan su propio detalle en el servicio de pedidos.
+    favoritos.borrarDeProducto(id);
+    resenas.borrarDeProducto(id);
     repo.delete(p);
   }
 }

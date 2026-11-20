@@ -48,7 +48,7 @@ public class ImagenService {
     if (s3.activo()) s3.subir("imagenes/" + internal, png.toByteArray(), "image/png");
     else Files.write(root.resolve(internal), png.toByteArray(), StandardOpenOption.CREATE_NEW);
     // La referencia es la misma en disco y en S3: con S3 activo, /api/imagenes/... redirige al bucket.
-    return "/api/imagenes/" + internal;
+    return "/api/v1/imagenes/" + internal;
   }
   public boolean enS3() { return s3.activo(); }
   /** URL pública en S3 (o CloudFront) de una imagen subida. */
@@ -63,8 +63,10 @@ public class ImagenService {
     return path;
   }
   public void validarReferencia(String path) {
-    if (!path.startsWith("/api/imagenes/")) return;
-    String name = path.substring("/api/imagenes/".length());
+    // Acepta también las referencias guardadas antes del versionado (/api/imagenes/...).
+    var m = java.util.regex.Pattern.compile("/api/(?:v1/)?imagenes/(.+)").matcher(path);
+    if (!m.matches()) return;
+    String name = m.group(1);
     if (!s3.activo()) { obtener(name); return; }
     if (!name.matches(NOMBRE) || !s3.existe("imagenes/" + name)) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
   }

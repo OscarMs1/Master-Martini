@@ -6,5 +6,6 @@ import cl.mastermartini.model.Novedad;import cl.mastermartini.repository.Novedad
  public List<Novedad> publicadas(){return repo.findByPublicadoTrueOrderByFechaDesc();}
  public Novedad obtener(String slug){return repo.findBySlugAndPublicadoTrue(slug).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));}
  public List<Novedad> todas(){return repo.findAll();}
- @Transactional public Novedad guardar(Long id,NovedadRequest r){images.validarReferencia(r.imagen());var n=id==null?new Novedad():repo.findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));n.setTitulo(r.titulo());n.setSlug(r.slug());n.setBajada(r.bajada());n.setContenido(r.contenido());n.setFecha(r.fecha());n.setImagen(r.imagen());n.setPublicado(r.publicado());return repo.save(n);}
+ @Transactional public Novedad guardar(Long id,NovedadRequest r){images.validarReferencia(r.imagen());var n=id==null?new Novedad():repo.findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));n.setTitulo(r.titulo());n.setSlug(r.slug());n.setBajada(r.bajada());n.setContenido(validarContenido(cl.mastermartini.service.HtmlSeguro.limpiar(r.contenido())));n.setFecha(r.fecha());n.setImagen(r.imagen());n.setPublicado(r.publicado());return repo.save(n);}
+ private static String validarContenido(String html){if(HtmlSeguro.sinTexto(html)&&!html.contains("<hr"))throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"El contenido quedó vacío al quitar el formato no permitido.");return html;}
 }

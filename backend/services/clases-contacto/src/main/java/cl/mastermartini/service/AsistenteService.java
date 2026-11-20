@@ -214,7 +214,7 @@ public class AsistenteService {
 
     s.append("Productos (ID | nombre | categoría | formato | precio | descuento | stock):\n");
     try {
-      JsonNode productos = remote.call(catalogo + "/api/productos", HttpMethod.GET, null, JsonNode.class);
+      JsonNode productos = remote.call(catalogo + "/api/v1/productos", HttpMethod.GET, null, JsonNode.class);
       int n = 0;
       if (productos != null && productos.isArray()) {
         for (JsonNode p : productos) {

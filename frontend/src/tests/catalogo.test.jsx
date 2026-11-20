@@ -1,4 +1,5 @@
-import { describe, it, expect, vi } from "vitest";
+import { afterEach, describe, it, expect, vi } from "vitest";
+afterEach(() => vi.unstubAllGlobals());
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
@@ -6,6 +7,13 @@ import TarjetaProducto from "../components/productos/TarjetaProducto";
 import Catalogo from "../pages/Catalogo";
 import DetalleProducto from "../pages/DetalleProducto";
 import { ShopContext } from "../context/ShopContext";
+import { AuthContext } from "../context/AuthContext";
+
+// La ficha también carga reseñas y favoritos: se simulan sesión anónima y respuestas vacías.
+function ficha(ui) {
+  vi.stubGlobal("fetch", vi.fn(async () => ({ ok: true, status: 200, json: async () => ({ promedio: 0, cantidad: 0, opiniones: [] }) })));
+  return <AuthContext.Provider value={{ user: null, loading: false }}>{ui}</AuthContext.Provider>;
+}
 
 const productos = [
   {
@@ -114,9 +122,11 @@ describe("Catálogo y presentación", () => {
     const agregar = vi.fn();
     render(
       <MemoryRouter initialEntries={["/producto/2"]}>
+        {ficha(
         <ShopContext.Provider value={{ productos: [agotado], loading: false, error: "", agregar }}>
           <Routes><Route path="/producto/:id" element={<DetalleProducto />} /></Routes>
-        </ShopContext.Provider>
+        </ShopContext.Provider>,
+        )}
       </MemoryRouter>,
     );
     await userEvent.click(screen.getByRole("button", { name: /Agregar al carrito/i }));
@@ -127,9 +137,11 @@ describe("Catálogo y presentación", () => {
     const agregar = vi.fn();
     render(
       <MemoryRouter initialEntries={["/producto/2"]}>
+        {ficha(
         <ShopContext.Provider value={{ productos, loading: false, error: "", agregar }}>
           <Routes><Route path="/producto/:id" element={<DetalleProducto />} /></Routes>
-        </ShopContext.Provider>
+        </ShopContext.Provider>,
+        )}
       </MemoryRouter>,
     );
     const campo = screen.getByRole("spinbutton", { name: "Cantidad de Base para gelato" });

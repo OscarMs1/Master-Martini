@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/contactos")
+@RequestMapping("/api/v1/contactos")
 public class ContactoController {
   private final ContactoService service;
 

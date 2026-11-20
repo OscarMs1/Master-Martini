@@ -44,17 +44,22 @@ public class ApiExceptionHandler {
         .body(Map.of("message", "No tienes permiso para esta operación."));
   }
 
-  @ExceptionHandler({
-    DataIntegrityViolationException.class,
-    PessimisticLockingFailureException.class
-  })
+  /** Llave única o foránea: un registro repetido, o uno del que dependen otros datos. */
+  @ExceptionHandler(DataIntegrityViolationException.class)
   public ResponseEntity<?> conflict() {
     return ResponseEntity.status(409)
         .body(
             Map.of(
                 "message",
-                "El registro ya existe o cambió durante la operación. Actualiza y vuelve a"
-                    + " intentar."));
+                "No se pudo completar: el registro ya existe o hay otros datos que dependen de"
+                    + " él."));
+  }
+
+  /** Otra solicitud estaba modificando el mismo registro al mismo tiempo. */
+  @ExceptionHandler(PessimisticLockingFailureException.class)
+  public ResponseEntity<?> concurrent() {
+    return ResponseEntity.status(409)
+        .body(Map.of("message", "El registro cambió durante la operación. Actualiza y vuelve a intentar."));
   }
 
   @ExceptionHandler({

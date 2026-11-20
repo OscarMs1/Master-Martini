@@ -3,7 +3,8 @@ package cl.mastermartini.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"usuarioId", "claseId"}))
+/** Inscripción de un cliente en una clase. Relación N:1 con {@link Clase}. */
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"usuarioId", "clase_id"}))
 public class Inscripcion {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,8 +17,9 @@ public class Inscripcion {
   @Column(nullable = false)
   private Long usuarioId;
 
-  @Column(nullable = false)
-  private Long claseId;
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "clase_id", nullable = false)
+  private Clase clase;
 
   @Column(nullable = false)
   private java.time.Instant fecha;
@@ -30,12 +32,16 @@ public class Inscripcion {
     this.usuarioId = usuarioId;
   }
 
-  public Long getClaseId() {
-    return claseId;
+  public Clase getClase() {
+    return clase;
   }
 
-  public void setClaseId(Long claseId) {
-    this.claseId = claseId;
+  public void setClase(Clase clase) {
+    this.clase = clase;
+  }
+
+  public Long getClaseId() {
+    return clase == null ? null : clase.getId();
   }
 
   public java.time.Instant getFecha() {
