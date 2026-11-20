@@ -8,6 +8,15 @@ import { validarEntrega } from "../utils/validaciones";
 import { esUbicacionValida, regionCanonica } from "../data/regionesComunasChile";
 import { totales } from "../utils/comercio";
 import { api } from "../services/api";
+// crypto.randomUUID solo existe en HTTPS o localhost; getRandomValues funciona también por http.
+function nuevaClave() {
+  if (typeof crypto.randomUUID === "function") return crypto.randomUUID();
+  const b = crypto.getRandomValues(new Uint8Array(16));
+  b[6] = (b[6] & 0x0f) | 0x40;
+  b[8] = (b[8] & 0x3f) | 0x80;
+  const h = Array.from(b, (x) => x.toString(16).padStart(2, "0")).join("");
+  return `${h.slice(0, 8)}-${h.slice(8, 12)}-${h.slice(12, 16)}-${h.slice(16, 20)}-${h.slice(20)}`;
+}
 export default function Checkout() {
   const {
       items,
@@ -25,7 +34,7 @@ export default function Checkout() {
     [errors, setErrors] = useState({}),
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false);
-  const [requestKey] = useState(() => crypto.randomUUID());
+  const [requestKey] = useState(nuevaClave);
   const [direccionesGuardadas, setDireccionesGuardadas] = useState([]);
   useEffect(() => {
     let active = true;
