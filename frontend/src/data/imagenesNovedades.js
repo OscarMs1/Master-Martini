@@ -16,11 +16,11 @@ export const imagenesNovedades = {
 };
 
 export function imagenParaNovedad(articulo) {
-  if (articulo.imagen?.startsWith("/api/imagenes/")) return articulo.imagen;
+  if (/^\/api\/(v1\/)?imagenes\//.test(articulo.imagen || "")) return articulo.imagen;
   return imagenesNovedades[articulo.slug]?.src || articulo.imagen;
 }
 
 export function altParaNovedad(articulo) {
-  if (articulo.imagen?.startsWith("/api/imagenes/")) return articulo.titulo;
+  if (/^\/api\/(v1\/)?imagenes\//.test(articulo.imagen || "")) return articulo.titulo;
   return imagenesNovedades[articulo.slug]?.alt || articulo.titulo;
 }

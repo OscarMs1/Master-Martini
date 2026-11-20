@@ -12,11 +12,39 @@ Arriba a la derecha, en **"Select a definition"**, eliges el servicio: `auth-usu
 
 Para probar rutas que exigen cuenta:
 
-1. Ejecuta `POST /api/auth/token` (en `auth-usuarios`) con tu correo y contraseña.
+1. Ejecuta `POST /api/v1/auth/token` (en `auth-usuarios`) con tu correo y contraseña.
 2. Copia el `accessToken` de la respuesta.
 3. Pulsa **Authorize** (el candado) y pega el token.
 
 Para apagar Swagger, define `SWAGGER_ENABLED=false` en `.env`.
+
+## Versionado
+
+Todas las rutas de la API llevan la versión: `/api/v1/...`. Por ejemplo, `GET /api/v1/productos` o
+`POST /api/v1/auth/login`. Si en el futuro cambia el formato de alguna respuesta, se publica
+`/api/v2/...` y `/api/v1` sigue funcionando para las apps que ya están instaladas.
+
+- Las imágenes y videos subidos antes del versionado quedaron guardados como `/api/imagenes/...` y
+  `/api/videos/...`. Esas rutas siguen respondiendo, igual que las nuevas `/api/v1/imagenes/...`.
+- En el frontend, la versión está definida en un solo lugar: la constante `API` de `src/services/api.js`.
+
+## Modelo de datos
+
+Cada microservicio tiene su propia base de datos MySQL. Dentro de cada base, las relaciones son
+llaves foráneas reales mapeadas con JPA:
+
+| Servicio | Entidad | Relación |
+|---|---|---|
+| catalogo | `Favorito` | N:1 con `Producto` (`@ManyToOne`, FK `favorito.producto_id`) |
+| catalogo | `Resena` | N:1 con `Producto` (`@ManyToOne`, FK `resena.producto_id`) |
+| clases-contacto | `Inscripcion` | N:1 con `Clase` (`@ManyToOne`, FK `inscripcion.clase_id`) |
+| pedidos | `Pedido` | 1:N con sus líneas (`@ElementCollection`, tabla `pedido_lineas`) |
+| auth-usuarios | `RefreshToken` | N:1 con el usuario (por email) |
+
+Las referencias **entre microservicios**, como `usuarioId` en un pedido o `productoId` en una línea,
+se guardan solo como ID. No hay llave foránea porque cada servicio tiene su propia base de datos
+(*database per service*). La validez de esos IDs la comprueba el servicio dueño a través de la API.
+Por ejemplo, pedidos consulta a catálogo el precio y el stock.
 
 ## Cómo funciona la autenticación
 
@@ -25,11 +53,11 @@ El proyecto no usa sesiones en el servidor. Cada petición se autentica con
 
 | | Página web | App del teléfono |
 |---|---|---|
-| Login | `POST /api/auth/login` | `POST /api/auth/token` |
+| Login | `POST /api/v1/auth/login` | `POST /api/v1/auth/token` |
 | Access token (15 min) | En el cuerpo. La página lo guarda **solo en memoria** | En el cuerpo |
 | Token de renovación (7 días) | Cookie `mm_refresh` HttpOnly que JavaScript no puede leer | En el cuerpo (`refreshToken`) |
-| Renovar | `POST /api/auth/refresh` (la cookie va sola) | `POST /api/auth/refresh` con `{"refreshToken": "..."}` |
-| Cerrar sesión | `POST /api/auth/logout` | `POST /api/auth/logout` con `{"refreshToken": "..."}` |
+| Renovar | `POST /api/v1/auth/refresh` (la cookie va sola) | `POST /api/v1/auth/refresh` con `{"refreshToken": "..."}` |
+| Cerrar sesión | `POST /api/v1/auth/logout` | `POST /api/v1/auth/logout` con `{"refreshToken": "..."}` |
 
 ### Medidas de seguridad
 
@@ -40,7 +68,7 @@ El proyecto no usa sesiones en el servidor. Cada petición se autentica con
 - **Cookie de renovación protegida:**
   - Es `HttpOnly`, así que JavaScript no puede leerla y un script inyectado no puede robarla.
   - Es `SameSite=Strict`, así que otro sitio no puede usarla.
-  - Solo viaja a `/api/auth`.
+  - Solo viaja a `/api/v1/auth`.
   - En AWS es `Secure` (`COOKIE_SECURE=true`) y solo viaja por HTTPS.
 - **Protección CSRF:**
   - Las rutas que usan la cookie (`login`, `refresh` y `logout` de la web) solo aceptan peticiones con un `Origin` incluido en `FRONTEND_ORIGIN`.
@@ -63,7 +91,7 @@ El proyecto no usa sesiones en el servidor. Cada petición se autentica con
 ### App móvil
 
 ```http
-POST /api/auth/token
+POST /api/v1/auth/token
 Content-Type: application/json
 
 {"email": "cliente@correo.cl", "password": "..."}
@@ -81,7 +109,7 @@ Content-Type: application/json
 
 - Envía `Authorization: Bearer <accessToken>` en cada petición.
 - Cuando la API responda `401`:
-  1. Llama a `POST /api/auth/refresh` con `{"refreshToken": "..."}`.
+  1. Llama a `POST /api/v1/auth/refresh` con `{"refreshToken": "..."}`.
   2. Guarda el **nuevo** `refreshToken`, porque el anterior ya no sirve.
   3. Repite la petición.
 - Si la renovación también responde `401`, la app debe pedir login otra vez.

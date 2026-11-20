@@ -51,7 +51,7 @@ class ClaseServiceTest {
   }
 
   @Test void noDuplicaLaInscripcionDelMismoUsuario() {
-    when(inscripciones.existsByUsuarioIdAndClaseId(42L, 7L)).thenReturn(true);
+    when(inscripciones.existsByUsuarioIdAndClase_Id(42L, 7L)).thenReturn(true);
     var error = assertThrows(ResponseStatusException.class, () -> service.inscribir(7L, "cliente@demo.local"));
     assertEquals(HttpStatus.CONFLICT, error.getStatusCode());
     verify(inscripciones, never()).saveAndFlush(any());
@@ -65,7 +65,7 @@ class ClaseServiceTest {
   }
 
   @Test void rechazaCuposAgotados() {
-    when(inscripciones.countByClaseId(7L)).thenReturn(2L);
+    when(inscripciones.countByClase_Id(7L)).thenReturn(2L);
     var error = assertThrows(ResponseStatusException.class, () -> service.inscribir(7L, "cliente@demo.local"));
     assertEquals(HttpStatus.CONFLICT, error.getStatusCode());
     verify(inscripciones, never()).saveAndFlush(any());

@@ -18,7 +18,7 @@ public class EstadoController {
     this.jdbc = jdbc;
   }
 
-  @GetMapping("/api/estado")
+  @GetMapping("/api/v1/estado")
   public ResponseEntity<Map<String, Object>> estado() {
     Map<String, Object> salida = new LinkedHashMap<>();
     try {

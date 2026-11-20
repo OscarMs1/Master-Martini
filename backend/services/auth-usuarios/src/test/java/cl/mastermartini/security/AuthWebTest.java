@@ -52,24 +52,24 @@ class AuthWebTest {
   }
 
   @Test void loginWebEntregaTokenYCookieSegura() throws Exception {
-    mvc.perform(post("/api/auth/login").header("Origin", ORIGEN).contentType(MediaType.APPLICATION_JSON).content(LOGIN))
+    mvc.perform(post("/api/v1/auth/login").header("Origin", ORIGEN).contentType(MediaType.APPLICATION_JSON).content(LOGIN))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.accessToken").isNotEmpty())
         .andExpect(jsonPath("$.refreshToken").doesNotExist())
         .andExpect(jsonPath("$.usuario.email").value("cliente@test.cl"))
         .andExpect(header().string("Set-Cookie", allOf(org.hamcrest.Matchers.startsWith("mm_refresh=" + VALOR), containsString("HttpOnly"),
-            containsString("Secure"), containsString("SameSite=Strict"), containsString("Path=/api/auth"))));
+            containsString("Secure"), containsString("SameSite=Strict"), containsString("Path=/api/v1/auth"))));
   }
 
   @Test void loginDesdeOtroSitioSeRechaza() throws Exception {
-    mvc.perform(post("/api/auth/login").header("Origin", "https://evil.example").contentType(MediaType.APPLICATION_JSON).content(LOGIN))
+    mvc.perform(post("/api/v1/auth/login").header("Origin", "https://evil.example").contentType(MediaType.APPLICATION_JSON).content(LOGIN))
         .andExpect(status().isForbidden());
-    mvc.perform(post("/api/auth/login").contentType(MediaType.APPLICATION_JSON).content(LOGIN))
+    mvc.perform(post("/api/v1/auth/login").contentType(MediaType.APPLICATION_JSON).content(LOGIN))
         .andExpect(status().isForbidden());
   }
 
   @Test void renovarConCookieRotaLaCookie() throws Exception {
-    mvc.perform(post("/api/auth/refresh").header("Origin", ORIGEN).cookie(new Cookie("mm_refresh", VALOR)))
+    mvc.perform(post("/api/v1/auth/refresh").header("Origin", ORIGEN).cookie(new Cookie("mm_refresh", VALOR)))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.accessToken").isNotEmpty())
         .andExpect(jsonPath("$.refreshToken").doesNotExist())
@@ -77,29 +77,29 @@ class AuthWebTest {
   }
 
   @Test void renovarConCookieDesdeOtroSitioSeRechaza() throws Exception {
-    mvc.perform(post("/api/auth/refresh").header("Origin", "https://evil.example").cookie(new Cookie("mm_refresh", VALOR)))
+    mvc.perform(post("/api/v1/auth/refresh").header("Origin", "https://evil.example").cookie(new Cookie("mm_refresh", VALOR)))
         .andExpect(status().isForbidden());
     verify(refresh, never()).rotar(anyString());
   }
 
   @Test void cookieInvalidaSeBorra() throws Exception {
-    mvc.perform(post("/api/auth/refresh").header("Origin", ORIGEN).cookie(new Cookie("mm_refresh", "C".repeat(43))))
+    mvc.perform(post("/api/v1/auth/refresh").header("Origin", ORIGEN).cookie(new Cookie("mm_refresh", "C".repeat(43))))
         .andExpect(status().isUnauthorized())
         .andExpect(header().string("Set-Cookie", containsString("Max-Age=0")));
   }
 
   @Test void appMovilUsaElCuerpoSinCookies() throws Exception {
-    mvc.perform(post("/api/auth/token").contentType(MediaType.APPLICATION_JSON).content(LOGIN))
+    mvc.perform(post("/api/v1/auth/token").contentType(MediaType.APPLICATION_JSON).content(LOGIN))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.refreshToken").value(VALOR))
         .andExpect(header().doesNotExist("Set-Cookie"));
-    mvc.perform(post("/api/auth/refresh").contentType(MediaType.APPLICATION_JSON).content("{\"refreshToken\":\"" + VALOR + "\"}"))
+    mvc.perform(post("/api/v1/auth/refresh").contentType(MediaType.APPLICATION_JSON).content("{\"refreshToken\":\"" + VALOR + "\"}"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.refreshToken").value(NUEVO));
   }
 
   @Test void logoutRevocaYBorraLaCookie() throws Exception {
-    mvc.perform(post("/api/auth/logout").header("Origin", ORIGEN).cookie(new Cookie("mm_refresh", VALOR)))
+    mvc.perform(post("/api/v1/auth/logout").header("Origin", ORIGEN).cookie(new Cookie("mm_refresh", VALOR)))
         .andExpect(status().isNoContent())
         .andExpect(header().string("Set-Cookie", containsString("Max-Age=0")));
     verify(refresh).revocar(VALOR);

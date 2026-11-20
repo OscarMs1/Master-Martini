@@ -16,12 +16,12 @@ class SeguridadTest {
  @Autowired MockMvc mvc;
  @MockitoBean UsuarioRepository usuarios;
  @RestController static class Probe {
-  @GetMapping("/api/admin/probe") String admin(){return "ok";}
-  @PostMapping("/api/admin/probe") String write(){return "ok";}
+  @GetMapping("/api/v1/admin/probe") String admin(){return "ok";}
+  @PostMapping("/api/v1/admin/probe") String write(){return "ok";}
  }
- @Test void anonimoNoAccede() throws Exception {mvc.perform(get("/api/admin/probe")).andExpect(status().isUnauthorized());}
- @Test void clienteNoAdmin() throws Exception {mvc.perform(get("/api/admin/probe").with(user("cliente").roles("CLIENTE"))).andExpect(status().isForbidden());}
- @Test void adminPuedeEscribir() throws Exception {mvc.perform(post("/api/admin/probe").with(user("admin").roles("ADMINISTRADOR"))).andExpect(status().isOk());}
- @Test void unaCookieDeSesionNoAutentica() throws Exception {mvc.perform(get("/api/admin/probe").cookie(new jakarta.servlet.http.Cookie("JSESSIONID","robada"))).andExpect(status().isUnauthorized());}
- @Test void noSeCreanSesiones() throws Exception {mvc.perform(get("/api/admin/probe")).andExpect(request().sessionAttributeDoesNotExist("SPRING_SECURITY_CONTEXT"));}
+ @Test void anonimoNoAccede() throws Exception {mvc.perform(get("/api/v1/admin/probe")).andExpect(status().isUnauthorized());}
+ @Test void clienteNoAdmin() throws Exception {mvc.perform(get("/api/v1/admin/probe").with(user("cliente").roles("CLIENTE"))).andExpect(status().isForbidden());}
+ @Test void adminPuedeEscribir() throws Exception {mvc.perform(post("/api/v1/admin/probe").with(user("admin").roles("ADMINISTRADOR"))).andExpect(status().isOk());}
+ @Test void unaCookieDeSesionNoAutentica() throws Exception {mvc.perform(get("/api/v1/admin/probe").cookie(new jakarta.servlet.http.Cookie("JSESSIONID","robada"))).andExpect(status().isUnauthorized());}
+ @Test void noSeCreanSesiones() throws Exception {mvc.perform(get("/api/v1/admin/probe")).andExpect(request().sessionAttributeDoesNotExist("SPRING_SECURITY_CONTEXT"));}
 }

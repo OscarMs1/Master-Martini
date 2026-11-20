@@ -4,9 +4,9 @@ import cl.mastermartini.model.Inscripcion;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface InscripcionRepository extends JpaRepository<Inscripcion, Long> {
-  boolean existsByUsuarioIdAndClaseId(Long usuarioId, Long claseId);
+  boolean existsByUsuarioIdAndClase_Id(Long usuarioId, Long claseId);
 
-  long countByClaseId(Long claseId);
+  long countByClase_Id(Long claseId);
 
   java.util.List<Inscripcion> findByUsuarioIdOrderByFechaDesc(Long usuarioId);
 }

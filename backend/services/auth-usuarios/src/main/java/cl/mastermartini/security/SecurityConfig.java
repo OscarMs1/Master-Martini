@@ -94,24 +94,24 @@ public class SecurityConfig {
                 a.requestMatchers(HttpMethod.OPTIONS, "/**")
                     .permitAll()
                     .requestMatchers(
-                        "/api/estado", "/api/auth/registro", "/api/auth/login", "/api/auth/token", "/api/auth/refresh", "/api/auth/logout", "/error")
+                        "/api/v1/estado", "/api/v1/auth/registro", "/api/v1/auth/login", "/api/v1/auth/token", "/api/v1/auth/refresh", "/api/v1/auth/logout", "/error")
                     .permitAll()
                     .requestMatchers(HttpMethod.GET, "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**", "/v3/servicios/*")
                     .permitAll()
                     .requestMatchers(
-                        HttpMethod.GET, "/api/productos", "/api/productos/*", "/api/clases", "/api/imagenes/*", "/api/videos/*", "/api/novedades", "/api/novedades/*")
+                        HttpMethod.GET, "/api/v1/productos", "/api/v1/productos/*", "/api/v1/clases", "/api/v1/imagenes/*", "/api/v1/videos/*", "/api/imagenes/*", "/api/videos/*", "/api/v1/novedades", "/api/v1/novedades/*")
                     .permitAll()
                     // Las reseñas se pueden leer sin cuenta; escribir exige sesión y CSRF.
-                    .requestMatchers(HttpMethod.GET, "/api/resenas/producto/*").permitAll()
-                    .requestMatchers(HttpMethod.POST, "/api/pedidos", "/api/contactos", "/api/asistente")
+                    .requestMatchers(HttpMethod.GET, "/api/v1/resenas/producto/*").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/v1/pedidos", "/api/v1/contactos", "/api/v1/asistente")
                     .permitAll()
-                    .requestMatchers("/api/admin/**")
+                    .requestMatchers("/api/v1/admin/**")
                     .hasRole("ADMINISTRADOR")
-                    .requestMatchers(HttpMethod.POST, "/api/productos")
+                    .requestMatchers(HttpMethod.POST, "/api/v1/productos")
                     .hasRole("ADMINISTRADOR")
-                    .requestMatchers(HttpMethod.PUT, "/api/productos/*")
+                    .requestMatchers(HttpMethod.PUT, "/api/v1/productos/*")
                     .hasRole("ADMINISTRADOR")
-                    .requestMatchers(HttpMethod.DELETE, "/api/productos/*")
+                    .requestMatchers(HttpMethod.DELETE, "/api/v1/productos/*")
                     .hasRole("ADMINISTRADOR")
                     .anyRequest()
                     .authenticated())
@@ -139,7 +139,7 @@ public class SecurityConfig {
     c.setAllowedHeaders(List.of("Content-Type", "Authorization"));
     c.setAllowCredentials(true);
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/api/**", c);
+    source.registerCorsConfiguration("/api/v1/**", c);
     return source;
   }
 }

@@ -164,13 +164,13 @@ Por último, actualiza el CORS del bucket (paso 1.4) con ese mismo dominio.
 
 | Qué | Cómo |
 |---|---|
-| Subir imagen (admin) | `POST /api/admin/imagenes` con multipart `archivo`. Responde `{"url": "/api/imagenes/<id>.png"}` |
-| Ver imagen | `GET /api/imagenes/<id>.png` responde `302` al archivo en CloudFront o S3 |
-| Subir video (admin) | 1) `POST /api/admin/videos` con `{"tipo": "video/mp4", "tamano": 12345678}`. 2) Haz `PUT` del archivo a la URL de `subida`, con la cabecera `Content-Type` indicada. 3) Guarda la `url` (`/api/videos/<id>.mp4`) |
-| Ver video | `GET /api/videos/<id>.mp4` responde `302` al archivo en CloudFront o S3 |
+| Subir imagen (admin) | `POST /api/v1/admin/imagenes` con multipart `archivo`. Responde `{"url": "/api/v1/imagenes/<id>.png"}` |
+| Ver imagen | `GET /api/v1/imagenes/<id>.png` responde `302` al archivo en CloudFront o S3 |
+| Subir video (admin) | 1) `POST /api/v1/admin/videos` con `{"tipo": "video/mp4", "tamano": 12345678}`. 2) Haz `PUT` del archivo a la URL de `subida`, con la cabecera `Content-Type` indicada. 3) Guarda la `url` (`/api/v1/videos/<id>.mp4`) |
+| Ver video | `GET /api/v1/videos/<id>.mp4` responde `302` al archivo en CloudFront o S3 |
 
 - Los videos pueden ser MP4, WEBM o MOV, de hasta 200 MB. La URL firmada dura 15 minutos.
-- **App del teléfono:** inicia sesión con `POST /api/auth/token` y envía `Authorization: Bearer <token>`
+- **App del teléfono:** inicia sesión con `POST /api/v1/auth/token` y envía `Authorization: Bearer <token>`
   (ver [API.md](API.md)). Usa `https://dxxxx.cloudfront.net` como base. Las referencias `/api/...` se
   anteponen con ese dominio. Las librerías de imágenes y video siguen la redirección `302` solas.
 - En tu PC, con `S3_BUCKET` vacío, todo sigue igual: las imágenes quedan en el volumen `uploads`

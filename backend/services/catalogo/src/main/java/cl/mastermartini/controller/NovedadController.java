@@ -6,7 +6,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
-@RestController @RequestMapping("/api")
+@RestController @RequestMapping("/api/v1")
 public class NovedadController {
   private final NovedadService service;
   public NovedadController(NovedadService service){this.service=service;}

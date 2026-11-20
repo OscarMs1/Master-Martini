@@ -25,10 +25,10 @@ import org.springframework.web.server.ResponseStatusException;
  * </ul>
  */
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/v1/auth")
 public class AuthController {
   public static final String COOKIE = "mm_refresh";
-  private static final String RUTA_COOKIE = "/api/auth";
+  private static final String RUTA_COOKIE = "/api/v1/auth";
   private final UsuarioService usuarios;
   private final AuthenticationManager manager;
   private final TokenService tokens;

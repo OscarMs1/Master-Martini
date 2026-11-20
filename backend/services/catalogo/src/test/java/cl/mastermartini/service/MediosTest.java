@@ -27,9 +27,9 @@ class MediosTest {
   @Test void sinBucketLaImagenQuedaEnDisco() throws Exception {
     var service = new ImagenService(dir.toString(), new AlmacenS3("", "us-east-1", ""));
     String ref = service.guardar(png());
-    assertTrue(ref.startsWith("/api/imagenes/"));
+    assertTrue(ref.startsWith("/api/v1/imagenes/"));
     assertFalse(service.enS3());
-    assertTrue(Files.isRegularFile(service.obtener(ref.substring("/api/imagenes/".length()))));
+    assertTrue(Files.isRegularFile(service.obtener(ref.substring("/api/v1/imagenes/".length()))));
   }
 
   @Test void conBucketLaImagenSeSubeAS3YConservaLaReferencia() throws Exception {
@@ -38,7 +38,7 @@ class MediosTest {
     when(s3.url(anyString())).thenAnswer(i -> "https://cdn.test/" + i.getArgument(0));
     var service = new ImagenService(dir.toString(), s3);
     String ref = service.guardar(png());
-    String nombre = ref.substring("/api/imagenes/".length());
+    String nombre = ref.substring("/api/v1/imagenes/".length());
     verify(s3).subir(eq("imagenes/" + nombre), any(), eq("image/png"));
     assertEquals("https://cdn.test/imagenes/" + nombre, service.urlS3(nombre));
     try (var archivos = Files.list(dir)) { assertEquals(0, archivos.count()); }
@@ -54,7 +54,7 @@ class MediosTest {
     var subida = videos.prepararSubida("video/MP4", 1000);
     assertEquals("PUT", subida.metodo());
     assertEquals("video/mp4", subida.cabeceras().get("Content-Type"));
-    assertTrue(subida.url().matches("/api/videos/[a-f0-9-]{36}\\.mp4"));
+    assertTrue(subida.url().matches("/api/v1/videos/[a-f0-9-]{36}\\.mp4"));
     assertThrows(ResponseStatusException.class, () -> videos.prepararSubida("application/pdf", 1000));
     assertThrows(ResponseStatusException.class, () -> videos.prepararSubida("video/mp4", VideoService.MAX_BYTES + 1));
     assertThrows(ResponseStatusException.class, () -> videos.urlPublica("../secreto.mp4"));

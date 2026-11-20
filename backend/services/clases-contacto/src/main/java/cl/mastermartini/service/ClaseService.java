@@ -30,10 +30,10 @@ public class ClaseService {
               v.put("duracion", c.getDuracion());
               v.put("lugar", c.getLugar());
               v.put("imagen", c.getImagen());
-              v.put("cuposDisponibles", c.getCapacidad() - inscripciones.countByClaseId(c.getId()));
+              v.put("cuposDisponibles", c.getCapacidad() - inscripciones.countByClase_Id(c.getId()));
               var ids = Arrays.stream(c.getProductosIds().split(",")).map(Long::valueOf).toList();
               var relacionados=new java.util.ArrayList<java.util.Map<String,Object>>();
-              for(Long id:ids)try{var producto=remote.call(catalog+"/api/productos/"+id,org.springframework.http.HttpMethod.GET,null,java.util.Map.class);relacionados.add(java.util.Map.of("id",producto.get("id"),"nombre",producto.get("nombre")));}catch(org.springframework.web.server.ResponseStatusException ex){if(ex.getStatusCode().value()!=404)throw ex;}
+              for(Long id:ids)try{var producto=remote.call(catalog+"/api/v1/productos/"+id,org.springframework.http.HttpMethod.GET,null,java.util.Map.class);relacionados.add(java.util.Map.of("id",producto.get("id"),"nombre",producto.get("nombre")));}catch(org.springframework.web.server.ResponseStatusException ex){if(ex.getStatusCode().value()!=404)throw ex;}
               v.put("productos",relacionados);
               return v;
             })
@@ -49,15 +49,15 @@ public class ClaseService {
             .orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Clase no encontrada."));
     if (c.isRetirado()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Clase no disponible.");
-    if (inscripciones.existsByUsuarioIdAndClaseId(uid, claseId))
+    if (inscripciones.existsByUsuarioIdAndClase_Id(uid, claseId))
       throw new ResponseStatusException(HttpStatus.CONFLICT, "Ya estás inscrito en esta clase.");
     if (!c.getFecha().isAfter(Instant.now()))
       throw new ResponseStatusException(HttpStatus.CONFLICT, "La fecha de inscripción ya pasó.");
-    if (inscripciones.countByClaseId(claseId) >= c.getCapacidad())
+    if (inscripciones.countByClase_Id(claseId) >= c.getCapacidad())
       throw new ResponseStatusException(HttpStatus.CONFLICT, "No quedan cupos en esta clase.");
     Inscripcion i = new Inscripcion();
     i.setUsuarioId(uid);
-    i.setClaseId(claseId);
+    i.setClase(c);
     i.setFecha(Instant.now());
     return vista(inscripciones.saveAndFlush(i));
   }
@@ -73,7 +73,7 @@ public class ClaseService {
   }
 
   private Map<String, Object> vista(Inscripcion i) {
-    Clase c = clases.findById(i.getClaseId()).orElseThrow();
+    Clase c = i.getClase();
     return Map.of(
         "id",
         i.getId(),

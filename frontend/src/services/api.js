@@ -3,6 +3,9 @@
 //   sessionStorage: un script inyectado no lo encuentra guardado y dura 15 minutos como máximo.
 // - La sesión se recupera con la cookie de renovación, que es HttpOnly (JavaScript no puede leerla)
 //   y SameSite=Strict. El navegador la envía sola, y solo a /api/auth.
+/** Versión de la API REST. Todas las rutas del backend cuelgan de /api/v1. */
+export const API = "/api/v1";
+
 let accessToken = null;
 let renovando = null;
 
@@ -27,7 +30,7 @@ export function avisarLogout() {
 /** Pide un access token nuevo con la cookie. Varias llamadas simultáneas comparten una petición. */
 export function renovarSesion() {
   if (!renovando) {
-    renovando = fetch("/api/auth/refresh", { method: "POST", credentials: "same-origin" })
+    renovando = fetch(`${API}/auth/refresh`, { method: "POST", credentials: "same-origin" })
       .then(async (response) => {
         if (!response.ok) {
           accessToken = null;
@@ -47,7 +50,7 @@ export function renovarSesion() {
 
 export async function api(path, options = {}, reintento = false) {
   try {
-    const response = await fetch(`/api${path}`, {
+    const response = await fetch(`${API}${path}`, {
       ...options,
       credentials: "same-origin",
       headers: {

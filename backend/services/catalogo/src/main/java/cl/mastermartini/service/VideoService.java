@@ -31,7 +31,7 @@ public class VideoService {
     String nombre = UUID.randomUUID() + "." + ext;
     String tipoNormal = tipo.toLowerCase(java.util.Locale.ROOT);
     String url = s3.firmarSubida("videos/" + nombre, tipoNormal, tamano, VIGENCIA);
-    return new Subida(url, "PUT", Map.of("Content-Type", tipoNormal), "/api/videos/" + nombre, VIGENCIA.toSeconds());
+    return new Subida(url, "PUT", Map.of("Content-Type", tipoNormal), "/api/v1/videos/" + nombre, VIGENCIA.toSeconds());
   }
 
   public String urlPublica(String nombre) {

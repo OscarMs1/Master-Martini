@@ -13,6 +13,6 @@ public record ProductoRequest(
     @NotBlank
         @Pattern(
             regexp =
-                "(/api/imagenes/[a-f0-9-]{36}\\.png|/assets/images/[a-z0-9-]+\\.(jpg|jpeg|webp)|https://mastermartini\\.cl/wp-content/uploads/2023/06/Margarinas-1\\.jpg)")
+                "(/api/(v1/)?imagenes/[a-f0-9-]{36}\\.png|/assets/images/[a-z0-9-]+\\.(jpg|jpeg|webp)|https://mastermartini\\.cl/wp-content/uploads/2023/06/Margarinas-1\\.jpg)")
         String imagen,
     boolean destacado) {}

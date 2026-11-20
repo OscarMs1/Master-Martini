@@ -20,7 +20,7 @@ public class InternalSecurity {
   h.csrf(c->c.disable()).sessionManagement(c->c.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
   h.addFilterBefore(new OncePerRequestFilter(){
    protected void doFilterInternal(jakarta.servlet.http.HttpServletRequest r,jakarta.servlet.http.HttpServletResponse s,jakarta.servlet.FilterChain chain)throws java.io.IOException,jakarta.servlet.ServletException{
-    if(r.getRequestURI().equals("/api/estado")){chain.doFilter(r,s);return;}
+    if(r.getRequestURI().equals("/api/v1/estado")){chain.doFilter(r,s);return;}
     String supplied=r.getHeader("X-Service-Key");
     if(supplied==null||!MessageDigest.isEqual(key.getBytes(StandardCharsets.UTF_8),supplied.getBytes(StandardCharsets.UTF_8))){s.setStatus(401);return;}
     String uid=r.getHeader("X-User-Id"),role=r.getHeader("X-User-Role");
@@ -30,11 +30,11 @@ public class InternalSecurity {
     chain.doFilter(r,s);
    }
   },AnonymousAuthenticationFilter.class);
-  h.authorizeHttpRequests(a->a.requestMatchers("/api/estado").permitAll().requestMatchers("/api/admin/**").hasRole("ADMINISTRADOR")
-   .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/productos").hasRole("ADMINISTRADOR")
-   .requestMatchers(org.springframework.http.HttpMethod.PUT,"/api/productos/*").hasRole("ADMINISTRADOR")
-   .requestMatchers(org.springframework.http.HttpMethod.DELETE,"/api/productos/*").hasRole("ADMINISTRADOR")
-   .requestMatchers("/api/inscripciones/**","/api/pedidos/mis-pedidos","/api/favoritos/**").hasAnyRole("CLIENTE","ADMINISTRADOR")
+  h.authorizeHttpRequests(a->a.requestMatchers("/api/v1/estado").permitAll().requestMatchers("/api/v1/admin/**").hasRole("ADMINISTRADOR")
+   .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/v1/productos").hasRole("ADMINISTRADOR")
+   .requestMatchers(org.springframework.http.HttpMethod.PUT,"/api/v1/productos/*").hasRole("ADMINISTRADOR")
+   .requestMatchers(org.springframework.http.HttpMethod.DELETE,"/api/v1/productos/*").hasRole("ADMINISTRADOR")
+   .requestMatchers("/api/v1/inscripciones/**","/api/v1/pedidos/mis-pedidos","/api/v1/favoritos/**").hasAnyRole("CLIENTE","ADMINISTRADOR")
    .anyRequest().authenticated());
   h.exceptionHandling(e->e.accessDeniedHandler((r,s,x)->s.setStatus(403)));return h.build();
  }

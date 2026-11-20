@@ -10,7 +10,7 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/productos")
+@RequestMapping("/api/v1/productos")
 public class ProductoController {
   private final ProductoService service;
   private final cl.mastermartini.service.OfertaService ofertas;
@@ -38,7 +38,7 @@ public class ProductoController {
   @PostMapping
   public ResponseEntity<Producto> crear(@Valid @RequestBody ProductoRequest r) {
     Producto p = service.guardar(null, r);
-    return ResponseEntity.created(URI.create("/api/productos/" + p.getId())).body(p);
+    return ResponseEntity.created(URI.create("/api/v1/productos/" + p.getId())).body(p);
   }
 
   @PutMapping("/{id}")
