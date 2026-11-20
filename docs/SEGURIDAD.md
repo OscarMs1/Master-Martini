@@ -44,7 +44,9 @@ La IP del visitante se obtiene de forma segura (`IpCliente`): el cliente puede i
 - **Inyección SQL:** se probaron cargas típicas (`' OR '1'='1`, `; DROP TABLE`) en el login y en las rutas. Todas se rechazan sin errores de SQL, porque JPA usa consultas parametrizadas.
 - **XSS:**
   - Una reseña con `<img src=x onerror=...>` se muestra como texto: React la escapa y no se inyecta ninguna etiqueta (verificado en el navegador).
-  - El HTML enriquecido de novedades y consultas pasa por DOMPurify.
+  - El HTML enriquecido de novedades y consultas se limpia dos veces: en el servidor antes de
+    guardarlo (OWASP Java HTML Sanitizer, `HtmlSeguro`) y en la web al mostrarlo (DOMPurify). Así la
+    base de datos no guarda scripts y la app móvil también recibe HTML seguro.
   - La CSP solo permite scripts del propio sitio.
 - **Archivos:**
   - Solo un administrador puede subir imágenes.

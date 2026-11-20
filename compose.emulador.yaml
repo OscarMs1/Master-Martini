@@ -1,0 +1,19 @@
+# Pruebas de S3 sin AWS, con AWS Emulator (https://github.com/aws/aws-emulator).
+# Uso: ./emulador/iniciar.sh  (levanta el emulador, crea el bucket y arranca la página con S3).
+# Nada de esto se usa en AWS.
+services:
+  catalogo:
+    env_file: [.env.emulador]   # claves del emulador, generadas por iniciar.sh (no se versiona)
+    environment:
+      S3_BUCKET: mm-media
+      S3_ENDPOINT: http://frontend:8080
+      S3_ENDPOINT_PUBLICO: http://localhost:8095
+      MEDIA_BASE_URL: http://localhost:8095/mm-media
+  frontend:
+    networks: [default, aws-emulator]
+    volumes:
+      - ./emulador:/etc/nginx/extra:ro
+
+networks:
+  aws-emulator:
+    external: true

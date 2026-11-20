@@ -14,4 +14,9 @@ public interface ResenaRepository extends JpaRepository<Resena, Long> {
 
   @Query("select coalesce(avg(r.puntuacion), 0) from Resena r where r.producto.id = :productoId")
   double promedio(@Param("productoId") Long productoId);
+
+  /** Borra las opiniones de un producto (al eliminarlo del catálogo). */
+  @Modifying
+  @Query("delete from Resena r where r.producto.id = :productoId")
+  int borrarDeProducto(@Param("productoId") Long productoId);
 }

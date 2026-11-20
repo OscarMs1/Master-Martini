@@ -25,7 +25,7 @@ class MediosTest {
   }
 
   @Test void sinBucketLaImagenQuedaEnDisco() throws Exception {
-    var service = new ImagenService(dir.toString(), new AlmacenS3("", "us-east-1", ""));
+    var service = new ImagenService(dir.toString(), new AlmacenS3("", "us-east-1", "", "", ""));
     String ref = service.guardar(png());
     assertTrue(ref.startsWith("/api/v1/imagenes/"));
     assertFalse(service.enS3());
@@ -61,7 +61,7 @@ class MediosTest {
   }
 
   @Test void sinBucketLosVideosNoEstanDisponibles() {
-    var videos = new VideoService(new AlmacenS3("", "us-east-1", ""));
+    var videos = new VideoService(new AlmacenS3("", "us-east-1", "", "", ""));
     var e = assertThrows(ResponseStatusException.class, () -> videos.prepararSubida("video/mp4", 1000));
     assertEquals(HttpStatus.SERVICE_UNAVAILABLE, e.getStatusCode());
   }
