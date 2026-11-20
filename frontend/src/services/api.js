@@ -1,44 +1,73 @@
-let csrf;
-let csrfRequest;
-let csrfVersion = 0;
-async function obtenerCsrf() {
-  if (csrf) return csrf;
-  if (!csrfRequest) {
-    const version = csrfVersion;
-    csrfRequest = fetch("/api/auth/csrf", { credentials: "include" })
-      .then(async (response) => {
-        if (!response.ok) throw new Error("No se pudo iniciar una conexión segura.");
-        const token = await response.json();
-        if (version === csrfVersion) csrf = token;
-        return token;
-      }).finally(() => { if (version === csrfVersion) csrfRequest = undefined; });
+// Autenticación con JWT.
+// - El access token vive SOLO en esta variable (memoria). No se guarda en localStorage ni
+//   sessionStorage: un script inyectado no lo encuentra guardado y dura 15 minutos como máximo.
+// - La sesión se recupera con la cookie de renovación, que es HttpOnly (JavaScript no puede leerla)
+//   y SameSite=Strict. El navegador la envía sola, y solo a /api/auth.
+let accessToken = null;
+let renovando = null;
+
+const canal = typeof BroadcastChannel === "function" ? new BroadcastChannel("mm-auth") : null;
+// Si otra pestaña cierra sesión, esta también olvida su token.
+canal?.addEventListener("message", (event) => {
+  if (event.data === "logout") {
+    accessToken = null;
+    window.dispatchEvent(new Event("session-expired"));
   }
-  return csrfRequest;
+});
+
+export function setAccessToken(token) {
+  accessToken = token || null;
 }
-export async function api(path, options = {}) {
-  const method = options.method || "GET";
+
+export function avisarLogout() {
+  accessToken = null;
+  canal?.postMessage("logout");
+}
+
+/** Pide un access token nuevo con la cookie. Varias llamadas simultáneas comparten una petición. */
+export function renovarSesion() {
+  if (!renovando) {
+    renovando = fetch("/api/auth/refresh", { method: "POST", credentials: "same-origin" })
+      .then(async (response) => {
+        if (!response.ok) {
+          accessToken = null;
+          return null;
+        }
+        const data = await response.json();
+        accessToken = data.accessToken;
+        return data;
+      })
+      .catch(() => null)
+      .finally(() => {
+        renovando = null;
+      });
+  }
+  return renovando;
+}
+
+export async function api(path, options = {}, reintento = false) {
   try {
-    if (!["GET", "HEAD"].includes(method) && !csrf) {
-      await obtenerCsrf();
-    }
     const response = await fetch(`/api${path}`, {
       ...options,
-      credentials: "include",
+      credentials: "same-origin",
       headers: {
         ...(!(options.body instanceof FormData) && { "Content-Type": "application/json" }),
-        ...(csrf && { [csrf.headerName]: csrf.token }),
+        ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
         ...options.headers,
       },
       body: options.body instanceof FormData ? options.body : options.body ? JSON.stringify(options.body) : undefined,
     });
+    // Token vencido: se renueva una vez y se repite la petición.
+    if (response.status === 401 && !reintento && !path.startsWith("/auth/")) {
+      if (await renovarSesion()) return api(path, options, true);
+    }
     const data =
       response.status === 204 ? null : await response.json().catch(() => null);
     if (!response.ok) {
-      if (response.status === 401) {
-        resetCsrf();
+      if (response.status === 401 && !path.startsWith("/auth/login")) {
+        accessToken = null;
         window.dispatchEvent(new Event("session-expired"));
       }
-      if (response.status === 403) resetCsrf();
       const error = new Error(
         (response.status >= 500 ? "El servidor no está disponible en este momento. Inténtalo nuevamente." : data?.message) ||
           "No se pudo completar la solicitud. Inténtalo nuevamente.",
@@ -55,9 +84,4 @@ export async function api(path, options = {}) {
       );
     throw error;
   }
-}
-export function resetCsrf() {
-  csrfVersion += 1;
-  csrfRequest = undefined;
-  csrf = undefined;
 }

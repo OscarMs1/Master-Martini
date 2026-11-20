@@ -10,6 +10,7 @@
 *.dump
 *.bak
 *.log
+claude.md
 
 # Dependencias, compilados, caché y archivos del editor.
 **/node_modules/

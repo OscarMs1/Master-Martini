@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestClient;
-@RestController public class GatewayController {
+@io.swagger.v3.oas.annotations.Hidden @RestController public class GatewayController {
  private final UsuarioService users;private final String catalog,orders,classes,key;private final RestClient client;
  public GatewayController(UsuarioService users,@Value("${app.catalog-url}")String catalog,@Value("${app.orders-url}")String orders,@Value("${app.classes-url}")String classes,@Value("${app.service-key}")String key){
   this.users=users;this.catalog=catalog;this.orders=orders;this.classes=classes;this.key=key;

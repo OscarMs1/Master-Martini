@@ -13,8 +13,11 @@ import org.springframework.security.core.userdetails.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.context.*;
-import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.web.cors.*;
 
 @Configuration
@@ -47,22 +50,53 @@ public class SecurityConfig {
   }
 
   @Bean
-  SecurityContextRepository contextRepository() {
-    return new HttpSessionSecurityContextRepository();
+  JwtDecoder jwtDecoder(TokenService tokens) {
+    return tokens.decoder();
   }
 
+  /**
+   * Convierte un JWT válido en usuario autenticado. El rol se lee de la base de datos (no del
+   * token) y el token deja de valer si el usuario se borra o cambia la contraseña.
+   */
+  static Converter<Jwt, JwtAuthenticationToken> jwtConverter(UserDetailsService details, TokenService tokens) {
+    return jwt -> {
+      UserDetails u = details.loadUserByUsername(jwt.getSubject());
+      if (!tokens.versionPassword(u.getPassword()).equals(jwt.getClaimAsString("pwv")))
+        throw new BadCredentialsException("Token revocado.");
+      return new JwtAuthenticationToken(jwt, u.getAuthorities(), u.getUsername());
+    };
+  }
+
+  private static final AuthenticationEntryPoint NO_AUTENTICADO =
+      (req, res, ex) -> {
+        res.setStatus(401);
+        res.setContentType("application/json;charset=UTF-8");
+        res.getWriter().write("{\"message\":\"Inicia sesión para continuar.\"}");
+      };
+
   @Bean
-  SecurityFilterChain filterChain(HttpSecurity http, SecurityContextRepository repository)
+  SecurityFilterChain filterChain(
+      HttpSecurity http,
+      UserDetailsService details,
+      TokenService tokens)
       throws Exception {
     http.cors(cors -> {})
-        .csrf(csrf -> csrf.csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()))
-        .securityContext(c -> c.securityContextRepository(repository))
+        // Sin sesiones: cada petición se autentica con "Authorization: Bearer", que el navegador
+        // nunca agrega solo, así que un sitio ajeno no puede falsificarla (no hace falta token CSRF).
+        // La única cookie (renovación) es SameSite=Strict y AuthController exige un Origin permitido.
+        .csrf(csrf -> csrf.disable())
+        .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .oauth2ResourceServer(o -> o
+            .authenticationEntryPoint(NO_AUTENTICADO)
+            .jwt(j -> j.jwtAuthenticationConverter(jwtConverter(details, tokens))))
         .authorizeHttpRequests(
             a ->
                 a.requestMatchers(HttpMethod.OPTIONS, "/**")
                     .permitAll()
                     .requestMatchers(
-                        "/api/estado", "/api/auth/csrf", "/api/auth/registro", "/api/auth/login", "/error")
+                        "/api/estado", "/api/auth/registro", "/api/auth/login", "/api/auth/token", "/api/auth/refresh", "/api/auth/logout", "/error")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**", "/v3/servicios/*")
                     .permitAll()
                     .requestMatchers(
                         HttpMethod.GET, "/api/productos", "/api/productos/*", "/api/clases", "/api/imagenes/*", "/api/videos/*", "/api/novedades", "/api/novedades/*")
@@ -83,20 +117,14 @@ public class SecurityConfig {
                     .authenticated())
         .exceptionHandling(
             e ->
-                e.authenticationEntryPoint(
-                        (req, res, ex) -> {
-                          res.setStatus(401);
-                          res.setContentType("application/json;charset=UTF-8");
-                          res.getWriter().write("{\"message\":\"Inicia sesión para continuar.\"}");
-                        })
+                e.authenticationEntryPoint(NO_AUTENTICADO)
                     .accessDeniedHandler(
                         (req, res, ex) -> {
                           res.setStatus(403);
                           res.setContentType("application/json;charset=UTF-8");
                           res.getWriter()
                               .write(
-                                  "{\"message\":\"No tienes permiso o la sesión de seguridad"
-                                      + " expiró. Recarga la página.\"}");
+                                  "{\"message\":\"No tienes permiso para realizar esta acción.\"}");
                         }))
         .logout(logout -> logout.disable())
         .requestCache(cache -> cache.disable());
@@ -108,7 +136,7 @@ public class SecurityConfig {
     CorsConfiguration c = new CorsConfiguration();
     c.setAllowedOrigins(java.util.Arrays.stream(origin.split(",")).map(String::trim).toList());
     c.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-    c.setAllowedHeaders(List.of("Content-Type", "X-CSRF-TOKEN"));
+    c.setAllowedHeaders(List.of("Content-Type", "Authorization"));
     c.setAllowCredentials(true);
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/api/**", c);

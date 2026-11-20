@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Campo from "./Campo";
-import { api, resetCsrf } from "../services/api";
+import { api, avisarLogout } from "../services/api";
 
 export default function CambiarPassword() {
   const [datos, setDatos] = useState({ actual: "", nueva: "", confirmar: "" });
@@ -28,7 +28,7 @@ export default function CambiarPassword() {
         method: "POST",
         body: { actual: datos.actual, nueva: datos.nueva },
       });
-      resetCsrf();
+      avisarLogout();
       window.location.replace("/login?clave=actualizada");
     } catch (e) {
       setError(e.message);
