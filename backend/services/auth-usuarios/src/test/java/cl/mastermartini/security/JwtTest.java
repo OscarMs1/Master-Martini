@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @WebMvcTest(controllers = JwtTest.Probe.class, properties = {
     "app.frontend-origin=http://127.0.0.1:5173",
     "app.jwt-secret=" + JwtTest.SECRETO})
-@Import({SecurityConfig.class, TokenService.class, JwtTest.Probe.class})
+@Import({SecurityConfig.class, TokenService.class, IpCliente.class, JwtTest.Probe.class})
 class JwtTest {
   static final String SECRETO = "secreto-de-pruebas-con-mas-de-32-caracteres";
   @Autowired MockMvc mvc;

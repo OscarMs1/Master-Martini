@@ -33,6 +33,10 @@ public class AuthController {
   private final AuthenticationManager manager;
   private final TokenService tokens;
   private final RefreshTokenService refresh;
+  private final LimiteSolicitudes limite;
+  /** Contraseñas incorrectas permitidas por cuenta antes de bloquearla 15 minutos (aunque cambie la IP). */
+  static final int FALLOS_POR_CUENTA = 10;
+  static final java.time.Duration BLOQUEO = java.time.Duration.ofMinutes(15);
   private final Set<String> origenes;
   private final boolean cookieSegura;
 
@@ -41,12 +45,14 @@ public class AuthController {
       AuthenticationManager manager,
       TokenService tokens,
       RefreshTokenService refresh,
+      LimiteSolicitudes limite,
       @Value("${app.frontend-origin}") String origenes,
       @Value("${app.cookie-secure:false}") boolean cookieSegura) {
     this.usuarios = usuarios;
     this.manager = manager;
     this.tokens = tokens;
     this.refresh = refresh;
+    this.limite = limite;
     this.origenes = Set.copyOf(Arrays.stream(origenes.split(",")).map(String::trim).filter(s -> !s.isEmpty()).toList());
     this.cookieSegura = cookieSegura;
   }
@@ -134,10 +140,18 @@ public class AuthController {
   }
 
   private Usuario autenticar(LoginRequest r) {
-    Authentication auth =
-        manager.authenticate(
-            UsernamePasswordAuthenticationToken.unauthenticated(
-                r.email().trim().toLowerCase(Locale.ROOT), r.password()));
+    String email = r.email().trim().toLowerCase(Locale.ROOT);
+    String clave = "fallos|" + email;
+    // Defensa contra fuerza bruta distribuida (muchas IP contra una cuenta).
+    if (limite.bloqueada(clave, FALLOS_POR_CUENTA, BLOQUEO))
+      throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS, "Demasiados intentos. Espera unos minutos y vuelve a intentarlo.");
+    Authentication auth;
+    try {
+      auth = manager.authenticate(UsernamePasswordAuthenticationToken.unauthenticated(email, r.password()));
+    } catch (org.springframework.security.core.AuthenticationException e) {
+      limite.registrar(clave, BLOQUEO);
+      throw e;
+    }
     return usuarios.obtener(auth.getName());
   }
 

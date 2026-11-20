@@ -25,7 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
     "app.frontend-origin=http://localhost:8095",
     "app.cookie-secure=true",
     "app.jwt-secret=secreto-de-pruebas-con-mas-de-32-caracteres"})
-@Import({SecurityConfig.class, TokenService.class})
+@Import({SecurityConfig.class, TokenService.class, IpCliente.class})
 class AuthWebTest {
   static final String ORIGEN = "http://localhost:8095";
   static final String LOGIN = "{\"email\":\"cliente@test.cl\",\"password\":\"clave12345\"}";

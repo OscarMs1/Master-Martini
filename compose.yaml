@@ -56,6 +56,8 @@ services:
       REFRESH_DIAS: ${REFRESH_DIAS:-7}
       # true en AWS (HTTPS). Con false la cookie de renovación también viaja por http (solo para local).
       COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      # 1 cuando CloudFront está delante (para conocer la IP real en el límite de intentos).
+      PROXIES_CONFIABLES: ${PROXIES_CONFIABLES:-0}
       SWAGGER_ENABLED: ${SWAGGER_ENABLED:-true}
       ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@gmail.com}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Configura ADMIN_PASSWORD en .env}

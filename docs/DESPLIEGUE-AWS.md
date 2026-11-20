@@ -122,11 +122,12 @@ En `.env` completa lo siguiente:
 - `JWT_SECRET`: genera uno nuevo con `openssl rand -hex 32`. Firma los tokens de la web y de la app
   (ver [API.md](API.md)).
 - `COOKIE_SECURE=true`, porque con CloudFront todo va por HTTPS.
+- `PROXIES_CONFIABLES=1`: CloudFront agrega un salto, y así el límite de intentos usa la IP real del visitante.
 - `FRONTEND_ORIGIN`: el login de la web solo funciona desde los dominios de esta lista. Si quieres
   probar antes del paso 5 entrando por `http://TU-ELASTIC-IP`, pon `FRONTEND_ORIGIN=http://TU-ELASTIC-IP`
   y `COOKIE_SECURE=false`. Cuando tengas CloudFront, vuelve a los valores de HTTPS.
-- `SWAGGER_ENABLED=true` deja Swagger visible en `/swagger-ui.html`. Ponlo en `false` si no quieres
-  que sea público.
+- `SWAGGER_ENABLED=true`: deja Swagger visible en `/swagger-ui.html`. Se mantiene activo porque se
+  muestra en la presentación.
 - `ANTHROPIC_API_KEY=` es opcional (para el asistente).
 - **No pongas** `AWS_ACCESS_KEY_ID` ni `AWS_SECRET_ACCESS_KEY`. Los permisos vienen de `LabInstanceProfile`.
 
@@ -149,7 +150,13 @@ En **CloudFront → Create distribution**:
 2. **Origen 2 (S3):** agrega el bucket como origen.
    - Crea dos **behaviors**, `imagenes/*` y `videos/*`, que apunten al origen S3.
      Usa *Redirect HTTP to HTTPS* y la cache policy **CachingOptimized**.
-3. Espera a que el estado diga *Deployed*. Esto tarda unos minutos. Copia el dominio (`https://dxxxx.cloudfront.net`).
+3. **Cabeceras de seguridad:** en el comportamiento por defecto, en *Response headers policy*, crea
+   una política con **Strict-Transport-Security** (`max-age=31536000`, *includeSubDomains*, override activado).
+   Así el navegador nunca vuelve a entrar por `http://`.
+4. **Cierra el acceso directo a la EC2:** en el security group, cambia la regla HTTP (80) de *Anywhere*
+   a la *prefix list* `com.amazonaws.global.cloudfront.origin-facing`. Así nadie salta CloudFront
+   ni falsifica la IP.
+5. Espera a que el estado diga *Deployed*. Esto tarda unos minutos. Copia el dominio (`https://dxxxx.cloudfront.net`).
 
 Luego vuelve a la EC2 y aplica el dominio:
 

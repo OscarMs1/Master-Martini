@@ -11,7 +11,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 @WebMvcTest(controllers=SeguridadTest.Probe.class,properties={"app.frontend-origin=http://127.0.0.1:5173","app.jwt-secret=secreto-de-pruebas-con-mas-de-32-caracteres"})
-@Import({SecurityConfig.class,TokenService.class,SeguridadTest.Probe.class})
+@Import({SecurityConfig.class, TokenService.class, IpCliente.class,SeguridadTest.Probe.class})
 class SeguridadTest {
  @Autowired MockMvc mvc;
  @MockitoBean UsuarioRepository usuarios;
