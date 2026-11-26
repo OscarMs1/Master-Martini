@@ -125,3 +125,34 @@ Content-Type: application/json
 | `REFRESH_DIAS` | Cuántos días se recuerda la sesión sin volver a escribir la contraseña (7 por defecto). |
 | `COOKIE_SECURE` | `true` en AWS (HTTPS). `false` solo en local con http. |
 | `FRONTEND_ORIGIN` | Dominios desde los que la web puede iniciar sesión, separados por comas. |
+
+## Preguntas del asistente de ayuda (administrador)
+
+Cada pregunta que se le hace al asistente (`POST /api/v1/asistente`) se guarda para que el
+administrador vea qué se consulta más. Está en el panel de administración, pestaña **Chatbot**.
+
+- **Qué se guarda:** solo el texto de la pregunta (máximo 300 caracteres) y la fecha. No se guarda la
+  IP ni el usuario, porque los visitantes pueden escribir datos personales en el chat.
+- **Cuánto tiempo:** se borran solas a los 90 días (`ConsultaAsistenteService.RETENCION`).
+- **Qué se registra:** las preguntas que el asistente respondió y las que no pudo responder por un
+  fallo propio (por ejemplo, sin saldo en la cuenta de Anthropic). No se registran las rechazadas por
+  exceso de preguntas (429) ni por datos inválidos (400).
+- **Agrupación:** las preguntas repetidas se cuentan juntas ignorando mayúsculas, tildes y signos:
+  "¿Qué ofertas hay?" y "que ofertas hay" son la misma.
+
+`GET /api/v1/admin/asistente/consultas` (solo `ADMINISTRADOR`) devuelve:
+
+```json
+{
+  "total": 120,
+  "hoy": 8,
+  "retencionDias": 90,
+  "porDia": [{"fecha": "2026-11-26", "total": 8}],
+  "masFrecuentes": [{"pregunta": "¿Qué ofertas hay?", "veces": 14}],
+  "recientes": [{"texto": "hola", "fecha": "2026-11-26T15:00:00Z", "respondida": true}]
+}
+```
+
+`porDia` trae los últimos 14 días (hora de Chile), `masFrecuentes` las 20 preguntas más repetidas y
+`recientes` las últimas 50. La tabla `consulta_asistente` vive en la base de `clases-contacto` y se
+crea sola al arrancar.

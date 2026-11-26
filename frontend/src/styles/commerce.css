@@ -878,3 +878,44 @@
 .product-review-text {margin-top:.35rem;} .product-review-text > :last-child {margin-bottom:0;} .product-review-text ul, .product-review-text ol {padding-left:1.25rem;margin-bottom:.5rem;} .product-review-text li > p {margin:0;} .product-review-text li + li {margin-top:.15rem;}
 .account-address-item {display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
 .account-address-form {padding:1rem;border:1px solid rgba(5,57,42,.14);border-radius:14px;}
+.admin-chatbot .admin-stats {
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 15px;
+}
+.admin-bars {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.admin-bars li {
+  display: grid;
+  grid-template-columns: 56px 1fr 34px;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+}
+.admin-bars-dia {
+  color: var(--muted);
+}
+.admin-bars-barra {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  height: 14px;
+  display: block;
+}
+.admin-bars-barra > span {
+  display: block;
+  height: 100%;
+  background: var(--green);
+}
+.admin-bars-total {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 575px) {
+  .admin-chatbot .admin-stats {
+    grid-template-columns: 1fr;
+  }
+}
