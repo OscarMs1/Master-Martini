@@ -1,10 +1,30 @@
 /**
- * Selección reducida para los formularios de Master Martini:
- * 8 regiones y 173 comunas reales de Chile (no es un catálogo territorial completo).
- * Los datos se basan en el catálogo territorial incluido en el proyecto anterior.
+ * Regiones y comunas de Chile para los formularios de Master Martini:
+ * 16 regiones y 346 comunas (Códigos Únicos Territoriales, SUBDERE).
  * No hace solicitudes externas. Tanto registro como checkout reutilizan este módulo.
  */
 export const REGIONES_COMUNAS_CHILE = [
+  {
+    "region": "Región de Arica y Parinacota",
+    "comunas": [
+      "Arica",
+      "Camarones",
+      "General Lagos",
+      "Putre"
+    ]
+  },
+  {
+    "region": "Región de Tarapacá",
+    "comunas": [
+      "Alto Hospicio",
+      "Camiña",
+      "Colchane",
+      "Huara",
+      "Iquique",
+      "Pica",
+      "Pozo Almonte"
+    ]
+  },
   {
     "region": "Región de Antofagasta",
     "comunas": [
@@ -17,6 +37,20 @@ export const REGIONES_COMUNAS_CHILE = [
       "Sierra Gorda",
       "Taltal",
       "Tocopilla"
+    ]
+  },
+  {
+    "region": "Región de Atacama",
+    "comunas": [
+      "Alto del Carmen",
+      "Caldera",
+      "Chañaral",
+      "Copiapó",
+      "Diego de Almagro",
+      "Freirina",
+      "Huasco",
+      "Tierra Amarilla",
+      "Vallenar"
     ]
   },
   {
@@ -52,34 +86,53 @@ export const REGIONES_COMUNAS_CHILE = [
       "Concón",
       "El Quisco",
       "El Tabo",
+      "Hijuelas",
+      "Isla de Pascua",
+      "Juan Fernández",
       "La Cruz",
       "La Ligua",
       "Limache",
+      "Llaillay",
       "Los Andes",
+      "Nogales",
       "Olmué",
+      "Panquehue",
       "Papudo",
+      "Petorca",
       "Puchuncaví",
+      "Putaendo",
       "Quillota",
       "Quilpué",
       "Quintero",
+      "Rinconada",
       "San Antonio",
+      "San Esteban",
       "San Felipe",
+      "Santa María",
+      "Santo Domingo",
       "Valparaíso",
       "Villa Alemana",
-      "Viña del Mar"
+      "Viña del Mar",
+      "Zapallar"
     ]
   },
   {
     "region": "Región Metropolitana de Santiago",
     "comunas": [
+      "Alhué",
+      "Buin",
+      "Calera de Tango",
       "Cerrillos",
       "Cerro Navia",
       "Colina",
       "Conchalí",
+      "Curacaví",
       "El Bosque",
+      "El Monte",
       "Estación Central",
       "Huechuraba",
       "Independencia",
+      "Isla de Maipo",
       "La Cisterna",
       "La Florida",
       "La Granja",
@@ -92,10 +145,14 @@ export const REGIONES_COMUNAS_CHILE = [
       "Lo Prado",
       "Macul",
       "Maipú",
+      "María Pinto",
+      "Melipilla",
       "Padre Hurtado",
+      "Paine",
       "Pedro Aguirre Cerda",
       "Peñaflor",
       "Peñalolén",
+      "Pirque",
       "Providencia",
       "Pudahuel",
       "Puente Alto",
@@ -105,9 +162,13 @@ export const REGIONES_COMUNAS_CHILE = [
       "Renca",
       "San Bernardo",
       "San Joaquín",
+      "San José de Maipo",
       "San Miguel",
+      "San Pedro",
+      "San Ramón",
       "Santiago",
       "Talagante",
+      "Tiltil",
       "Vitacura",
       "Ñuñoa"
     ]
@@ -123,17 +184,30 @@ export const REGIONES_COMUNAS_CHILE = [
       "Doñihue",
       "Graneros",
       "La Estrella",
+      "Las Cabras",
+      "Litueche",
+      "Lolol",
       "Machalí",
       "Malloa",
+      "Marchihue",
       "Mostazal",
       "Nancagua",
+      "Navidad",
       "Olivar",
+      "Palmilla",
+      "Paredones",
+      "Peralillo",
+      "Peumo",
+      "Pichidegua",
       "Pichilemu",
       "Placilla",
+      "Pumanque",
+      "Quinta de Tilcoco",
       "Rancagua",
       "Rengo",
       "Requínoa",
       "San Fernando",
+      "San Vicente",
       "Santa Cruz"
     ]
   },
@@ -156,11 +230,46 @@ export const REGIONES_COMUNAS_CHILE = [
       "Parral",
       "Pelarco",
       "Pelluhue",
+      "Pencahue",
       "Rauco",
+      "Retiro",
+      "Romeral",
+      "Río Claro",
       "Sagrada Familia",
+      "San Clemente",
       "San Javier",
+      "San Rafael",
       "Talca",
-      "Teno"
+      "Teno",
+      "Vichuquén",
+      "Villa Alegre",
+      "Yerbas Buenas"
+    ]
+  },
+  {
+    "region": "Región de Ñuble",
+    "comunas": [
+      "Bulnes",
+      "Chillán",
+      "Chillán Viejo",
+      "Cobquecura",
+      "Coelemu",
+      "Coihueco",
+      "El Carmen",
+      "Ninhue",
+      "Pemuco",
+      "Pinto",
+      "Portezuelo",
+      "Quillón",
+      "Quirihue",
+      "Ránquil",
+      "San Carlos",
+      "San Fabián",
+      "San Ignacio",
+      "San Nicolás",
+      "Treguaco",
+      "Yungay",
+      "Ñiquén"
     ]
   },
   {
@@ -181,16 +290,78 @@ export const REGIONES_COMUNAS_CHILE = [
       "Hualqui",
       "Laja",
       "Lebu",
+      "Los Álamos",
       "Los Ángeles",
       "Lota",
       "Mulchén",
       "Nacimiento",
+      "Negrete",
       "Penco",
+      "Quilaco",
+      "Quilleco",
       "San Pedro de la Paz",
+      "San Rosendo",
       "Santa Bárbara",
+      "Santa Juana",
       "Talcahuano",
+      "Tirúa",
       "Tomé",
+      "Tucapel",
       "Yumbel"
+    ]
+  },
+  {
+    "region": "Región de La Araucanía",
+    "comunas": [
+      "Angol",
+      "Carahue",
+      "Cholchol",
+      "Collipulli",
+      "Cunco",
+      "Curacautín",
+      "Curarrehue",
+      "Ercilla",
+      "Freire",
+      "Galvarino",
+      "Gorbea",
+      "Lautaro",
+      "Loncoche",
+      "Lonquimay",
+      "Los Sauces",
+      "Lumaco",
+      "Melipeuco",
+      "Nueva Imperial",
+      "Padre Las Casas",
+      "Perquenco",
+      "Pitrufquén",
+      "Pucón",
+      "Purén",
+      "Renaico",
+      "Saavedra",
+      "Temuco",
+      "Teodoro Schmidt",
+      "Toltén",
+      "Traiguén",
+      "Victoria",
+      "Vilcún",
+      "Villarrica"
+    ]
+  },
+  {
+    "region": "Región de Los Ríos",
+    "comunas": [
+      "Corral",
+      "Futrono",
+      "La Unión",
+      "Lago Ranco",
+      "Lanco",
+      "Los Lagos",
+      "Mariquina",
+      "Máfil",
+      "Paillaco",
+      "Panguipulli",
+      "Río Bueno",
+      "Valdivia"
     ]
   },
   {
@@ -206,16 +377,57 @@ export const REGIONES_COMUNAS_CHILE = [
       "Dalcahue",
       "Fresia",
       "Frutillar",
+      "Futaleufú",
+      "Hualaihué",
       "Llanquihue",
       "Los Muermos",
+      "Maullín",
       "Osorno",
+      "Palena",
       "Puerto Montt",
       "Puerto Octay",
       "Puerto Varas",
+      "Puqueldón",
       "Purranque",
       "Puyehue",
+      "Queilén",
       "Quellón",
-      "Río Negro"
+      "Quemchi",
+      "Quinchao",
+      "Río Negro",
+      "San Juan de la Costa",
+      "San Pablo"
+    ]
+  },
+  {
+    "region": "Región de Aysén del General Carlos Ibáñez del Campo",
+    "comunas": [
+      "Aysén",
+      "Chile Chico",
+      "Cisnes",
+      "Cochrane",
+      "Coyhaique",
+      "Guaitecas",
+      "Lago Verde",
+      "O'Higgins",
+      "Río Ibáñez",
+      "Tortel"
+    ]
+  },
+  {
+    "region": "Región de Magallanes y de la Antártica Chilena",
+    "comunas": [
+      "Antártica",
+      "Cabo de Hornos",
+      "Laguna Blanca",
+      "Natales",
+      "Porvenir",
+      "Primavera",
+      "Punta Arenas",
+      "Río Verde",
+      "San Gregorio",
+      "Timaukel",
+      "Torres del Paine"
     ]
   }
 ];

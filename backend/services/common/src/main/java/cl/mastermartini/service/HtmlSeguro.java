@@ -20,7 +20,32 @@ public final class HtmlSeguro {
           .requireRelsOnLinks("noopener", "noreferrer")
           .toFactory();
 
+  /**
+   * Reseñas de productos: solo formato básico (negrita, cursiva, listas). Sin enlaces ni títulos,
+   * para que una opinión no se use como publicidad ni rompa el diseño de la ficha.
+   */
+  private static final PolicyFactory POLITICA_RESENA =
+      new HtmlPolicyBuilder()
+          .allowElements("p", "br", "strong", "b", "em", "i", "u", "s", "ul", "ol", "li")
+          .toFactory();
+
   private HtmlSeguro() {}
+
+  public static String limpiarResena(String html) {
+    return html == null ? null : POLITICA_RESENA.sanitize(html).trim();
+  }
+
+  /** Texto que ve el lector (sin etiquetas), para validar largos mínimos y máximos. */
+  public static String textoVisible(String html) {
+    if (html == null) return "";
+    String t = html.replaceAll("<[^>]*>", " ")
+        .replace("&nbsp;", " ").replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">").replace("&quot;", "\"");
+    // El sanitizador escribe algunos signos como entidades numéricas (&#64; = @): cuentan como un carácter.
+    t = java.util.regex.Pattern.compile("&#(x?)([0-9a-fA-F]+);").matcher(t)
+        .replaceAll(m -> java.util.regex.Matcher.quoteReplacement(
+            new String(Character.toChars(Integer.parseInt(m.group(2), m.group(1).isEmpty() ? 10 : 16)))));
+    return t.replaceAll("\\s+", " ").trim();
+  }
 
   public static String limpiar(String html) {
     return html == null ? null : POLITICA.sanitize(html).trim();

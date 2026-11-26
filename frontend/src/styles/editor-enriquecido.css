@@ -21,3 +21,10 @@
 .prose a { color: var(--green); text-decoration: underline; text-underline-offset: 3px; }
 .prose hr { margin: 34px 0; border: 0; border-top: 1px solid var(--border); opacity: 1; }
 .prose strong { font-weight: 700; }
+
+/* Texto de ayuda mientras el editor está vacío (reseñas). */
+.ee-contenido[data-placeholder] { position: relative; }
+.ee-contenido[data-placeholder]:has(> p:only-child > br.ProseMirror-trailingBreak:only-child)::before {
+  content: attr(data-placeholder); position: absolute; left: 18px; top: 16px; right: 18px;
+  color: var(--bs-secondary-color, #6c757d); pointer-events: none;
+}

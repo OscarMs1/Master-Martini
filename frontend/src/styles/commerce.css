@@ -875,5 +875,6 @@
 .product-review-write > summary, .account-address-form > summary {cursor:pointer;color:var(--green,#165743);font-weight:600;}
 .product-review-write .product-review-rating {max-width:220px;}
 .product-review-write textarea {resize:vertical;}
+.product-review-text {margin-top:.35rem;} .product-review-text > :last-child {margin-bottom:0;} .product-review-text ul, .product-review-text ol {padding-left:1.25rem;margin-bottom:.5rem;} .product-review-text li > p {margin:0;} .product-review-text li + li {margin-top:.15rem;}
 .account-address-item {display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
 .account-address-form {padding:1rem;border:1px solid rgba(5,57,42,.14);border-radius:14px;}
