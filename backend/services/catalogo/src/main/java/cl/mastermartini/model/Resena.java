@@ -25,7 +25,8 @@ public class Resena {
   @Column(nullable = false)
   private int puntuacion;
 
-  @Column(nullable = false, length = 500)
+  /** HTML limpio del editor (TipTap): hasta 500 caracteres de texto visible. */
+  @Column(nullable = false, length = 2000)
   private String comentario;
 
   @Column(nullable = false)

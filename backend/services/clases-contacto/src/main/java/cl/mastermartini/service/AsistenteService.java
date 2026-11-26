@@ -3,6 +3,7 @@ package cl.mastermartini.service;
 import cl.mastermartini.dto.AsistenteRequest;
 import cl.mastermartini.model.Clase;
 import cl.mastermartini.repository.ClaseRepository;
+import cl.mastermartini.repository.InscripcionRepository;
 import com.anthropic.client.AnthropicClient;
 import com.anthropic.client.okhttp.AnthropicOkHttpClient;
 import com.anthropic.errors.AnthropicIoException;
@@ -78,6 +79,7 @@ public class AsistenteService {
       """;
 
   private final ClaseRepository clases;
+  private final InscripcionRepository inscripciones;
   private final Remote remote;
   private final String catalogo;
   private final String modelo;
@@ -90,11 +92,13 @@ public class AsistenteService {
 
   public AsistenteService(
       ClaseRepository clases,
+      InscripcionRepository inscripciones,
       Remote remote,
       @Value("${app.catalog-url}") String catalogo,
       @Value("${app.anthropic-api-key:}") String apiKey,
       @Value("${app.asistente-modelo:claude-haiku-5-5}") String modelo) {
     this.clases = clases;
+    this.inscripciones = inscripciones;
     this.remote = remote;
     this.catalogo = catalogo;
     this.modelo = modelo;
@@ -259,7 +263,7 @@ public class AsistenteService {
           .append(" | ").append(Objects.toString(c.getLugar(), ""))
           .append(" | duración ").append(Objects.toString(c.getDuracion(), "-"))
           .append(" | nivel ").append(Objects.toString(c.getNivel(), "-"))
-          .append(" | capacidad ").append(c.getCapacidad())
+          .append(" | cupos libres ").append(cuposLibres(c))
           .append('\n');
     }
     if (proximas.isEmpty()) s.append("(no hay clases programadas)\n");
@@ -267,5 +271,10 @@ public class AsistenteService {
     contexto = s.toString();
     contextoGenerado = Instant.now();
     return contexto;
+  }
+
+  /** Lugares que quedan: la capacidad de la clase menos las inscripciones (nunca menos de 0). */
+  private long cuposLibres(Clase c) {
+    return Math.max(0, c.getCapacidad() - inscripciones.countByClase_Id(c.getId()));
   }
 }

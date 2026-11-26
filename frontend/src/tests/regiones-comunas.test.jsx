@@ -30,20 +30,22 @@ function EjemploFormulario() {
 }
 
 describe("regiones y comunas de Chile", () => {
-  it("contiene 8 regiones y 173 comunas seleccionadas sin duplicados", () => {
-    expect(regionesChile).toHaveLength(8);
-    expect(REGIONES_COMUNAS_CHILE.reduce((total, item) => total + item.comunas.length, 0)).toBe(173);
-    expect(new Set(regionesChile).size).toBe(8);
+  it("contiene las 16 regiones y 346 comunas sin duplicados", () => {
+    expect(regionesChile).toHaveLength(16);
+    expect(REGIONES_COMUNAS_CHILE.reduce((total, item) => total + item.comunas.length, 0)).toBe(346);
+    expect(new Set(regionesChile).size).toBe(16);
     REGIONES_COMUNAS_CHILE.forEach(({ comunas }) => {
       expect(new Set(comunas).size).toBe(comunas.length);
     });
   });
 
   it("incluye comunas de distintas zonas y evita asociaciones incorrectas", () => {
-    expect(comunasDeRegion("Región Metropolitana de Santiago")).toHaveLength(38);
+    expect(comunasDeRegion("Región Metropolitana de Santiago")).toHaveLength(52);
     expect(esUbicacionValida("Región Metropolitana de Santiago", "Renca")).toBe(true);
     expect(esUbicacionValida("Región de Los Lagos", "Puerto Montt")).toBe(true);
     expect(esUbicacionValida("Región de Los Lagos", "Castro")).toBe(true);
+    expect(esUbicacionValida("Región de Magallanes y de la Antártica Chilena", "Punta Arenas")).toBe(true);
+    expect(esUbicacionValida("Región de Arica y Parinacota", "Putre")).toBe(true);
     expect(esUbicacionValida("Región Metropolitana de Santiago", "Valparaíso")).toBe(false);
     expect(comunasDeRegion("Región que no existe")).toEqual([]);
     expect(regionCanonica("RM")).toBe("Región Metropolitana de Santiago");
@@ -57,18 +59,18 @@ describe("regiones y comunas de Chile", () => {
     const comuna = screen.getByLabelText("Comuna");
     expect(region.tagName).toBe("SELECT");
     expect(comuna.tagName).toBe("SELECT");
-    expect(region.options).toHaveLength(9); // 8 regiones + indicación inicial
+    expect(region.options).toHaveLength(17); // 16 regiones + indicación inicial
     expect(comuna).toBeDisabled();
 
     fireEvent.change(region, { target: { value: "Región Metropolitana de Santiago" } });
     expect(comuna).not.toBeDisabled();
-    expect(comuna.options).toHaveLength(39); // 38 comunas + indicación inicial
+    expect(comuna.options).toHaveLength(53); // 52 comunas + indicación inicial
     fireEvent.change(comuna, { target: { value: "Renca" } });
     expect(comuna.value).toBe("Renca");
 
     fireEvent.change(region, { target: { value: "Región de Valparaíso" } });
     expect(comuna.value).toBe("");
-    expect(comuna.options).toHaveLength(26); // 25 comunas + indicación inicial
+    expect(comuna.options).toHaveLength(39); // 38 comunas + indicación inicial
     expect(Array.from(comuna.options).some((option) => option.value === "Renca")).toBe(false);
   });
 

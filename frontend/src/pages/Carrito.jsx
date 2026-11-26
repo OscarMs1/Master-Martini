@@ -7,6 +7,7 @@ import { dinero, precioFinal, totales } from "../utils/comercio";
 import ResumenPedido from "../components/ResumenPedido";
 import Estado from "../components/Estado";
 import CantidadEditable from "../components/CantidadEditable";
+import SugerenciasCarrito from "../components/SugerenciasCarrito";
 export default function Carrito() {
   const {
       items,
@@ -37,6 +38,7 @@ export default function Carrito() {
       </h1>
       <Estado loading={loading} error={error} retry={recargar}>
         {!items.length ? (
+          <>
           <div className="state-box">
             <h2>Tu carrito está vacío.</h2>
             <p>Agrega los ingredientes de tu próxima creación.</p>
@@ -44,6 +46,8 @@ export default function Carrito() {
               Explorar productos <ArrowRight size={18} />
             </Link>
           </div>
+          <SugerenciasCarrito />
+          </>
         ) : (
           <div className="row g-5 mt-2">
             <div className="col-lg-8">
@@ -108,6 +112,7 @@ export default function Carrito() {
               >
                 Vaciar carrito
               </button>
+              <SugerenciasCarrito />
             </div>
             <div className="col-lg-4">
               <aside className="summary-panel">

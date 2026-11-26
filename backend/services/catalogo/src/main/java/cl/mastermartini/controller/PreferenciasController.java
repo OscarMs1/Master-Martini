@@ -24,7 +24,7 @@ public class PreferenciasController {
     this.productos = productos;
   }
 
-  public record Opinion(@Min(1) @Max(5) int puntuacion, @NotBlank @Size(min = 10, max = 500) String comentario) {}
+  public record Opinion(@Min(1) @Max(5) int puntuacion, @NotBlank @Size(min = 10, max = 4000) String comentario) {}
 
   private long user() {
     Long id = Actor.id();

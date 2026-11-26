@@ -1,4 +1,5 @@
 import AdminNovedades from "../components/admin/AdminNovedades";
+import AdminChatbot from "../components/admin/AdminChatbot";
 import { useEffect, useRef, useState } from "react";
 import { useShop } from "../context/ShopContext";
 import { productosApi } from "../services/productosApi";
@@ -123,7 +124,7 @@ export default function Admin() {
         role="group"
         aria-label="Secciones administrativas"
       >
-        {["productos", "novedades", "usuarios", "pedidos", "inscripciones", "contactos"].map(
+        {["productos", "novedades", "usuarios", "pedidos", "inscripciones", "contactos", "chatbot"].map(
           (t) => (
             <button
               key={t}
@@ -146,7 +147,7 @@ export default function Admin() {
           {message}
         </p>
       )}
-      {tab === "novedades" ? <AdminNovedades /> : tab === "productos" ? (
+      {tab === "novedades" ? <AdminNovedades /> : tab === "chatbot" ? <AdminChatbot /> : tab === "productos" ? (
         <>
           <div className="d-flex justify-content-between gap-3 flex-wrap mb-4">
             <input

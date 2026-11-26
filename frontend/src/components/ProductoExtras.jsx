@@ -3,6 +3,11 @@ import { Heart, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { api } from "../services/api";
+import EditorEnriquecido from "./admin/EditorEnriquecido";
+import { aHtml, limpiarHtml } from "../utils/contenidoEnriquecido";
+
+/** Largo del texto que se lee (sin formato). El backend valida lo mismo: 10 a 500 caracteres. */
+const largoTexto = (html) => new DOMParser().parseFromString(`<body>${html}</body>`, "text/html").body.textContent.trim().length;
 
 export default function ProductoExtras({ producto }) {
   const { user } = useAuth();
@@ -10,6 +15,8 @@ export default function ProductoExtras({ producto }) {
   const [favorite, setFavorite] = useState(false);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
+  // Cambia al publicar para que el editor TipTap se vacíe.
+  const [editorKey, setEditorKey] = useState(0);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
@@ -50,7 +57,7 @@ export default function ProductoExtras({ producto }) {
     e.preventDefault();setBusy(true);setError("");setMessage("");
     try {
       await api(`/resenas/producto/${producto.id}`, { method: "POST", body: { puntuacion: Number(rating), comentario: comment.trim() } });
-      await refresh();setComment("");setMessage("Tu opinión quedó guardada. Puedes actualizarla cuando quieras.");
+      await refresh();setComment("");setEditorKey((k) => k + 1);setMessage("Tu opinión quedó guardada. Puedes actualizarla cuando quieras.");
     } catch (e) {setError(e.message);} finally {setBusy(false);}
   };
   if (!checked || !available) return null;
@@ -77,7 +84,8 @@ export default function ProductoExtras({ producto }) {
               <strong>{op.autor}</strong><span aria-label={`${op.puntuacion} de 5 estrellas`} className="product-review-stars">{"★".repeat(op.puntuacion)}{"☆".repeat(5-op.puntuacion)}</span>
               {user && op.mia && <button type="button" disabled={busy} className="btn btn-link btn-sm" onClick={()=>deleteReview(op.id)}>Eliminar mi opinión</button>}
             </div>
-            <p className="mb-0">{op.comentario}</p>
+            {/* Las opiniones pueden traer formato del editor; se limpian antes de mostrarlas. */}
+            <div className="product-review-text prose" dangerouslySetInnerHTML={{ __html: limpiarHtml(aHtml(op.comentario)) }} />
           </div>)}
         </div>}
         {user ? <details className="product-review-write">
@@ -87,9 +95,22 @@ export default function ProductoExtras({ producto }) {
             <select className="form-select product-review-rating" id="review-rating" value={rating} onChange={e=>setRating(e.target.value)}>
               {[5,4,3,2,1].map(n=><option key={n} value={n}>{n} estrella{n===1?"":"s"}</option>)}
             </select>
-            <label className="form-label mt-3" htmlFor="review-text">Tu experiencia con el producto</label>
-            <textarea className="form-control" id="review-text" rows={3} minLength={10} maxLength={500} required value={comment} onChange={e=>setComment(e.target.value)} placeholder="Cuéntanos cómo lo utilizaste (10 a 500 caracteres)" />
-            <button type="submit" disabled={busy || comment.trim().length < 10} className="btn btn-primary mt-3">{busy ? "Guardando..." : "Publicar opinión"}</button>
+            <div className="mt-3">
+              <EditorEnriquecido
+                key={editorKey}
+                id="review-text"
+                label="Tu experiencia con el producto"
+                value={comment}
+                onChange={setComment}
+                maxLength={500}
+                compacto
+                enlaces={false}
+                contarTexto
+                minAlto="6rem"
+                placeholder="Cuéntanos cómo lo utilizaste (10 a 500 caracteres)"
+              />
+            </div>
+            <button type="submit" disabled={busy || largoTexto(comment) < 10 || largoTexto(comment) > 500} className="btn btn-primary">{busy ? "Guardando..." : "Publicar opinión"}</button>
           </form>
         </details> : <p className="small text-muted mb-0">Para escribir una opinión necesitas <Link to="/login">iniciar sesión</Link>.</p>}
       </>}

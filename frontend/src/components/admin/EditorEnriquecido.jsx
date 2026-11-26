@@ -24,12 +24,13 @@ function Boton({ activo, onClick, etiqueta, children, deshabilitado }) {
  * Editor de texto enriquecido (TipTap). Guarda HTML en `value`.
  * Un editor vacío se entrega como "" para que la validación "obligatorio" funcione.
  */
-export default function EditorEnriquecido({ id = "campo-contenido", label, value, onChange, maxLength = 15000, clave = "", compacto = false, error = "", minAlto }) {
+export default function EditorEnriquecido({ id = "campo-contenido", label, value, onChange, maxLength = 15000, clave = "", compacto = false, error = "", minAlto, enlaces = true, contarTexto = false, placeholder = "" }) {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
         heading: { levels: [2, 3] },
-        link: { openOnClick: false, autolink: true, protocols: ["http", "https", "mailto", "tel"] },
+        // Sin enlaces (reseñas): el backend tampoco los acepta ahí.
+        link: enlaces ? { openOnClick: false, autolink: true, protocols: ["http", "https", "mailto", "tel"] } : false,
       }),
     ],
     content: aHtml(value),
@@ -40,6 +41,7 @@ export default function EditorEnriquecido({ id = "campo-contenido", label, value
         "aria-multiline": "true",
         "aria-label": label,
         class: "ee-contenido prose",
+        ...(placeholder ? { "data-placeholder": placeholder } : {}),
         ...(error ? { "aria-invalid": "true", "aria-describedby": `${id}-error` } : {}),
       },
     },
@@ -78,7 +80,8 @@ export default function EditorEnriquecido({ id = "campo-contenido", label, value
   });
 
   if (!editor || !e) return null;
-  const largo = esVacio(editor.getHTML()) ? 0 : editor.getHTML().length;
+  // En reseñas se cuenta el texto que se lee (sin etiquetas), igual que el backend.
+  const largo = esVacio(editor.getHTML()) ? 0 : contarTexto ? editor.getText().trim().length : editor.getHTML().length;
 
   function enlazar() {
     const previo = editor.getAttributes("link").href || "https://";
@@ -111,7 +114,7 @@ export default function EditorEnriquecido({ id = "campo-contenido", label, value
           <Boton etiqueta="Lista con viñetas" activo={e.lista} onClick={() => c().toggleBulletList().run()}>• Lista</Boton>
           <Boton etiqueta="Lista numerada" activo={e.numerada} onClick={() => c().toggleOrderedList().run()}>1. Lista</Boton>
           {!compacto && <Boton etiqueta="Cita" activo={e.cita} onClick={() => c().toggleBlockquote().run()}>“ ”</Boton>}
-          <Boton etiqueta="Enlace" activo={e.enlace} onClick={enlazar}>Enlace</Boton>
+          {enlaces && <Boton etiqueta="Enlace" activo={e.enlace} onClick={enlazar}>Enlace</Boton>}
           {!compacto && <Boton etiqueta="Línea separadora" onClick={() => c().setHorizontalRule().run()}>—</Boton>}
           <span className="ee-sep" aria-hidden="true" />
           <Boton etiqueta="Deshacer" deshabilitado={!e.deshacer} onClick={() => c().undo().run()}>↶</Boton>
